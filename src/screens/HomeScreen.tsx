@@ -83,8 +83,8 @@ export function HomeScreen({
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              tintColor={theme.colors.accent}
-              colors={[theme.colors.accent]}
+              tintColor={theme.colors.cream}
+              colors={[theme.colors.cream]}
               onRefresh={() => {
                 setRefreshing(true);
                 load();

@@ -35,7 +35,7 @@ export function Avatar({ name, size }: { name: string; size?: number }) {
     >
       <AppText
         variant="footnote"
-        color={theme.colors.brandPressed}
+        color={theme.colors.onGlass}
         style={{ fontWeight: '700' }}
       >
         {initialsFromName(name)}

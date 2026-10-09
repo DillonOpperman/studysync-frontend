@@ -65,7 +65,7 @@ export function TextField({
             borderColor: border,
             borderWidth: 1,
             backgroundColor: glass.backgroundColor,
-            color: theme.colors.text,
+            color: theme.colors.onGlass,
             paddingHorizontal: theme.space.lg,
             ...theme.type.callout,
           },

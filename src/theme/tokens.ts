@@ -1,40 +1,46 @@
 /**
- * StudySync visual language.
- *
- * References: Nothing OS (soft atmosphere, circular glyphs, floating search),
- * ChromeOS sign-in (centered identity, one quiet field), Apple liquid glass
- * (translucent edges, light on the rim). Brown is the identity: clay, cinnamon,
- * espresso — not contest-slide beige and not a copy of those systems.
+ * StudySync visual language: gold-brew coffee, blurred cream, clean glass.
+ * Canvas is the cup. Controls are the cream.
  */
 
 export const palette = {
   ink: '#1C1410',
   cocoa: '#5A463A',
-  stone: '#7A6A60',
-  canvas: '#EDE4D8',
-  mist: '#F6EFE6',
-  clay: '#E4B48C',
-  blush: '#E8C4AE',
-  sageMist: '#C5D0B8',
-  surface: 'rgba(255, 250, 245, 0.78)',
-  inputFill: 'rgba(255, 252, 248, 0.55)',
-  line: 'rgba(255, 255, 255, 0.7)',
+  stone: '#C4B0A0',
+  canvas: '#3C2418',
+  brew: '#2F1B12',
+  mocha: '#4A2E20',
+  gold: '#C49A6C',
+  cream: '#F3E6D4',
+  foam: '#FFF6EC',
+  mist: '#F6EDE3',
+  clay: '#C49A6C',
+  blush: '#E8D3BE',
+  sageMist: '#A89078',
+  surface: 'rgba(255, 249, 242, 0.94)',
+  inputFill: 'rgba(255, 246, 236, 0.86)',
+  line: 'rgba(255, 255, 255, 0.55)',
   espresso: '#241C18',
   espressoPressed: '#3A2E27',
-  cinnamon: '#C45C32',
-  cinnamonPressed: '#A34B29',
-  cinnamonSoft: 'rgba(196, 92, 50, 0.16)',
-  sage: '#5C6B52',
-  sageSoft: 'rgba(92, 107, 82, 0.16)',
-  danger: '#B42318',
-  dangerSoft: 'rgba(180, 35, 24, 0.12)',
-  inverse: '#FFFFFF',
-  skeleton: 'rgba(90, 70, 58, 0.12)',
-  shadow: '#2A1C14',
+  cinnamon: '#E08A5C',
+  cinnamonPressed: '#C45C32',
+  cinnamonSoft: 'rgba(224, 138, 92, 0.22)',
+  sage: '#8FA084',
+  sageSoft: 'rgba(143, 160, 132, 0.2)',
+  danger: '#E87A6C',
+  dangerSoft: 'rgba(232, 122, 108, 0.18)',
+  inverse: '#F6EDE3',
+  skeleton: 'rgba(243, 230, 212, 0.16)',
+  shadow: '#1A0E08',
 } as const;
 
 export type ColorTokens = {
   canvas: string;
+  brew: string;
+  mocha: string;
+  gold: string;
+  cream: string;
+  foam: string;
   mist: string;
   clay: string;
   blush: string;
@@ -45,6 +51,8 @@ export type ColorTokens = {
   textSecondary: string;
   textMuted: string;
   textInverse: string;
+  onGlass: string;
+  onGlassMuted: string;
   border: string;
   divider: string;
   accent: string;
@@ -68,18 +76,25 @@ export type ColorTokens = {
 
 export const lightColors: ColorTokens = {
   canvas: palette.canvas,
+  brew: palette.brew,
+  mocha: palette.mocha,
+  gold: palette.gold,
+  cream: palette.cream,
+  foam: palette.foam,
   mist: palette.mist,
   clay: palette.clay,
   blush: palette.blush,
   sageMist: palette.sageMist,
   surface: palette.surface,
   inputFill: palette.inputFill,
-  text: palette.ink,
-  textSecondary: palette.cocoa,
-  textMuted: palette.stone,
-  textInverse: palette.inverse,
+  text: palette.mist,
+  textSecondary: palette.blush,
+  textMuted: 'rgba(246, 237, 227, 0.64)',
+  textInverse: palette.mist,
+  onGlass: palette.ink,
+  onGlassMuted: palette.cocoa,
   border: palette.line,
-  divider: 'rgba(80, 60, 48, 0.08)',
+  divider: 'rgba(246, 237, 227, 0.12)',
   accent: palette.espresso,
   accentPressed: palette.espressoPressed,
   accentSoft: palette.inputFill,
@@ -92,7 +107,7 @@ export const lightColors: ColorTokens = {
   danger: palette.danger,
   dangerSoft: palette.dangerSoft,
   skeleton: palette.skeleton,
-  placeholder: palette.stone,
+  placeholder: 'rgba(28, 20, 16, 0.42)',
   glass: palette.inputFill,
   glassStrong: palette.surface,
   glassEdge: palette.line,

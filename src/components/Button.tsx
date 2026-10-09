@@ -37,7 +37,7 @@ export function Button({
       ? theme.colors.danger
       : tone === 'ghost'
       ? theme.colors.brand
-      : theme.colors.text;
+      : theme.colors.onGlass;
   const size = theme.control.circle;
   const frosted = tone !== 'ghost';
 

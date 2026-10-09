@@ -47,7 +47,7 @@ export function MessageBubble({
     : announcement
     ? theme.colors.brandSoft
     : theme.colors.glassStrong;
-  const fg = deleted ? theme.colors.textMuted : theme.colors.text;
+  const fg = deleted ? theme.colors.onGlassMuted : theme.colors.onGlass;
   const align = mine ? 'flex-end' : 'flex-start';
   return (
     <View style={{ alignSelf: align, maxWidth: '84%', marginVertical: 5 }}>

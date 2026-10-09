@@ -38,17 +38,19 @@ export function GroupRow({
         },
       ]}
     >
-      <AppText variant="headline">{group.title}</AppText>
+      <AppText variant="headline" color={theme.colors.onGlass}>
+        {group.title}
+      </AppText>
       <AppText
         variant="subhead"
-        color={theme.colors.textSecondary}
+        color={theme.colors.onGlassMuted}
         style={{ marginTop: 3 }}
       >
         {group.subject}
       </AppText>
       <AppText
         variant="footnote"
-        color={theme.colors.textMuted}
+        color={theme.colors.onGlassMuted}
         style={{ marginTop: 4 }}
       >
         {meta}
@@ -56,7 +58,7 @@ export function GroupRow({
       {caption ? (
         <AppText
           variant="footnote"
-          color={theme.colors.textMuted}
+          color={theme.colors.onGlassMuted}
           style={{ marginTop: 4 }}
         >
           {caption}
@@ -65,7 +67,7 @@ export function GroupRow({
       {group.description ? (
         <AppText
           variant="subhead"
-          color={theme.colors.textMuted}
+          color={theme.colors.onGlassMuted}
           numberOfLines={2}
           style={{ marginTop: 6 }}
         >

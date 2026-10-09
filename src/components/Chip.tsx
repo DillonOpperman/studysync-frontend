@@ -39,7 +39,7 @@ export function Chip({
     >
       <AppText
         variant="footnote"
-        color={theme.colors.text}
+        color={theme.colors.onGlass}
         style={{ fontWeight: selected ? '700' : '600' }}
       >
         {label}
