@@ -31,3 +31,12 @@ export function apiUrl(path: string): string {
   const normalized = path.startsWith('/') ? path : `/${path}`;
   return `${getApiBaseUrl()}${API_PREFIX}${normalized}`;
 }
+
+/** WebSocket origin without credentials. Never log a URL that includes a token. */
+export function wsBaseUrl(): string {
+  return getApiBaseUrl().replace(/^http/i, 'ws') + `${API_PREFIX}/ws`;
+}
+
+export function authenticatedWsUrl(accessToken: string): string {
+  return `${wsBaseUrl()}?access_token=${encodeURIComponent(accessToken)}`;
+}

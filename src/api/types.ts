@@ -202,6 +202,65 @@ export type RecommendResponse = {
   semanticAvailable: boolean;
 };
 
+export type ChatMessageType = 'text' | 'announcement' | 'image' | 'file';
+
+export type ReactionCountDto = {
+  emoji: string;
+  count: number;
+  me: boolean;
+};
+
+export type ChatAttachmentDto = {
+  id: string;
+  fileName: string;
+  contentType: string;
+  byteSize: number;
+  kind: string;
+  status: string;
+  downloadUrl: string | null;
+};
+
+export type GroupMessageDto = {
+  id: string;
+  groupId: string;
+  senderId: string;
+  clientMsgId: string;
+  content: string;
+  messageType: string;
+  createdAt: string;
+  editedAt: string | null;
+  deletedAt: string | null;
+  reactions: ReactionCountDto[];
+  attachments: ChatAttachmentDto[];
+};
+
+export type SendGroupMessageRequest = {
+  clientMsgId: string;
+  content: string;
+  messageType?: ChatMessageType;
+  attachmentIds?: string[];
+};
+
+export type GroupMessagePageDto = {
+  messages: GroupMessageDto[];
+  pagination: {
+    limit: number;
+    hasMore: boolean;
+    nextBefore: string | null;
+    nextAfter: string | null;
+  };
+};
+
+export type ReactionStateDto = {
+  messageId: string;
+  groupId: string;
+  reactions: ReactionCountDto[];
+};
+
+export const MAX_GROUP_MESSAGE_CHARS = 4000;
+export const GROUP_MESSAGE_EDIT_WINDOW_MS = 15 * 60 * 1000;
+export const CHAT_REACTION_CHOICES = ['👍', '❤️', '😂', '🎉', '👀'] as const;
+
 export const WEEKDAYS = [
   'Monday',
   'Tuesday',

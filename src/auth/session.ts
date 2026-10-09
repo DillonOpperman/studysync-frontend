@@ -44,6 +44,10 @@ export class SessionController {
     return { status: 'signedOut' };
   }
 
+  currentAccessToken(): string | null {
+    return this.accessToken;
+  }
+
   subscribe(listener: SessionListener): () => void {
     this.listeners.add(listener);
     return () => {

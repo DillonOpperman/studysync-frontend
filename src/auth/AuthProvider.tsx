@@ -25,6 +25,8 @@ type AuthContextValue = {
   logout: () => Promise<void>;
   refreshProfile: () => Promise<UserProfileDto>;
   loadGroups: () => Promise<GroupDto[]>;
+  getAccessToken: () => string | null;
+  refreshAccessToken: () => Promise<string | null>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -67,6 +69,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return controller.listMyGroups();
   }, []);
 
+  const getAccessToken = useCallback(() => controller.currentAccessToken(), []);
+  const refreshAccessToken = useCallback(
+    () => controller.refreshAccessToken(),
+    [],
+  );
+
   const value = useMemo(
     () => ({
       state,
@@ -76,8 +84,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logout,
       refreshProfile,
       loadGroups,
+      getAccessToken,
+      refreshAccessToken,
     }),
-    [state, register, login, logout, refreshProfile, loadGroups],
+    [
+      state,
+      register,
+      login,
+      logout,
+      refreshProfile,
+      loadGroups,
+      getAccessToken,
+      refreshAccessToken,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

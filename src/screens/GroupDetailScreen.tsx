@@ -18,6 +18,7 @@ import { groupsApi } from '../features/groups/groupsApi';
 import {
   canLeave,
   canManageJoinRequests,
+  canOpenGroupChat,
   canRequestJoin,
   canViewMembers,
   isActiveMember,
@@ -292,6 +293,17 @@ export function GroupDetailScreen({
       ) : null}
 
       <View style={{ marginTop: theme.space.xl, gap: theme.space.sm }}>
+        {canOpenGroupChat(group) ? (
+          <Button
+            label="Open group chat"
+            onPress={() =>
+              navigation.navigate('GroupChat', {
+                groupId: group.id,
+                title: group.title,
+              })
+            }
+          />
+        ) : null}
         {canRequestJoin(group) ? (
           <Button
             label="Request to join"

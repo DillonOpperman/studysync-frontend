@@ -9,6 +9,7 @@ export type AppStackParamList = {
   Search: undefined;
   CreateGroup: undefined;
   GroupDetail: { groupId: string };
+  GroupChat: { groupId: string; title: string };
 };
 
 export const APP_STACK_ROUTES: Array<keyof AppStackParamList> = [
@@ -17,4 +18,5 @@ export const APP_STACK_ROUTES: Array<keyof AppStackParamList> = [
   'Search',
   'CreateGroup',
   'GroupDetail',
+  'GroupChat',
 ];

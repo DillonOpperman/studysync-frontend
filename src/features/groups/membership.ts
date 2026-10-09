@@ -55,3 +55,7 @@ export function canManageJoinRequests(group: GroupDto): boolean {
 export function canViewMembers(group: GroupDto): boolean {
   return isActiveMember(group);
 }
+
+export function canOpenGroupChat(group: GroupDto): boolean {
+  return isActiveMember(group) && group.status === 'active';
+}

@@ -1,0 +1,112 @@
+import React from 'react';
+import { View } from 'react-native';
+
+import type { ChatMessage } from '../features/chat/messageStore';
+import { useTheme } from '../theme';
+import { AppText } from './AppText';
+import { TextLink } from './TextLink';
+
+function formatTime(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+  return date.toLocaleString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
+export function MessageBubble({
+  message,
+  mine,
+  senderName,
+  canEdit,
+  canDelete,
+  onEdit,
+  onDelete,
+  onReact,
+}: {
+  message: ChatMessage;
+  mine: boolean;
+  senderName: string;
+  canEdit: boolean;
+  canDelete: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+  onReact: (emoji: string) => void;
+}) {
+  const theme = useTheme();
+  const announcement = message.messageType === 'announcement';
+  const deleted = Boolean(message.deletedAt);
+  const bg = mine ? theme.colors.accentSoft : theme.colors.surface;
+  const align = mine ? 'flex-end' : 'flex-start';
+  return (
+    <View style={{ alignSelf: align, maxWidth: '86%', marginVertical: 6 }}>
+      <AppText variant="caption" color={theme.colors.textMuted}>
+        {senderName}
+        {announcement ? ' · announcement' : ''}
+        {message.pending ? ' · sending' : ''}
+        {message.failed ? ' · not sent' : ''}
+      </AppText>
+      <View
+        style={{
+          marginTop: 4,
+          paddingVertical: theme.space.sm,
+          paddingHorizontal: theme.space.md,
+          borderRadius: theme.radius.md,
+          backgroundColor: deleted ? theme.colors.skeleton : bg,
+        }}
+      >
+        <AppText
+          variant="body"
+          color={deleted ? theme.colors.textMuted : theme.colors.text}
+          style={deleted ? { fontStyle: 'italic' } : undefined}
+        >
+          {deleted ? 'Message deleted' : message.content}
+        </AppText>
+      </View>
+      <AppText
+        variant="caption"
+        color={theme.colors.textMuted}
+        style={{ marginTop: 4 }}
+      >
+        {formatTime(message.createdAt)}
+        {message.editedAt ? ' · edited' : ''}
+      </AppText>
+      {!deleted && message.reactions.length > 0 ? (
+        <AppText
+          variant="footnote"
+          color={theme.colors.textSecondary}
+          style={{ marginTop: 4 }}
+        >
+          {message.reactions.map(row => `${row.emoji} ${row.count}`).join('  ')}
+        </AppText>
+      ) : null}
+      {!deleted && !message.pending ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: theme.space.sm,
+            marginTop: 4,
+          }}
+        >
+          {['👍', '❤️', '😂'].map(emoji => (
+            <TextLink
+              key={emoji}
+              label={emoji}
+              onPress={() => onReact(emoji)}
+            />
+          ))}
+          {canEdit ? <TextLink label="Edit" onPress={onEdit} /> : null}
+          {canDelete ? (
+            <TextLink label="Delete" tone="danger" onPress={onDelete} />
+          ) : null}
+        </View>
+      ) : null}
+    </View>
+  );
+}

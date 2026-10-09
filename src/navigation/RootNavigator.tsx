@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import { useAuth } from '../auth/AuthProvider';
 import { CreateGroupScreen } from '../screens/CreateGroupScreen';
+import { GroupChatScreen } from '../screens/GroupChatScreen';
 import { GroupDetailScreen } from '../screens/GroupDetailScreen';
 import { GroupsScreen } from '../screens/GroupsScreen';
 import { HomeScreen } from '../screens/HomeScreen';
@@ -69,6 +70,7 @@ function SignedInNavigator() {
       <AppStack.Screen name="Search" component={SearchScreen} />
       <AppStack.Screen name="CreateGroup" component={CreateGroupScreen} />
       <AppStack.Screen name="GroupDetail" component={GroupDetailScreen} />
+      <AppStack.Screen name="GroupChat" component={GroupChatScreen} />
     </AppStack.Navigator>
   );
 }
