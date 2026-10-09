@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useTheme } from '../theme';
+import { glassSurface, useTheme } from '../theme';
 import { AppText } from './AppText';
 
 export function initialsFromName(name: string): string {
@@ -18,17 +18,20 @@ export function initialsFromName(name: string): string {
 export function Avatar({ name, size }: { name: string; size?: number }) {
   const theme = useTheme();
   const dim = size ?? theme.control.avatar;
+  const glass = glassSurface(theme, 'strong');
   return (
     <View
       accessibilityLabel={`${name} avatar`}
-      style={{
-        width: dim,
-        height: dim,
-        borderRadius: dim / 2,
-        backgroundColor: theme.colors.brandSoft,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      style={[
+        glass,
+        {
+          width: dim,
+          height: dim,
+          borderRadius: dim / 2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+      ]}
     >
       <AppText
         variant="footnote"

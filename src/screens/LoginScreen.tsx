@@ -38,25 +38,21 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
   }
 
   return (
-    <Screen>
-      <View
-        style={{ marginTop: theme.space.xxl, marginBottom: theme.space.xl }}
-      >
-        <BrandMark />
-        <AppText variant="title" style={{ marginTop: theme.space.xxl }}>
-          Welcome back
-        </AppText>
+    <Screen center>
+      <View style={{ alignItems: 'center', marginBottom: theme.space.xl }}>
+        <BrandMark align="center" />
         <AppText
-          variant="body"
+          variant="subhead"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.sm }}
+          style={{ marginTop: theme.space.sm, textAlign: 'center' }}
         >
-          Sign in with the email you used to register.
+          Sign in to find your people.
         </AppText>
       </View>
       <ErrorBanner message={error} />
       <TextField
         label="Email"
+        hideLabel
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -64,20 +60,36 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
         textContentType="emailAddress"
         returnKeyType="next"
       />
-      <TextField
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        autoComplete="password"
-        textContentType="password"
-        returnKeyType="go"
-        onSubmitEditing={onSubmit}
-      />
-      <View style={{ marginTop: theme.space.xxl }}>
-        <Button label="Log in" onPress={onSubmit} loading={loading} />
+      <View
+        style={{
+          marginTop: theme.space.sm,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: theme.space.sm,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <TextField
+            label="Password"
+            hideLabel
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoComplete="password"
+            textContentType="password"
+            returnKeyType="go"
+            onSubmitEditing={onSubmit}
+          />
+        </View>
+        <Button
+          label="Go"
+          round
+          onPress={onSubmit}
+          loading={loading}
+          accessibilityLabel="Log in"
+        />
       </View>
-      <View style={{ marginTop: theme.space.sm, alignItems: 'center' }}>
+      <View style={{ marginTop: theme.space.lg, alignItems: 'center' }}>
         <Button label="Create an account" tone="ghost" onPress={onGoRegister} />
       </View>
     </Screen>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { useTheme } from '../theme';
+import { glassSurface, useTheme } from '../theme';
 import { AppText } from './AppText';
 import { PressScale } from './PressScale';
 
@@ -13,56 +13,68 @@ export function Button({
   loading,
   disabled,
   tone = 'primary',
+  round = false,
   accessibilityHint,
+  accessibilityLabel,
 }: {
   label: string;
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
   tone?: Tone;
+  round?: boolean;
   accessibilityHint?: string;
+  accessibilityLabel?: string;
 }) {
   const theme = useTheme();
   const inactive = disabled || loading;
+  const glass = glassSurface(theme, 'soft');
   const bg =
     tone === 'primary'
       ? theme.colors.accent
       : tone === 'danger'
       ? theme.colors.danger
       : tone === 'secondary'
-      ? theme.colors.brandSoft
+      ? glass.backgroundColor
       : 'transparent';
   const fg =
     tone === 'primary' || tone === 'danger'
       ? theme.colors.textInverse
       : tone === 'secondary'
-      ? theme.colors.brandPressed
+      ? theme.colors.text
       : theme.colors.brand;
   const spinner =
     tone === 'primary' || tone === 'danger'
       ? theme.colors.textInverse
       : theme.colors.brand;
+  const size = theme.control.circle;
 
   return (
     <PressScale
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={accessibilityLabel ?? label}
       accessibilityHint={accessibilityHint}
       accessibilityState={{ disabled: inactive, busy: !!loading }}
       onPress={onPress}
       disabled={inactive}
       style={[
         styles.base,
+        tone === 'secondary' ? glass : null,
         {
-          minHeight: theme.control.minHeight,
-          borderRadius: theme.radius.lg,
+          minHeight: round ? size : theme.control.minHeight,
+          width: round ? size : undefined,
+          height: round ? size : undefined,
+          borderRadius: theme.radius.pill,
           backgroundColor: bg,
-          opacity: inactive ? 0.45 : 1,
-          paddingHorizontal: theme.space.lg,
+          opacity: inactive ? 0.4 : 1,
+          paddingHorizontal: round ? 0 : theme.space.lg,
+          borderWidth: tone === 'secondary' ? 1 : 0,
+          borderColor:
+            tone === 'secondary' ? theme.colors.glassEdge : 'transparent',
         },
       ]}
     >
-      <View style={styles.inner}>
+      <View style={[styles.inner, round ? { minHeight: size } : null]}>
         {loading ? (
           <ActivityIndicator color={spinner} />
         ) : (
@@ -86,6 +98,6 @@ const styles = StyleSheet.create({
   inner: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 50,
+    minHeight: 52,
   },
 });

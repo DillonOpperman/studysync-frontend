@@ -1,35 +1,44 @@
 /**
- * StudySync design tokens. Light theme only for this phase; names are semantic
- * so a later dark palette can slot in without restyling every screen.
+ * StudySync visual language.
  *
- * Warm brown is the identity. Primary actions use near-black espresso (high
- * contrast, contemporary). Cinnamon is the brand accent for selection, links,
- * and the wordmark — not a wash of beige.
+ * References: Nothing OS (soft atmosphere, circular glyphs, floating search),
+ * ChromeOS sign-in (centered identity, one quiet field), Apple liquid glass
+ * (translucent edges, light on the rim). Brown is the identity: clay, cinnamon,
+ * espresso — not contest-slide beige and not a copy of those systems.
  */
 
 export const palette = {
-  ink: '#1A1410',
-  cocoa: '#4E3F36',
-  stone: '#6D5E55',
-  canvas: '#F4F0EB',
-  surface: '#FFFFFF',
-  inputFill: '#EFE8E1',
-  line: '#E2D9D0',
+  ink: '#1C1410',
+  cocoa: '#5A463A',
+  stone: '#7A6A60',
+  canvas: '#EDE4D8',
+  mist: '#F6EFE6',
+  clay: '#E4B48C',
+  blush: '#E8C4AE',
+  sageMist: '#C5D0B8',
+  surface: 'rgba(255, 250, 245, 0.78)',
+  inputFill: 'rgba(255, 252, 248, 0.55)',
+  line: 'rgba(255, 255, 255, 0.7)',
   espresso: '#241C18',
   espressoPressed: '#3A2E27',
   cinnamon: '#C45C32',
   cinnamonPressed: '#A34B29',
-  cinnamonSoft: '#F6E6DC',
+  cinnamonSoft: 'rgba(196, 92, 50, 0.16)',
   sage: '#5C6B52',
-  sageSoft: '#E7EDE3',
+  sageSoft: 'rgba(92, 107, 82, 0.16)',
   danger: '#B42318',
-  dangerSoft: '#F8E7E4',
+  dangerSoft: 'rgba(180, 35, 24, 0.12)',
   inverse: '#FFFFFF',
-  skeleton: '#E8E0D7',
+  skeleton: 'rgba(90, 70, 58, 0.12)',
+  shadow: '#2A1C14',
 } as const;
 
 export type ColorTokens = {
   canvas: string;
+  mist: string;
+  clay: string;
+  blush: string;
+  sageMist: string;
   surface: string;
   inputFill: string;
   text: string;
@@ -51,10 +60,18 @@ export type ColorTokens = {
   dangerSoft: string;
   skeleton: string;
   placeholder: string;
+  glass: string;
+  glassStrong: string;
+  glassEdge: string;
+  shadow: string;
 };
 
 export const lightColors: ColorTokens = {
   canvas: palette.canvas,
+  mist: palette.mist,
+  clay: palette.clay,
+  blush: palette.blush,
+  sageMist: palette.sageMist,
   surface: palette.surface,
   inputFill: palette.inputFill,
   text: palette.ink,
@@ -62,7 +79,7 @@ export const lightColors: ColorTokens = {
   textMuted: palette.stone,
   textInverse: palette.inverse,
   border: palette.line,
-  divider: palette.line,
+  divider: 'rgba(80, 60, 48, 0.08)',
   accent: palette.espresso,
   accentPressed: palette.espressoPressed,
   accentSoft: palette.inputFill,
@@ -76,6 +93,10 @@ export const lightColors: ColorTokens = {
   dangerSoft: palette.dangerSoft,
   skeleton: palette.skeleton,
   placeholder: palette.stone,
+  glass: palette.inputFill,
+  glassStrong: palette.surface,
+  glassEdge: palette.line,
+  shadow: palette.shadow,
 };
 
 export const space = {
@@ -87,35 +108,35 @@ export const space = {
   xl: 24,
   xxl: 32,
   xxxl: 44,
-  screen: 20,
+  screen: 22,
 } as const;
 
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 22,
+  sm: 12,
+  md: 18,
+  lg: 24,
+  xl: 32,
   pill: 999,
 } as const;
 
 export const type = {
   display: {
-    fontSize: 34,
-    lineHeight: 40,
+    fontSize: 40,
+    lineHeight: 44,
     fontWeight: '700' as const,
-    letterSpacing: -0.7,
+    letterSpacing: -1.2,
   },
   title: {
     fontSize: 28,
     lineHeight: 34,
     fontWeight: '700' as const,
-    letterSpacing: -0.45,
+    letterSpacing: -0.5,
   },
   headline: {
     fontSize: 17,
     lineHeight: 22,
     fontWeight: '600' as const,
-    letterSpacing: -0.2,
+    letterSpacing: -0.25,
   },
   body: {
     fontSize: 17,
@@ -145,23 +166,24 @@ export const type = {
     fontSize: 12,
     lineHeight: 16,
     fontWeight: '600' as const,
-    letterSpacing: 0.4,
+    letterSpacing: 0.6,
   },
 } as const;
 
 export const control = {
-  minHeight: 50,
+  minHeight: 52,
+  circle: 56,
   hitSlop: { top: 8, bottom: 8, left: 8, right: 8 },
   icon: 22,
-  avatar: 40,
+  avatar: 44,
   hairline: 1,
 } as const;
 
 export const motion = {
   fast: 120,
-  normal: 200,
-  slow: 280,
-  pressScale: 0.98,
+  normal: 220,
+  slow: 320,
+  pressScale: 0.97,
 } as const;
 
 export const lightTheme = {

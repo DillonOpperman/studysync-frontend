@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import type { ChatMessage } from '../features/chat/messageStore';
-import { useTheme } from '../theme';
+import { glassSurface, useTheme } from '../theme';
 import { AppText } from './AppText';
 import { TextLink } from './TextLink';
 
@@ -48,7 +48,7 @@ export function MessageBubble({
     ? theme.colors.brandSoft
     : outgoing
     ? theme.colors.accent
-    : theme.colors.surface;
+    : theme.colors.glassStrong;
   const fg = deleted
     ? theme.colors.textMuted
     : outgoing
@@ -64,17 +64,20 @@ export function MessageBubble({
         {message.failed ? ' · not sent' : ''}
       </AppText>
       <View
-        style={{
-          marginTop: 5,
-          paddingVertical: 10,
-          paddingHorizontal: 14,
-          borderRadius: theme.radius.lg,
-          borderBottomRightRadius: mine ? 6 : theme.radius.lg,
-          borderBottomLeftRadius: mine ? theme.radius.lg : 6,
-          backgroundColor: bg,
-          borderWidth: outgoing || deleted || announcement ? 0 : 1,
-          borderColor: theme.colors.border,
-        }}
+        style={[
+          outgoing || deleted ? null : glassSurface(theme, 'strong'),
+          {
+            marginTop: 5,
+            paddingVertical: 11,
+            paddingHorizontal: 16,
+            borderRadius: theme.radius.lg,
+            backgroundColor: bg,
+            borderWidth: outgoing || deleted ? 0 : 1,
+            borderColor: announcement
+              ? 'rgba(196, 92, 50, 0.28)'
+              : theme.colors.glassEdge,
+          },
+        ]}
       >
         <AppText
           variant="body"

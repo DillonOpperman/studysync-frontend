@@ -4,6 +4,7 @@ export {
   useReduceMotion,
   useTheme,
 } from './ThemeProvider';
+export { glassSurface } from './surfaces';
 export {
   control,
   lightColors,

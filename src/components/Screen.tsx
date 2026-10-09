@@ -9,15 +9,18 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../theme';
+import { ScreenShell } from './ScreenShell';
 
 export function Screen({
   children,
   scroll = true,
   padded = true,
+  center = false,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   padded?: boolean;
+  center?: boolean;
 }) {
   const theme = useTheme();
   const padding = padded ? theme.space.screen : 0;
@@ -31,6 +34,7 @@ export function Screen({
           padding,
           paddingBottom: theme.space.xxxl + theme.space.xl,
           flexGrow: 1,
+          justifyContent: center ? 'center' : 'flex-start',
         }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -43,12 +47,14 @@ export function Screen({
   );
 
   return (
-    <SafeAreaView
-      style={[styles.flex, { backgroundColor: theme.colors.canvas }]}
-      edges={['top', 'bottom', 'left', 'right']}
-    >
-      {body}
-    </SafeAreaView>
+    <ScreenShell>
+      <SafeAreaView
+        style={styles.flex}
+        edges={['top', 'bottom', 'left', 'right']}
+      >
+        {body}
+      </SafeAreaView>
+    </ScreenShell>
   );
 }
 

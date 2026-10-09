@@ -14,6 +14,7 @@ import { ErrorBanner } from '../components/ErrorBanner';
 import { GroupRow } from '../components/GroupRow';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { TextLink } from '../components/TextLink';
+import { ScreenShell } from '../components/ScreenShell';
 import { SectionLabel } from '../components/SectionLabel';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { groupsApi } from '../features/groups/groupsApi';
@@ -80,115 +81,117 @@ export function GroupsScreen({
   );
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.canvas }}
-      edges={['top', 'bottom', 'left', 'right']}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: theme.space.screen,
-          paddingBottom: theme.space.xxxl,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            tintColor={theme.colors.accent}
-            colors={[theme.colors.accent]}
-            onRefresh={() => {
-              setRefreshing(true);
-              load();
-            }}
-          />
-        }
+    <ScreenShell>
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={['top', 'bottom', 'left', 'right']}
       >
-        <ScreenHeader
-          title="Groups"
-          onBack={() => navigation.goBack()}
-          action={
-            <TextLink
-              label="Create"
-              onPress={() => navigation.navigate('CreateGroup')}
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: theme.space.screen,
+            paddingBottom: theme.space.xxxl,
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              tintColor={theme.colors.accent}
+              colors={[theme.colors.accent]}
+              onRefresh={() => {
+                setRefreshing(true);
+                load();
+              }}
             />
           }
-        />
-        <ErrorBanner message={error} />
-        <ErrorBanner message={recommendError} />
-
-        <Button
-          label="Search groups"
-          tone="secondary"
-          onPress={() => navigation.navigate('Search')}
-        />
-
-        <SectionLabel>Your groups</SectionLabel>
-        {loading && !mine ? <GroupListSkeleton /> : null}
-        {mine && memberships.length === 0 ? (
-          <EmptyState
-            title="No memberships yet"
-            body="Create a group or search to find one. Join requests stay pending until a leader approves them."
-          />
-        ) : null}
-        {memberships.map((group, index) => (
-          <GroupRow
-            key={group.id}
-            group={group}
-            last={index === memberships.length - 1}
-            onPress={() =>
-              navigation.navigate('GroupDetail', { groupId: group.id })
-            }
-          />
-        ))}
-
-        <SectionLabel>For you</SectionLabel>
-        <AppText
-          variant="footnote"
-          color={theme.colors.textMuted}
-          style={{ marginBottom: theme.space.xs }}
         >
-          Personalized matches from the API. Groups you already lead, belong to,
-          or have requested are excluded server-side.
-        </AppText>
-        {loading && !recs ? <GroupListSkeleton /> : null}
-        {recs && recs.length === 0 ? (
-          <EmptyState
-            title={createNew ? 'No strong matches' : 'No recommendations'}
-            body={
-              createNew
-                ? 'Nothing passed the matching threshold. You can create a group instead.'
-                : 'There are no compatible groups to show right now.'
+          <ScreenHeader
+            title="Groups"
+            onBack={() => navigation.goBack()}
+            action={
+              <TextLink
+                label="Create"
+                onPress={() => navigation.navigate('CreateGroup')}
+              />
             }
           />
-        ) : null}
-        {recs?.map((row, index) => (
-          <GroupRow
-            key={row.group.id}
-            group={row.group}
-            last={index === recs.length - 1}
-            caption={factorCaption(row)}
-            onPress={() =>
-              navigation.navigate('GroupDetail', { groupId: row.group.id })
-            }
-          />
-        ))}
-        {formula ? (
-          <AppText
-            variant="caption"
-            color={theme.colors.textMuted}
-            style={{ marginTop: theme.space.md }}
-          >
-            {formula}
-          </AppText>
-        ) : null}
+          <ErrorBanner message={error} />
+          <ErrorBanner message={recommendError} />
 
-        {createNew ? (
-          <View style={{ marginTop: theme.space.lg }}>
-            <Button
-              label="Create a group"
-              onPress={() => navigation.navigate('CreateGroup')}
+          <Button
+            label="Search groups"
+            tone="secondary"
+            onPress={() => navigation.navigate('Search')}
+          />
+
+          <SectionLabel>Your groups</SectionLabel>
+          {loading && !mine ? <GroupListSkeleton /> : null}
+          {mine && memberships.length === 0 ? (
+            <EmptyState
+              title="No memberships yet"
+              body="Create a group or search to find one. Join requests stay pending until a leader approves them."
             />
-          </View>
-        ) : null}
-      </ScrollView>
-    </SafeAreaView>
+          ) : null}
+          {memberships.map((group, index) => (
+            <GroupRow
+              key={group.id}
+              group={group}
+              last={index === memberships.length - 1}
+              onPress={() =>
+                navigation.navigate('GroupDetail', { groupId: group.id })
+              }
+            />
+          ))}
+
+          <SectionLabel>For you</SectionLabel>
+          <AppText
+            variant="footnote"
+            color={theme.colors.textMuted}
+            style={{ marginBottom: theme.space.xs }}
+          >
+            Personalized matches from the API. Groups you already lead, belong
+            to, or have requested are excluded server-side.
+          </AppText>
+          {loading && !recs ? <GroupListSkeleton /> : null}
+          {recs && recs.length === 0 ? (
+            <EmptyState
+              title={createNew ? 'No strong matches' : 'No recommendations'}
+              body={
+                createNew
+                  ? 'Nothing passed the matching threshold. You can create a group instead.'
+                  : 'There are no compatible groups to show right now.'
+              }
+            />
+          ) : null}
+          {recs?.map((row, index) => (
+            <GroupRow
+              key={row.group.id}
+              group={row.group}
+              last={index === recs.length - 1}
+              caption={factorCaption(row)}
+              onPress={() =>
+                navigation.navigate('GroupDetail', { groupId: row.group.id })
+              }
+            />
+          ))}
+          {formula ? (
+            <AppText
+              variant="caption"
+              color={theme.colors.textMuted}
+              style={{ marginTop: theme.space.md }}
+            >
+              {formula}
+            </AppText>
+          ) : null}
+
+          {createNew ? (
+            <View style={{ marginTop: theme.space.lg }}>
+              <Button
+                label="Create a group"
+                onPress={() => navigation.navigate('CreateGroup')}
+              />
+            </View>
+          ) : null}
+        </ScrollView>
+      </SafeAreaView>
+    </ScreenShell>
   );
 }

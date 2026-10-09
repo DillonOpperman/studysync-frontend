@@ -46,58 +46,75 @@ export function RegisterScreen({ onGoLogin }: { onGoLogin: () => void }) {
 
   return (
     <Screen>
-      <View style={{ marginTop: theme.space.md, marginBottom: theme.space.lg }}>
-        <BrandMark compact />
-        <AppText variant="title" style={{ marginTop: theme.space.xl }}>
-          Join StudySync
-        </AppText>
+      <View
+        style={{
+          alignItems: 'center',
+          marginTop: theme.space.sm,
+          marginBottom: theme.space.lg,
+        }}
+      >
+        <BrandMark compact align="center" />
         <AppText
-          variant="body"
+          variant="subhead"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.sm }}
+          style={{ marginTop: theme.space.sm, textAlign: 'center' }}
         >
-          A few details from campus. Passwords must be at least 8 characters.
+          A few details from campus.
         </AppText>
       </View>
       <ErrorBanner message={error} />
       <TextField
         label="Name"
+        hideLabel
         value={name}
         onChangeText={setName}
         autoCapitalize="words"
         textContentType="name"
       />
+      <View style={{ height: theme.space.sm }} />
       <TextField
         label="Email"
+        hideLabel
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         textContentType="emailAddress"
       />
+      <View style={{ height: theme.space.sm }} />
       <TextField
         label="Password"
+        hideLabel
         hint="8–128 characters"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         textContentType="newPassword"
       />
+      <View style={{ height: theme.space.sm }} />
       <TextField
         label="Institution"
+        hideLabel
         value={institutionName}
         onChangeText={setInstitutionName}
         autoCapitalize="words"
       />
+      <View style={{ height: theme.space.sm }} />
       <TextField
         label="Major"
+        hideLabel
         value={major}
         onChangeText={setMajor}
         autoCapitalize="words"
       />
       <AppText
-        variant="footnote"
-        color={theme.colors.textSecondary}
-        style={{ marginTop: theme.space.md, marginBottom: theme.space.xs }}
+        variant="caption"
+        color={theme.colors.textMuted}
+        style={{
+          marginTop: theme.space.lg,
+          marginBottom: theme.space.sm,
+          textTransform: 'uppercase',
+          letterSpacing: 0.8,
+        }}
       >
         Year
       </AppText>

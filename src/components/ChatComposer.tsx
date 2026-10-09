@@ -34,11 +34,9 @@ export function ChatComposer({
   return (
     <View
       style={{
-        borderTopWidth: theme.control.hairline,
-        borderTopColor: theme.colors.divider,
         paddingTop: theme.space.sm,
         paddingBottom: Math.max(insets.bottom, theme.space.sm),
-        backgroundColor: theme.colors.canvas,
+        backgroundColor: 'transparent',
       }}
     >
       {canAnnounce ? (
@@ -50,44 +48,48 @@ export function ChatComposer({
           />
         </View>
       ) : null}
-      <TextField
-        label="Message"
-        hideLabel
-        placeholder="Message"
-        value={value}
-        onChangeText={onChangeText}
-        multiline
-        editable={!disabled}
-        maxLength={MAX_GROUP_MESSAGE_CHARS}
-        returnKeyType="send"
-        blurOnSubmit={false}
-        onSubmitEditing={onSend}
-      />
       <View
         style={{
-          marginTop: theme.space.sm,
           flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          alignItems: 'flex-end',
           gap: theme.space.sm,
         }}
       >
-        <AppText
-          variant="caption"
-          color={theme.colors.textMuted}
-          style={{ letterSpacing: 0, fontWeight: '400' }}
-        >
-          {count}/{MAX_GROUP_MESSAGE_CHARS}
-        </AppText>
-        <View style={{ minWidth: 108 }}>
-          <Button
-            label="Send"
-            onPress={onSend}
-            loading={sending}
-            disabled={disabled || sending || !value.trim()}
+        <View style={{ flex: 1 }}>
+          <TextField
+            label="Message"
+            hideLabel
+            placeholder="Message"
+            value={value}
+            onChangeText={onChangeText}
+            multiline
+            editable={!disabled}
+            maxLength={MAX_GROUP_MESSAGE_CHARS}
+            returnKeyType="send"
+            blurOnSubmit={false}
+            onSubmitEditing={onSend}
           />
         </View>
+        <Button
+          label="Go"
+          round
+          onPress={onSend}
+          loading={sending}
+          disabled={disabled || sending || !value.trim()}
+          accessibilityLabel="Send"
+        />
       </View>
+      <AppText
+        variant="caption"
+        color={theme.colors.textMuted}
+        style={{
+          marginTop: theme.space.xs,
+          letterSpacing: 0,
+          fontWeight: '400',
+        }}
+      >
+        {count}/{MAX_GROUP_MESSAGE_CHARS}
+      </AppText>
     </View>
   );
 }

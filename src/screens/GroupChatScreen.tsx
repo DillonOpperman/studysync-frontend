@@ -26,6 +26,7 @@ import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { MessageBubble } from '../components/MessageBubble';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { ScreenShell } from '../components/ScreenShell';
 import { TextLink } from '../components/TextLink';
 import { chatApi } from '../features/chat/chatApi';
 import { newClientMsgId } from '../features/chat/clientMsgId';
@@ -382,115 +383,114 @@ export function GroupChatScreen({
       : null;
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.canvas }}
-      edges={['top', 'left', 'right']}
-    >
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <View style={{ paddingHorizontal: theme.space.screen, flex: 1 }}>
-          <ScreenHeader
-            title={headerTitle}
-            onBack={() => navigation.goBack()}
-          />
-          <ErrorBanner message={error ?? wsError} />
-          {live ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: theme.space.sm,
-              }}
-            >
-              <AppText variant="footnote" color={theme.colors.textMuted}>
-                {live}
-              </AppText>
-              {status === 'disconnected' ? (
-                <TextLink
-                  label="Retry"
-                  onPress={() => socketRef.current?.resume()}
-                />
-              ) : null}
-            </View>
-          ) : null}
+    <ScreenShell>
+      <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <View style={{ paddingHorizontal: theme.space.screen, flex: 1 }}>
+            <ScreenHeader
+              title={headerTitle}
+              onBack={() => navigation.goBack()}
+            />
+            <ErrorBanner message={error ?? wsError} />
+            {live ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: theme.space.sm,
+                }}
+              >
+                <AppText variant="footnote" color={theme.colors.textMuted}>
+                  {live}
+                </AppText>
+                {status === 'disconnected' ? (
+                  <TextLink
+                    label="Retry"
+                    onPress={() => socketRef.current?.resume()}
+                  />
+                ) : null}
+              </View>
+            ) : null}
 
-          {loading ? (
-            <ActivityIndicator color={theme.colors.accent} />
-          ) : messages.length === 0 ? (
-            <EmptyState
-              title="No messages yet"
-              body="Say hello. History is stored on the server and syncs over the live connection."
-            />
-          ) : (
-            <FlatList
-              data={inverted}
-              inverted
-              keyExtractor={item => item.id}
-              onEndReached={loadOlder}
-              onEndReachedThreshold={0.2}
-              keyboardShouldPersistTaps="handled"
-              ListFooterComponent={
-                loadingOlder ? (
-                  <ActivityIndicator color={theme.colors.accent} />
-                ) : undefined
-              }
-              renderItem={({ item }) => (
-                <MessageBubble
-                  message={item}
-                  mine={item.senderId === userId}
-                  senderName={
-                    names.get(item.senderId) ??
-                    (item.senderId === userId ? 'You' : 'Member')
-                  }
-                  canEdit={canEditMessage(item, userId)}
-                  canDelete={canDeleteMessage(
-                    item,
-                    userId,
-                    Boolean(group?.isLeader),
-                  )}
-                  onEdit={() => requestEdit(item)}
-                  onDelete={() => requestDelete(item)}
-                  onReact={emoji => {
-                    chatApi(client)
-                      .toggleReaction(item.id, emoji)
-                      .then(stateDto =>
-                        setMessages(current =>
-                          applyReactionState(current, stateDto),
-                        ),
-                      )
-                      .catch(caught => setError(userFacingMessage(caught)));
-                  }}
-                />
-              )}
-            />
-          )}
+            {loading ? (
+              <ActivityIndicator color={theme.colors.accent} />
+            ) : messages.length === 0 ? (
+              <EmptyState
+                title="No messages yet"
+                body="Say hello. History is stored on the server and syncs over the live connection."
+              />
+            ) : (
+              <FlatList
+                data={inverted}
+                inverted
+                keyExtractor={item => item.id}
+                onEndReached={loadOlder}
+                onEndReachedThreshold={0.2}
+                keyboardShouldPersistTaps="handled"
+                ListFooterComponent={
+                  loadingOlder ? (
+                    <ActivityIndicator color={theme.colors.accent} />
+                  ) : undefined
+                }
+                renderItem={({ item }) => (
+                  <MessageBubble
+                    message={item}
+                    mine={item.senderId === userId}
+                    senderName={
+                      names.get(item.senderId) ??
+                      (item.senderId === userId ? 'You' : 'Member')
+                    }
+                    canEdit={canEditMessage(item, userId)}
+                    canDelete={canDeleteMessage(
+                      item,
+                      userId,
+                      Boolean(group?.isLeader),
+                    )}
+                    onEdit={() => requestEdit(item)}
+                    onDelete={() => requestDelete(item)}
+                    onReact={emoji => {
+                      chatApi(client)
+                        .toggleReaction(item.id, emoji)
+                        .then(stateDto =>
+                          setMessages(current =>
+                            applyReactionState(current, stateDto),
+                          ),
+                        )
+                        .catch(caught => setError(userFacingMessage(caught)));
+                    }}
+                  />
+                )}
+              />
+            )}
 
-          {group && canOpenGroupChat(group) ? (
-            <ChatComposer
-              value={draft}
-              onChangeText={setDraft}
-              onSend={onSend}
-              sending={sending}
-              canAnnounce={Boolean(group.isLeader) && !editingId}
-              announce={announce}
-              onToggleAnnounce={() => setAnnounce(value => !value)}
-              disabled={false}
-            />
-          ) : null}
-          {editingId ? (
-            <TextLink
-              label="Cancel edit"
-              onPress={() => {
-                setEditingId(null);
-                setDraft('');
-              }}
-            />
-          ) : null}
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            {group && canOpenGroupChat(group) ? (
+              <ChatComposer
+                value={draft}
+                onChangeText={setDraft}
+                onSend={onSend}
+                sending={sending}
+                canAnnounce={Boolean(group.isLeader) && !editingId}
+                announce={announce}
+                onToggleAnnounce={() => setAnnounce(value => !value)}
+                disabled={false}
+              />
+            ) : null}
+            {editingId ? (
+              <TextLink
+                label="Cancel edit"
+                onPress={() => {
+                  setEditingId(null);
+                  setDraft('');
+                }}
+              />
+            ) : null}
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ScreenShell>
   );
 }

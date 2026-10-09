@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import type { GroupDto } from '../api/types';
-import { hairlineWidth, useTheme } from '../theme';
+import { glassSurface, useTheme } from '../theme';
 import { AppText } from './AppText';
 import { PressScale } from './PressScale';
 
@@ -28,11 +28,15 @@ export function GroupRow({
 
   const body = (
     <View
-      style={{
-        paddingVertical: 14,
-        borderBottomWidth: last ? 0 : hairlineWidth(),
-        borderBottomColor: theme.colors.divider,
-      }}
+      style={[
+        glassSurface(theme, 'soft'),
+        {
+          paddingVertical: 16,
+          paddingHorizontal: 16,
+          borderRadius: theme.radius.lg,
+          marginBottom: last ? 0 : theme.space.sm,
+        },
+      ]}
     >
       <AppText variant="headline">{group.title}</AppText>
       <AppText

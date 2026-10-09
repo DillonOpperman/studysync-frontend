@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { act, create } from 'react-test-renderer';
 
 import { Button } from '../src/components/Button';
@@ -66,16 +67,23 @@ let tree: ReturnType<typeof create> | undefined;
 async function renderChat() {
   await act(async () => {
     tree = create(
-      <ThemeProvider>
-        <GroupChatScreen
-          navigation={navigation as never}
-          route={{
-            key: 'c',
-            name: 'GroupChat',
-            params: { groupId: 'g1', title: 'Algo night' },
-          }}
-        />
-      </ThemeProvider>,
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, left: 0, right: 0, bottom: 34 },
+        }}
+      >
+        <ThemeProvider>
+          <GroupChatScreen
+            navigation={navigation as never}
+            route={{
+              key: 'c',
+              name: 'GroupChat',
+              params: { groupId: 'g1', title: 'Algo night' },
+            }}
+          />
+        </ThemeProvider>
+      </SafeAreaProvider>,
     );
     await Promise.resolve();
     await Promise.resolve();
@@ -134,7 +142,12 @@ describe('GroupChatScreen (mocked HTTP/WS — not a live Rust server)', () => {
     const screen = await renderChat();
     const send = screen.root
       .findAllByType(Button)
-      .find(node => node.props.label === 'Send');
+      .find(
+        node =>
+          node.props.accessibilityLabel === 'Send' ||
+          node.props.label === 'Send' ||
+          node.props.label === 'Go',
+      );
     await act(async () => {
       send?.props.onPress();
     });

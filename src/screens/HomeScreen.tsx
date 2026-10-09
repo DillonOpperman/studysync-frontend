@@ -13,6 +13,7 @@ import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { GroupRow } from '../components/GroupRow';
+import { ScreenShell } from '../components/ScreenShell';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { TextLink } from '../components/TextLink';
 import type { AppStackParamList } from '../navigation/types';
@@ -69,58 +70,58 @@ export function HomeScreen({
   const preview = (groups ?? []).slice(0, 3);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.canvas }}
-      edges={['top', 'bottom', 'left', 'right']}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: theme.space.screen,
-          paddingBottom: theme.space.xxxl,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            tintColor={theme.colors.accent}
-            colors={[theme.colors.accent]}
-            onRefresh={() => {
-              setRefreshing(true);
-              load();
-            }}
-          />
-        }
+    <ScreenShell>
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={['top', 'bottom', 'left', 'right']}
       >
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginTop: theme.space.sm,
-            marginBottom: theme.space.lg,
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: theme.space.screen,
+            paddingBottom: theme.space.xxxl,
           }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              tintColor={theme.colors.accent}
+              colors={[theme.colors.accent]}
+              onRefresh={() => {
+                setRefreshing(true);
+                load();
+              }}
+            />
+          }
         >
-          <AppText variant="caption" color={theme.colors.textMuted}>
-            StudySync
-          </AppText>
-          <TextLink label="Log out" tone="danger" onPress={onLogout} />
-        </View>
-
-        {profile ? (
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-              gap: theme.space.md,
-              marginBottom: theme.space.xl,
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginTop: theme.space.sm,
+              marginBottom: theme.space.lg,
             }}
           >
-            <Avatar name={profile.name} size={56} />
-            <View style={{ flex: 1 }}>
-              <AppText variant="title">Hi, {firstName(profile.name)}</AppText>
+            <AppText variant="caption" color={theme.colors.textMuted}>
+              StudySync
+            </AppText>
+            <TextLink label="Log out" tone="danger" onPress={onLogout} />
+          </View>
+
+          {profile ? (
+            <View
+              style={{
+                alignItems: 'flex-start',
+                marginBottom: theme.space.xl,
+              }}
+            >
+              <Avatar name={profile.name} size={88} />
+              <AppText variant="display" style={{ marginTop: theme.space.md }}>
+                Hi, {firstName(profile.name)}
+              </AppText>
               <AppText
                 variant="subhead"
                 color={theme.colors.textSecondary}
-                style={{ marginTop: 4 }}
+                style={{ marginTop: 6 }}
               >
                 {profile.major} · {profile.year}
               </AppText>
@@ -132,64 +133,64 @@ export function HomeScreen({
                 {profile.institution.name}
               </AppText>
             </View>
+          ) : null}
+
+          <ErrorBanner message={error} />
+
+          <View style={{ gap: theme.space.sm, marginBottom: theme.space.md }}>
+            <Button
+              label="Find groups"
+              onPress={() => navigation.navigate('Groups')}
+            />
+            <Button
+              label="Create a group"
+              tone="secondary"
+              onPress={() => navigation.navigate('CreateGroup')}
+            />
           </View>
-        ) : null}
 
-        <ErrorBanner message={error} />
-
-        <View style={{ gap: theme.space.sm, marginBottom: theme.space.md }}>
-          <Button
-            label="Find groups"
-            onPress={() => navigation.navigate('Groups')}
-          />
-          <Button
-            label="Create a group"
-            tone="secondary"
-            onPress={() => navigation.navigate('CreateGroup')}
-          />
-        </View>
-
-        <View
-          style={{
-            marginTop: theme.space.md,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-          }}
-        >
-          <AppText
-            variant="caption"
-            color={theme.colors.textMuted}
-            style={{ textTransform: 'uppercase', letterSpacing: 0.9 }}
+          <View
+            style={{
+              marginTop: theme.space.md,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+            }}
           >
-            Your groups
-          </AppText>
-          <TextLink
-            label="See all"
-            onPress={() => navigation.navigate('Groups')}
-          />
-        </View>
+            <AppText
+              variant="caption"
+              color={theme.colors.textMuted}
+              style={{ textTransform: 'uppercase', letterSpacing: 0.9 }}
+            >
+              Your groups
+            </AppText>
+            <TextLink
+              label="See all"
+              onPress={() => navigation.navigate('Groups')}
+            />
+          </View>
 
-        {loading && !groups ? <GroupListSkeleton /> : null}
+          {loading && !groups ? <GroupListSkeleton /> : null}
 
-        {groups && groups.length === 0 ? (
-          <EmptyState
-            title="No groups yet"
-            body="Create a group or search to find classmates. Join requests wait for a leader to approve."
-          />
-        ) : null}
+          {groups && groups.length === 0 ? (
+            <EmptyState
+              title="No groups yet"
+              body="Create a group or search to find classmates. Join requests wait for a leader to approve."
+            />
+          ) : null}
 
-        {preview.map((group, index) => (
-          <GroupRow
-            key={group.id}
-            group={group}
-            last={index === preview.length - 1}
-            onPress={() =>
-              navigation.navigate('GroupDetail', { groupId: group.id })
-            }
-          />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+          {preview.map((group, index) => (
+            <GroupRow
+              key={group.id}
+              group={group}
+              last={index === preview.length - 1}
+              onPress={() =>
+                navigation.navigate('GroupDetail', { groupId: group.id })
+              }
+            />
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </ScreenShell>
   );
 }
