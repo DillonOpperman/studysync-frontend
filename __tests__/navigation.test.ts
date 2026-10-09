@@ -11,7 +11,7 @@ describe('initial navigation', () => {
     expect(rootFor({ status: 'signedIn', user })).toBe('app');
   });
 
-  it('exposes Groups, Search, Create, and Detail without dummy Chat or Profile tabs', () => {
+  it('exposes Groups, Search, Create, Detail, Friends, and DirectChat without dummy tabs', () => {
     expect(APP_STACK_ROUTES).toEqual([
       'Home',
       'Groups',
@@ -19,6 +19,8 @@ describe('initial navigation', () => {
       'CreateGroup',
       'GroupDetail',
       'GroupChat',
+      'Friends',
+      'DirectChat',
     ]);
     expect(APP_STACK_ROUTES).not.toContain('Chat');
     expect(APP_STACK_ROUTES).not.toContain('Profile');

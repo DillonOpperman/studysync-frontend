@@ -143,6 +143,11 @@ export function HomeScreen({
               onPress={() => navigation.navigate('Groups')}
             />
             <Button
+              label="People"
+              tone="secondary"
+              onPress={() => navigation.navigate('Friends')}
+            />
+            <Button
               label="Create a group"
               tone="secondary"
               onPress={() => navigation.navigate('CreateGroup')}

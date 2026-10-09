@@ -60,6 +60,14 @@ export class ApiClient {
     path: string,
     init: RequestInit & { skipAuth?: boolean; parseJson?: boolean } = {},
   ): Promise<T> {
+    const { data } = await this.requestResult<T>(path, init);
+    return data;
+  }
+
+  async requestResult<T>(
+    path: string,
+    init: RequestInit & { skipAuth?: boolean; parseJson?: boolean } = {},
+  ): Promise<{ status: number; data: T }> {
     const { skipAuth, parseJson = true, ...rest } = init;
     try {
       return await this.send<T>(path, rest, skipAuth ?? false, parseJson);
@@ -90,7 +98,7 @@ export class ApiClient {
     init: RequestInit,
     skipAuth: boolean,
     parseJson: boolean,
-  ): Promise<T> {
+  ): Promise<{ status: number; data: T }> {
     const headers = new Headers(init.headers);
     if (init.body && !headers.has('Content-Type')) {
       headers.set('Content-Type', 'application/json');
@@ -133,7 +141,7 @@ export class ApiClient {
     }
 
     if (response.status === 204) {
-      return undefined as T;
+      return { status: 204, data: undefined as T };
     }
 
     const text = await response.text();
@@ -141,7 +149,7 @@ export class ApiClient {
       throw parseErrorBody(text, response.status);
     }
     if (!parseJson) {
-      return undefined as T;
+      return { status: response.status, data: undefined as T };
     }
     if (!text.trim()) {
       throw new ApiError(
@@ -151,7 +159,7 @@ export class ApiClient {
       );
     }
     try {
-      return JSON.parse(text) as T;
+      return { status: response.status, data: JSON.parse(text) as T };
     } catch {
       throw new ApiError(
         response.status,

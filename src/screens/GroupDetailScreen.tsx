@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { userFacingMessage } from '../api/errors';
 import type { GroupDto, GroupMemberDto, JoinRequestDto } from '../api/types';
@@ -14,8 +14,10 @@ import { ErrorBanner } from '../components/ErrorBanner';
 import { Screen } from '../components/Screen';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { SectionLabel } from '../components/SectionLabel';
+import { TextLink } from '../components/TextLink';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { groupsApi } from '../features/groups/groupsApi';
+import { friendsApi } from '../features/social/friendsApi';
 import {
   canLeave,
   canManageJoinRequests,
@@ -35,7 +37,8 @@ export function GroupDetailScreen({
   route,
 }: NativeStackScreenProps<AppStackParamList, 'GroupDetail'>) {
   const theme = useTheme();
-  const { client } = useAuth();
+  const { client, state } = useAuth();
+  const selfId = state?.status === 'signedIn' ? state.user.id : '';
   const { groupId } = route.params;
   const [group, setGroup] = useState<GroupDto | null>(null);
   const [members, setMembers] = useState<GroupMemberDto[] | null>(null);
@@ -237,11 +240,67 @@ export function GroupDetailScreen({
               }}
             >
               <Avatar name={member.name} size={32} />
-              <View>
+              <View style={{ flex: 1 }}>
                 <AppText variant="callout">{member.name}</AppText>
                 <AppText variant="caption" color={theme.colors.textMuted}>
                   {member.role}
                 </AppText>
+                {member.userId !== selfId ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      gap: theme.space.xs,
+                      marginTop: 4,
+                    }}
+                  >
+                    <TextLink
+                      label="Message"
+                      align="start"
+                      onPress={() =>
+                        navigation.navigate('DirectChat', {
+                          userId: member.userId,
+                          name: member.name,
+                        })
+                      }
+                    />
+                    <TextLink
+                      label="Add friend"
+                      align="start"
+                      onPress={() =>
+                        run(() =>
+                          friendsApi(client)
+                            .sendRequest(member.userId)
+                            .then(() => undefined),
+                        )
+                      }
+                    />
+                    <TextLink
+                      label="Block"
+                      tone="danger"
+                      align="start"
+                      onPress={() =>
+                        Alert.alert(
+                          'Block this person?',
+                          `You will not be able to message ${member.name}.`,
+                          [
+                            { text: 'Cancel', style: 'cancel' },
+                            {
+                              text: 'Block',
+                              style: 'destructive',
+                              onPress: () =>
+                                run(() =>
+                                  friendsApi(client)
+                                    .block(member.userId)
+                                    .then(() => undefined),
+                                ),
+                            },
+                          ],
+                        )
+                      }
+                    />
+                  </View>
+                ) : null}
               </View>
             </View>
           ))}

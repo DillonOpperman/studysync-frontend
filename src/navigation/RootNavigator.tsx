@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 
 import { useAuth } from '../auth/AuthProvider';
 import { CreateGroupScreen } from '../screens/CreateGroupScreen';
+import { DirectChatScreen } from '../screens/DirectChatScreen';
+import { FriendsScreen } from '../screens/FriendsScreen';
 import { GroupChatScreen } from '../screens/GroupChatScreen';
 import { GroupDetailScreen } from '../screens/GroupDetailScreen';
 import { GroupsScreen } from '../screens/GroupsScreen';
@@ -71,6 +73,8 @@ function SignedInNavigator() {
       <AppStack.Screen name="CreateGroup" component={CreateGroupScreen} />
       <AppStack.Screen name="GroupDetail" component={GroupDetailScreen} />
       <AppStack.Screen name="GroupChat" component={GroupChatScreen} />
+      <AppStack.Screen name="Friends" component={FriendsScreen} />
+      <AppStack.Screen name="DirectChat" component={DirectChatScreen} />
     </AppStack.Navigator>
   );
 }

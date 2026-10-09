@@ -20,6 +20,13 @@ jest.mock('../src/features/groups/groupsApi', () => ({
   groupsApi: () => mockApi,
 }));
 
+jest.mock('../src/features/social/friendsApi', () => ({
+  friendsApi: () => ({
+    sendRequest: jest.fn(),
+    block: jest.fn(),
+  }),
+}));
+
 const mockClient = {};
 
 jest.mock('../src/auth/AuthProvider', () => ({

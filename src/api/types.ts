@@ -257,7 +257,66 @@ export type ReactionStateDto = {
   reactions: ReactionCountDto[];
 };
 
+export type FriendRequestDto = {
+  id: string;
+  status: string;
+  createdAt: string;
+  decidedAt: string | null;
+  requester: UserSummaryDto;
+  recipient: UserSummaryDto;
+};
+
+export type FriendRequestListDto = {
+  incoming: FriendRequestDto[];
+  outgoing: FriendRequestDto[];
+};
+
+export type FriendListDto = {
+  user: UserSummaryDto;
+  friendsSince: string;
+};
+
+export type DirectMessageDto = {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  messageType: string;
+  createdAt: string;
+  readAt: string | null;
+  attachments: MediaDto[];
+};
+
+export type MessageRequestDto = {
+  id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  sender: UserSummaryDto;
+  receiver: UserSummaryDto;
+};
+
+export type SendDirectMessageRequest = {
+  recipientId: string;
+  content: string;
+  messageType?: 'text' | 'image' | 'file';
+  attachmentIds?: string[];
+};
+
+export type SendDirectMessageResult =
+  | {
+      kind: 'directMessage';
+      status: number;
+      message: DirectMessageDto;
+    }
+  | {
+      kind: 'messageRequest';
+      status: number;
+      messageRequest: MessageRequestDto;
+    };
+
 export const MAX_GROUP_MESSAGE_CHARS = 4000;
+export const MAX_DIRECT_MESSAGE_CHARS = 4000;
 export const GROUP_MESSAGE_EDIT_WINDOW_MS = 15 * 60 * 1000;
 export const CHAT_REACTION_CHOICES = ['👍', '❤️', '😂', '🎉', '👀'] as const;
 

@@ -18,6 +18,7 @@ export function ChatComposer({
   announce,
   onToggleAnnounce,
   disabled,
+  maxLength = MAX_GROUP_MESSAGE_CHARS,
 }: {
   value: string;
   onChangeText: (value: string) => void;
@@ -27,6 +28,7 @@ export function ChatComposer({
   announce: boolean;
   onToggleAnnounce: () => void;
   disabled?: boolean;
+  maxLength?: number;
 }) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -64,7 +66,7 @@ export function ChatComposer({
             onChangeText={onChangeText}
             multiline
             editable={!disabled}
-            maxLength={MAX_GROUP_MESSAGE_CHARS}
+            maxLength={maxLength}
             returnKeyType="send"
             blurOnSubmit={false}
             onSubmitEditing={onSend}
@@ -88,7 +90,7 @@ export function ChatComposer({
           fontWeight: '400',
         }}
       >
-        {count}/{MAX_GROUP_MESSAGE_CHARS}
+        {count}/{maxLength}
       </AppText>
     </View>
   );
