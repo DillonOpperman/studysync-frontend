@@ -135,6 +135,92 @@ export type GroupDto = {
   updatedAt: string;
 };
 
+export type CreateGroupRequest = {
+  title: string;
+  subject: string;
+  courseId?: string;
+  description?: string;
+  location?: string;
+  maxMembers: number;
+  recurringSlots?: AvailabilityInput[];
+};
+
+export type GroupMemberDto = {
+  userId: string;
+  name: string;
+  profilePictureKey: string | null;
+  role: string;
+  joinedAt: string;
+};
+
+export type JoinRequestDto = {
+  id: string;
+  groupId: string;
+  status: string;
+  createdAt: string;
+  decidedAt: string | null;
+  requester: UserSummaryDto;
+};
+
+export type SearchMode = 'fullText' | 'semantic';
+
+export type GroupSearchRequest = {
+  query: string;
+  mode?: SearchMode;
+  limit?: number;
+  offset?: number;
+  threshold?: number;
+};
+
+export type GroupSearchResultDto = {
+  group: GroupDto;
+  score: number;
+};
+
+export type GroupSearchResponse = {
+  mode: string;
+  query: string;
+  results: GroupSearchResultDto[];
+  limit: number;
+  offset: number;
+};
+
+export type RecommendedGroupDto = {
+  group: GroupDto;
+  score: number;
+  groupSubject: number;
+  leaderSubjectSimilarity: number;
+  scheduleOverlap: number;
+  sizeMatch: number;
+};
+
+export type RecommendResponse = {
+  groups: RecommendedGroupDto[];
+  createNew: boolean;
+  formula: string;
+  modelId: string;
+  semanticAvailable: boolean;
+};
+
+export const WEEKDAYS = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+] as const;
+
+export const COMMON_TIMEZONES = [
+  'America/Chicago',
+  'America/New_York',
+  'America/Denver',
+  'America/Los_Angeles',
+  'America/Phoenix',
+  'UTC',
+] as const;
+
 export type ApiErrorBody = {
   error: {
     code: string;

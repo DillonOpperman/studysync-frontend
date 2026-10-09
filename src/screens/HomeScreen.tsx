@@ -1,3 +1,5 @@
+import { useFocusEffect } from '@react-navigation/native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,18 +9,22 @@ import type { GroupDto, UserProfileDto } from '../api/types';
 import { useAuth } from '../auth/AuthProvider';
 import { AppText } from '../components/AppText';
 import { Avatar } from '../components/Avatar';
+import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
-import { TextLink } from '../components/TextLink';
 import { ErrorBanner } from '../components/ErrorBanner';
-import { GroupListSkeleton } from '../components/Skeleton';
 import { GroupRow } from '../components/GroupRow';
+import { GroupListSkeleton } from '../components/Skeleton';
+import { TextLink } from '../components/TextLink';
+import type { AppStackParamList } from '../navigation/types';
 import { hairlineWidth, useTheme } from '../theme';
 
 function firstName(name: string): string {
   return name.trim().split(/\s+/)[0] || name;
 }
 
-export function HomeScreen() {
+export function HomeScreen({
+  navigation,
+}: NativeStackScreenProps<AppStackParamList, 'Home'>) {
   const theme = useTheme();
   const { state, logout, refreshProfile, loadGroups } = useAuth();
   const user = state.status === 'signedIn' ? state.user : null;
@@ -45,9 +51,11 @@ export function HomeScreen() {
     }
   }, [loadGroups, refreshProfile]);
 
-  React.useEffect(() => {
-    load();
-  }, [load]);
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load]),
+  );
 
   async function onLogout() {
     setError(null);
@@ -57,6 +65,8 @@ export function HomeScreen() {
       setError(userFacingMessage(caught));
     }
   }
+
+  const preview = (groups ?? []).slice(0, 3);
 
   return (
     <SafeAreaView
@@ -123,23 +133,33 @@ export function HomeScreen() {
 
         <ErrorBanner message={error} />
 
+        <View style={{ gap: theme.space.sm, marginBottom: theme.space.xl }}>
+          <Button
+            label="Find groups"
+            onPress={() => navigation.navigate('Groups')}
+          />
+          <Button
+            label="Create a group"
+            tone="secondary"
+            onPress={() => navigation.navigate('CreateGroup')}
+          />
+        </View>
+
         <View
           style={{
             borderTopWidth: hairlineWidth(),
             borderTopColor: theme.colors.divider,
             paddingTop: theme.space.md,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          <AppText variant="headline">Groups</AppText>
-          {groups && groups.length > 0 ? (
-            <AppText
-              variant="footnote"
-              color={theme.colors.textMuted}
-              style={{ marginTop: 2 }}
-            >
-              {groups.length} {groups.length === 1 ? 'group' : 'groups'}
-            </AppText>
-          ) : null}
+          <AppText variant="headline">Your groups</AppText>
+          <TextLink
+            label="See all"
+            onPress={() => navigation.navigate('Groups')}
+          />
         </View>
 
         {loading && !groups ? <GroupListSkeleton /> : null}
@@ -147,15 +167,18 @@ export function HomeScreen() {
         {groups && groups.length === 0 ? (
           <EmptyState
             title="No groups yet"
-            body="When you join or create a study group, it will show up here. Matching and group creation are coming in a later update."
+            body="Create a group or search to find classmates. Join requests wait for a leader to approve."
           />
         ) : null}
 
-        {groups?.map((group, index) => (
+        {preview.map((group, index) => (
           <GroupRow
             key={group.id}
             group={group}
-            last={index === groups.length - 1}
+            last={index === preview.length - 1}
+            onPress={() =>
+              navigation.navigate('GroupDetail', { groupId: group.id })
+            }
           />
         ))}
       </ScrollView>

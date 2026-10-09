@@ -1,5 +1,6 @@
 import { apiUrl } from '../config/env';
 import {
+  AbortedError,
   ApiError,
   NetworkError,
   isTokenExpired,
@@ -103,14 +104,19 @@ export class ApiClient {
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    const onOuterAbort = () => controller.abort();
+    init.signal?.addEventListener('abort', onOuterAbort);
     let response: Response;
     try {
       response = await this.fetchImpl(apiUrl(path), {
         ...init,
         headers,
-        signal: init.signal ?? controller.signal,
+        signal: controller.signal,
       });
     } catch (error) {
+      if (init.signal?.aborted) {
+        throw new AbortedError();
+      }
       if (__DEV__) {
         console.warn('StudySync request failed', {
           path,
@@ -123,6 +129,7 @@ export class ApiClient {
       throw new NetworkError();
     } finally {
       clearTimeout(timer);
+      init.signal?.removeEventListener('abort', onOuterAbort);
     }
 
     if (response.status === 204) {

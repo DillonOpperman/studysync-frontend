@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 
+import type { ApiClient } from '../api/client';
 import type {
   GroupDto,
   LoginRequest,
@@ -18,6 +19,7 @@ import { SessionController, type SessionState } from './session';
 
 type AuthContextValue = {
   state: SessionState;
+  client: ApiClient;
   register: (body: RegisterRequest) => Promise<void>;
   login: (body: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
@@ -66,7 +68,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ state, register, login, logout, refreshProfile, loadGroups }),
+    () => ({
+      state,
+      client: controller.client,
+      register,
+      login,
+      logout,
+      refreshProfile,
+      loadGroups,
+    }),
     [state, register, login, logout, refreshProfile, loadGroups],
   );
 

@@ -12,6 +12,13 @@ export class ApiError extends Error {
   }
 }
 
+export class AbortedError extends Error {
+  constructor() {
+    super('Request cancelled');
+    this.name = 'AbortedError';
+  }
+}
+
 export class NetworkError extends Error {
   constructor(
     message = 'Unable to reach StudySync. Check that the API is running.',
@@ -59,6 +66,9 @@ export function parseErrorBody(text: string, status: number): ApiError {
 }
 
 export function userFacingMessage(error: unknown): string {
+  if (error instanceof AbortedError) {
+    return '';
+  }
   if (error instanceof NetworkError) {
     return error.message;
   }

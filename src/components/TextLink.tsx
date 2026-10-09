@@ -8,10 +8,12 @@ export function TextLink({
   label,
   onPress,
   tone = 'accent',
+  align = 'end',
 }: {
   label: string;
   onPress: () => void;
   tone?: 'accent' | 'danger' | 'muted';
+  align?: 'end' | 'start';
 }) {
   const theme = useTheme();
   const color =
@@ -30,7 +32,7 @@ export function TextLink({
         minHeight: 44,
         minWidth: 44,
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: align === 'start' ? 'flex-start' : 'flex-end',
       }}
     >
       <AppText variant="callout" color={color} style={{ fontWeight: '600' }}>
