@@ -1,5 +1,5 @@
 import { ApiClient } from '../src/api/client';
-import { ApiError, NetworkError } from '../src/api/errors';
+import { AbortedError, ApiError, NetworkError } from '../src/api/errors';
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(body === undefined ? '' : JSON.stringify(body), {
@@ -102,5 +102,30 @@ describe('ApiClient', () => {
       fetchImpl as unknown as typeof fetch,
     );
     await expect(client.request('/me')).rejects.toBeInstanceOf(NetworkError);
+  });
+
+  it('maps caller abort to AbortedError instead of a timeout', async () => {
+    const controller = new AbortController();
+    const fetchImpl = jest.fn(
+      async (_url: RequestInfo | URL, init?: RequestInit) => {
+        init?.signal?.addEventListener('abort', () => undefined);
+        throw Object.assign(new Error('Aborted'), { name: 'AbortError' });
+      },
+    );
+    const client = new ApiClient(
+      {
+        getAccessToken: () => 'x',
+        refreshAccessToken: async () => null,
+        onAuthFailure: async () => undefined,
+      },
+      fetchImpl as unknown as typeof fetch,
+    );
+    controller.abort();
+    await expect(
+      client.request('/search/groups', {
+        method: 'POST',
+        signal: controller.signal,
+      }),
+    ).rejects.toBeInstanceOf(AbortedError);
   });
 });

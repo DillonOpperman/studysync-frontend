@@ -1,0 +1,11 @@
+node_modules
+coverage
+android/app/build
+android/app/.cxx
+android/build
+ios/Pods
+ios/**/Contents.json
+README.md
+vendor
+*.lock
+.prettierignore
