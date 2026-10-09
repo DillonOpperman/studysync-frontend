@@ -7,6 +7,7 @@ import { Animated } from 'react-native';
 import {
   deskStackOptions,
   glassPageTurn,
+  GLASS_SHEET,
   PAGE_TURN_FADE_MS,
   PAGE_TURN_MS,
 } from '../src/navigation/glassPageTurn';
@@ -26,10 +27,10 @@ function props(
 }
 
 describe('glass page turn (unit — not an emulator recording)', () => {
-  it('uses a 400ms simulated hinge, not a 180-degree flip', () => {
-    expect(PAGE_TURN_MS).toBe(400);
+  it('uses a 420ms simulated hinge, not a 180-degree flip', () => {
+    expect(PAGE_TURN_MS).toBe(420);
     const open = glassPageTurn(props());
-    expect(open.cardStyle).toMatchObject({ backgroundColor: 'transparent' });
+    expect(open.cardStyle).toMatchObject({ backgroundColor: GLASS_SHEET });
     const close = glassPageTurn(props({ progress: new Animated.Value(0) }));
     expect(close.cardStyle).toBeDefined();
   });

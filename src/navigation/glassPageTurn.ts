@@ -7,14 +7,17 @@ import {
 } from '@react-navigation/stack';
 
 /** Simulated glass page turn — rotate/translate only, not a physical curl. */
-export const PAGE_TURN_MS = 400;
+export const PAGE_TURN_MS = 420;
 export const PAGE_TURN_FADE_MS = 200;
+
+/** Frosted ivory sheet: paper shows through, stacked text does not. */
+export const GLASS_SHEET = 'rgba(251, 246, 238, 0.58)';
 
 const pageTurnTiming = {
   animation: 'timing' as const,
   config: {
     duration: PAGE_TURN_MS,
-    easing: Easing.out(Easing.cubic),
+    easing: Easing.bezier(0.22, 0.08, 0.18, 1),
   },
 };
 
@@ -29,7 +32,7 @@ const fadeTiming = {
 /**
  * Forward navigation hinges the incoming glass page in from the right.
  * Back navigation is the reverse because the stack inverts progress.
- * Cards stay transparent so paper behind the navigator does not move.
+ * A frosted sheet plus overlay hide the outgoing text before the new page settles.
  */
 export function glassPageTurn({
   current,
@@ -43,60 +46,60 @@ export function glassPageTurn({
   const rotateY = opening
     ? current.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: ['48deg', '0deg'],
+        outputRange: ['28deg', '0deg'],
         extrapolate: 'clamp',
       })
     : leaving.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '-42deg'],
+        outputRange: ['0deg', '-24deg'],
         extrapolate: 'clamp',
       });
 
   const translateX = opening
     ? current.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: [Math.round(width * 0.07), 0],
+        outputRange: [Math.round(width * 0.16), 0],
         extrapolate: 'clamp',
       })
     : leaving.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, Math.round(-width * 0.04)],
+        outputRange: [0, Math.round(-width * 0.1)],
         extrapolate: 'clamp',
       });
 
   const opacity = opening
     ? current.progress.interpolate({
-        inputRange: [0, 0.18, 1],
-        outputRange: [0.88, 1, 1],
+        inputRange: [0, 0.22, 1],
+        outputRange: [0.55, 1, 1],
         extrapolate: 'clamp',
       })
     : leaving.progress.interpolate({
-        inputRange: [0, 0.55, 1],
-        outputRange: [1, 0.2, 0],
+        inputRange: [0, 0.28, 0.52, 1],
+        outputRange: [1, 0.28, 0.04, 0],
         extrapolate: 'clamp',
       });
 
   const overlay = opening
     ? current.progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0.14, 0],
+        inputRange: [0, 0.4, 1],
+        outputRange: [0.22, 0.06, 0],
         extrapolate: 'clamp',
       })
     : leaving.progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 0.12],
+        inputRange: [0, 0.22, 0.55, 1],
+        outputRange: [0, 0.55, 0.82, 0.88],
         extrapolate: 'clamp',
       });
 
   return {
     cardStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: GLASS_SHEET,
       backfaceVisibility: 'hidden',
       opacity,
-      transform: [{ perspective: 1200 }, { translateX }, { rotateY }],
+      transform: [{ perspective: 1400 }, { translateX }, { rotateY }],
     },
     overlayStyle: {
-      backgroundColor: '#49382B',
+      backgroundColor: 'rgba(237, 224, 201, 0.94)',
       opacity: overlay,
     },
   };
@@ -109,7 +112,7 @@ export function deskStackOptions(
     return {
       headerShown: false,
       gestureEnabled: false,
-      cardStyle: { backgroundColor: 'transparent' },
+      cardStyle: { backgroundColor: GLASS_SHEET },
       cardOverlayEnabled: false,
       cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
       transitionSpec: { open: fadeTiming, close: fadeTiming },
@@ -119,7 +122,7 @@ export function deskStackOptions(
     headerShown: false,
     gestureEnabled: true,
     gestureDirection: 'horizontal',
-    cardStyle: { backgroundColor: 'transparent' },
+    cardStyle: { backgroundColor: GLASS_SHEET },
     cardOverlayEnabled: true,
     cardStyleInterpolator: glassPageTurn,
     transitionSpec: { open: pageTurnTiming, close: pageTurnTiming },

@@ -6,11 +6,22 @@ import {
   InkWriteText,
   resetInkWriteForTests,
 } from '../src/components/InkWriteText';
+import { canWriteInInk, layoutInk } from '../src/components/ink/glyphs';
 import { ThemeProvider } from '../src/theme';
 
-describe('InkWriteText (character reveal — not stroke handwriting)', () => {
+describe('InkWriteText (stroke-based bookhand, not a character pop)', () => {
   afterEach(() => {
     resetInkWriteForTests();
+  });
+
+  it('lays out dynamic names as sequential SVG strokes', () => {
+    expect(canWriteInInk('Hi, Ada')).toBe(true);
+    expect(canWriteInInk('Hi, Dillon')).toBe(true);
+    const ada = layoutInk('Hi, Ada');
+    const dillon = layoutInk('Hi, Dillon');
+    expect(ada.strokes.length).toBeGreaterThan(4);
+    expect(dillon.strokes.length).toBeGreaterThan(ada.strokes.length);
+    expect(dillon.width).toBeGreaterThan(ada.width);
   });
 
   it('renders the full phrase immediately when reduce motion is enabled', async () => {
@@ -29,12 +40,13 @@ describe('InkWriteText (character reveal — not stroke handwriting)', () => {
     });
     const label = tree!.root.findByProps({ accessibilityLabel: 'Hi, Ada' });
     expect(label).toBeTruthy();
+    expect(label.findAllByType(Text).length).toBe(1);
     await act(async () => {
       tree!.unmount();
     });
   });
 
-  it('reveals characters once on first appearance when motion is allowed', async () => {
+  it('keeps an accessible label while strokes are drawing', async () => {
     jest
       .spyOn(AccessibilityInfo, 'isReduceMotionEnabled')
       .mockResolvedValue(false);
@@ -50,7 +62,6 @@ describe('InkWriteText (character reveal — not stroke handwriting)', () => {
     });
     const label = tree!.root.findByProps({ accessibilityLabel: 'Hi' });
     expect(label).toBeTruthy();
-    expect(label.findAllByType(Text).length).toBe(2);
     await act(async () => {
       tree!.unmount();
     });
