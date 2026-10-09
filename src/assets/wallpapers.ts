@@ -2,13 +2,26 @@ import type { ImageSourcePropType } from 'react-native';
 
 import type { AtmosphereMood } from '../components/Atmosphere';
 
+const paper = require('./paper-texture.jpg');
+
 export const wallpapers: Record<AtmosphereMood, ImageSourcePropType> = {
-  auth: require('./wallpaper-auth.jpg'),
-  splash: require('./wallpaper-auth.jpg'),
-  home: require('./wallpaper-home.jpg'),
-  search: require('./wallpaper-home.jpg'),
-  form: require('./wallpaper-home.jpg'),
-  groups: require('./wallpaper-dusk.jpg'),
-  detail: require('./wallpaper-dusk.jpg'),
-  chat: require('./wallpaper-dusk.jpg'),
+  auth: paper,
+  splash: paper,
+  home: paper,
+  search: paper,
+  form: paper,
+  groups: paper,
+  detail: paper,
+  chat: paper,
+};
+
+export const paperWashes: Record<AtmosphereMood, string> = {
+  auth: 'rgba(247, 240, 227, 0.08)',
+  splash: 'rgba(247, 240, 227, 0.1)',
+  home: 'rgba(237, 224, 201, 0.12)',
+  search: 'rgba(237, 224, 201, 0.1)',
+  form: 'rgba(247, 240, 227, 0.14)',
+  groups: 'rgba(213, 190, 155, 0.16)',
+  detail: 'rgba(213, 190, 155, 0.12)',
+  chat: 'rgba(213, 190, 155, 0.18)',
 };

@@ -5,6 +5,7 @@ export {
   useTheme,
 } from './ThemeProvider';
 export { glassSurface } from './surfaces';
+export { fonts } from './fonts';
 export {
   control,
   lightColors,

@@ -55,5 +55,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>CourierPrime-Regular.ttf</string>
+		<string>CourierPrime-Bold.ttf</string>
+	</array>
 </dict>
 </plist>

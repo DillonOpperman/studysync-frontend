@@ -1,37 +1,39 @@
 /**
- * StudySync visual language: dark espresso liquid wallpaper with
- * translucent glass controls and ivory type.
+ * StudySync visual language: warm antique paper, typewriter headings,
+ * and light liquid glass resting on the page.
  */
 
+import { fonts } from './fonts';
+
 export const palette = {
-  ink: '#F6EBDD',
-  cocoa: '#D9B48C',
-  stone: '#C4B0A0',
-  canvas: '#1B120D',
-  brew: '#1B120D',
-  mocha: '#2A1A12',
-  gold: '#E9B77A',
-  cream: '#F3E6D3',
-  foam: '#FFF6EA',
-  mist: '#F6EBDD',
-  clay: '#C98B4E',
-  blush: '#E8D3BE',
-  sageMist: '#A89078',
-  surface: 'rgba(255, 255, 255, 0.14)',
-  inputFill: 'rgba(255, 255, 255, 0.11)',
-  line: 'rgba(255, 255, 255, 0.22)',
-  espresso: '#1B120D',
-  espressoPressed: '#2A1A12',
-  cinnamon: '#F2C48D',
-  cinnamonPressed: '#E9B77A',
-  cinnamonSoft: 'rgba(242, 196, 141, 0.22)',
-  sage: '#C8D4B8',
-  sageSoft: 'rgba(200, 212, 184, 0.2)',
-  danger: '#F09595',
-  dangerSoft: 'rgba(240, 149, 149, 0.22)',
-  inverse: '#1B120D',
-  skeleton: 'rgba(255, 255, 255, 0.14)',
-  shadow: '#050302',
+  ink: '#49382B',
+  cocoa: '#79583F',
+  stone: '#D5BE9B',
+  canvas: '#F7F0E3',
+  brew: '#EDE0C9',
+  mocha: '#D5BE9B',
+  gold: '#D5BE9B',
+  cream: '#F7F0E3',
+  foam: '#FBF6EE',
+  mist: '#F7F0E3',
+  clay: '#79583F',
+  blush: '#EDE0C9',
+  sageMist: '#C8B79A',
+  surface: 'rgba(247, 240, 227, 0.42)',
+  inputFill: 'rgba(255, 252, 246, 0.28)',
+  line: 'rgba(121, 88, 63, 0.18)',
+  espresso: '#49382B',
+  espressoPressed: '#3A2C22',
+  cinnamon: '#B96F4A',
+  cinnamonPressed: '#A56342',
+  cinnamonSoft: 'rgba(185, 111, 74, 0.16)',
+  sage: '#6F7A5A',
+  sageSoft: 'rgba(111, 122, 90, 0.16)',
+  danger: '#A33D2F',
+  dangerSoft: 'rgba(163, 61, 47, 0.14)',
+  inverse: '#F7F0E3',
+  skeleton: 'rgba(121, 88, 63, 0.12)',
+  shadow: '#49382B',
 } as const;
 
 export type ColorTokens = {
@@ -88,13 +90,13 @@ export const lightColors: ColorTokens = {
   surface: palette.surface,
   inputFill: palette.inputFill,
   text: palette.ink,
-  textSecondary: 'rgba(246, 235, 221, 0.86)',
-  textMuted: 'rgba(246, 235, 221, 0.72)',
-  textInverse: palette.espresso,
+  textSecondary: palette.cocoa,
+  textMuted: 'rgba(73, 56, 43, 0.62)',
+  textInverse: palette.canvas,
   onGlass: palette.ink,
-  onGlassMuted: 'rgba(246, 235, 221, 0.78)',
+  onGlassMuted: 'rgba(73, 56, 43, 0.7)',
   border: palette.line,
-  divider: 'rgba(246, 235, 221, 0.14)',
+  divider: 'rgba(121, 88, 63, 0.16)',
   accent: palette.cinnamon,
   accentPressed: palette.cinnamonPressed,
   accentSoft: palette.cinnamonSoft,
@@ -107,10 +109,10 @@ export const lightColors: ColorTokens = {
   danger: palette.danger,
   dangerSoft: palette.dangerSoft,
   skeleton: palette.skeleton,
-  placeholder: 'rgba(246, 235, 221, 0.48)',
+  placeholder: 'rgba(73, 56, 43, 0.42)',
   glass: palette.inputFill,
   glassStrong: palette.surface,
-  glassEdge: palette.line,
+  glassEdge: 'rgba(255, 255, 255, 0.62)',
   shadow: palette.shadow,
 };
 
@@ -136,22 +138,25 @@ export const radius = {
 
 export const type = {
   display: {
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: '500' as const,
-    letterSpacing: -0.5,
+    fontFamily: fonts.typewriterBold,
+    fontSize: 32,
+    lineHeight: 38,
+    fontWeight: '400' as const,
+    letterSpacing: 0.4,
   },
   title: {
-    fontSize: 26,
-    lineHeight: 32,
-    fontWeight: '600' as const,
-    letterSpacing: -0.4,
+    fontFamily: fonts.typewriterBold,
+    fontSize: 24,
+    lineHeight: 30,
+    fontWeight: '400' as const,
+    letterSpacing: 0.3,
   },
   headline: {
+    fontFamily: fonts.typewriterBold,
     fontSize: 17,
     lineHeight: 22,
-    fontWeight: '600' as const,
-    letterSpacing: -0.25,
+    fontWeight: '400' as const,
+    letterSpacing: 0.2,
   },
   body: {
     fontSize: 17,
@@ -167,7 +172,7 @@ export const type = {
   },
   subhead: {
     fontSize: 15,
-    lineHeight: 20,
+    lineHeight: 21,
     fontWeight: '400' as const,
     letterSpacing: -0.1,
   },
@@ -178,10 +183,11 @@ export const type = {
     letterSpacing: 0,
   },
   caption: {
+    fontFamily: fonts.typewriter,
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '600' as const,
-    letterSpacing: 0.6,
+    fontWeight: '400' as const,
+    letterSpacing: 1.2,
   },
 } as const;
 
@@ -202,7 +208,7 @@ export const motion = {
 } as const;
 
 export const lightTheme = {
-  scheme: 'dark' as const,
+  scheme: 'light' as const,
   colors: lightColors,
   space,
   radius,

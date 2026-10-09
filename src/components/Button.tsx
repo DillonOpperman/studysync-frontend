@@ -49,14 +49,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={fg} />
       ) : (
-        <AppText
-          variant="headline"
-          color={fg}
-          style={{
-            letterSpacing: -0.2,
-            fontWeight: tone === 'primary' ? '500' : '600',
-          }}
-        >
+        <AppText variant="headline" color={fg}>
           {label}
         </AppText>
       )}
