@@ -5,16 +5,19 @@ import { enableScreens } from 'react-native-screens';
 
 import { AuthProvider } from '../auth/AuthProvider';
 import { RootNavigator } from '../navigation/RootNavigator';
+import { ThemeProvider } from '../theme';
 
 enableScreens();
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" />
-      <AuthProvider>
-        <RootNavigator />
-      </AuthProvider>
+      <ThemeProvider>
+        <StatusBar barStyle="dark-content" />
+        <AuthProvider>
+          <RootNavigator />
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }

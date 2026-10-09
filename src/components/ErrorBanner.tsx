@@ -1,27 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 
-import { colors } from '../theme/colors';
+import { useTheme } from '../theme';
+import { AppText } from './AppText';
 
 export function ErrorBanner({ message }: { message: string | null }) {
+  const theme = useTheme();
   if (!message) {
     return null;
   }
   return (
-    <View style={styles.box}>
-      <Text style={styles.text}>{message}</Text>
+    <View
+      accessibilityRole="alert"
+      style={{
+        backgroundColor: theme.colors.dangerSoft,
+        borderRadius: theme.radius.md,
+        padding: theme.space.md,
+        marginBottom: theme.space.md,
+      }}
+    >
+      <AppText variant="footnote" color={theme.colors.danger}>
+        {message}
+      </AppText>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  box: {
-    backgroundColor: colors.dangerBg,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-  },
-  text: {
-    color: colors.danger,
-  },
-});

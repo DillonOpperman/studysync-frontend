@@ -1,22 +1,25 @@
 import React, { useCallback, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { userFacingMessage } from '../api/errors';
 import type { GroupDto, UserProfileDto } from '../api/types';
 import { useAuth } from '../auth/AuthProvider';
+import { AppText } from '../components/AppText';
+import { Avatar } from '../components/Avatar';
+import { EmptyState } from '../components/EmptyState';
+import { TextLink } from '../components/TextLink';
 import { ErrorBanner } from '../components/ErrorBanner';
-import { colors } from '../theme/colors';
+import { GroupListSkeleton } from '../components/Skeleton';
+import { GroupRow } from '../components/GroupRow';
+import { hairlineWidth, useTheme } from '../theme';
+
+function firstName(name: string): string {
+  return name.trim().split(/\s+/)[0] || name;
+}
 
 export function HomeScreen() {
+  const theme = useTheme();
   const { state, logout, refreshProfile, loadGroups } = useAuth();
   const user = state.status === 'signedIn' ? state.user : null;
   const [groups, setGroups] = useState<GroupDto[] | null>(null);
@@ -56,12 +59,20 @@ export function HomeScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.canvas }}
+      edges={['top', 'left', 'right']}
+    >
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={{
+          paddingHorizontal: theme.space.xl,
+          paddingBottom: theme.space.xxxl,
+        }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
+            tintColor={theme.colors.accent}
+            colors={[theme.colors.accent]}
             onRefresh={() => {
               setRefreshing(true);
               load();
@@ -69,116 +80,85 @@ export function HomeScreen() {
           />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.brand}>StudySync</Text>
-          <Pressable onPress={onLogout} accessibilityRole="button">
-            <Text style={styles.logout}>Log out</Text>
-          </Pressable>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: theme.space.sm,
+            marginBottom: theme.space.lg,
+          }}
+        >
+          <AppText variant="footnote" color={theme.colors.textMuted}>
+            StudySync
+          </AppText>
+          <TextLink label="Log out" tone="danger" onPress={onLogout} />
         </View>
-        <ErrorBanner message={error} />
+
         {profile ? (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>{profile.name}</Text>
-            <Text style={styles.meta}>{profile.email}</Text>
-            <Text style={styles.meta}>
-              {profile.major} · {profile.year}
-            </Text>
-            <Text style={styles.meta}>{profile.institution.name}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: theme.space.md,
+              marginBottom: theme.space.xl,
+            }}
+          >
+            <Avatar name={profile.name} size={52} />
+            <View style={{ flex: 1 }}>
+              <AppText variant="title">Hi, {firstName(profile.name)}</AppText>
+              <AppText
+                variant="subhead"
+                color={theme.colors.textSecondary}
+                style={{ marginTop: 2 }}
+              >
+                {profile.major} · {profile.year}
+              </AppText>
+              <AppText variant="footnote" color={theme.colors.textMuted}>
+                {profile.institution.name}
+              </AppText>
+            </View>
           </View>
         ) : null}
-        <Text style={styles.section}>Your groups</Text>
-        {loading && !groups ? (
-          <ActivityIndicator color={colors.primary} />
-        ) : null}
+
+        <ErrorBanner message={error} />
+
+        <View
+          style={{
+            borderTopWidth: hairlineWidth(),
+            borderTopColor: theme.colors.divider,
+            paddingTop: theme.space.md,
+          }}
+        >
+          <AppText variant="headline">Groups</AppText>
+          {groups && groups.length > 0 ? (
+            <AppText
+              variant="footnote"
+              color={theme.colors.textMuted}
+              style={{ marginTop: 2 }}
+            >
+              {groups.length} {groups.length === 1 ? 'group' : 'groups'}
+            </AppText>
+          ) : null}
+        </View>
+
+        {loading && !groups ? <GroupListSkeleton /> : null}
+
         {groups && groups.length === 0 ? (
-          <View style={styles.empty}>
-            <Text style={styles.emptyTitle}>No groups yet</Text>
-            <Text style={styles.emptyBody}>
-              You are not a member of any study groups. Matching and group
-              creation come in a later frontend phase.
-            </Text>
-          </View>
+          <EmptyState
+            title="No groups yet"
+            body="When you join or create a study group, it will show up here. Matching and group creation are coming in a later update."
+          />
         ) : null}
-        {groups?.map(group => (
-          <View key={group.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{group.title}</Text>
-            <Text style={styles.meta}>{group.subject}</Text>
-            <Text style={styles.meta}>
-              {group.memberCount}/{group.maxMembers} members · {group.status}
-            </Text>
-            {group.description ? (
-              <Text style={styles.body}>{group.description}</Text>
-            ) : null}
-          </View>
+
+        {groups?.map((group, index) => (
+          <GroupRow
+            key={group.id}
+            group={group}
+            last={index === groups.length - 1}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  brand: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: colors.primary,
-  },
-  logout: {
-    color: colors.danger,
-    fontWeight: '700',
-  },
-  section: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 10,
-    marginTop: 8,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  meta: {
-    color: colors.muted,
-    marginTop: 4,
-  },
-  body: {
-    color: colors.text,
-    marginTop: 8,
-  },
-  empty: {
-    backgroundColor: colors.empty,
-    borderRadius: 12,
-    padding: 20,
-  },
-  emptyTitle: {
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 6,
-  },
-  emptyBody: {
-    color: colors.muted,
-  },
-});

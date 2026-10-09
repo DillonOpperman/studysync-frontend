@@ -4,7 +4,7 @@ React Native (CLI) + TypeScript client for the **Rust** API in `E:\Desktop\study
 
 This is a **separate Git repository**. It is not a monorepo with the backend. Do not copy this tree into `studysync-app` or the Flask backend.
 
-The legacy `studysync-app` tree was not available on this machine during Phase 8A, so branding here is a conservative StudySync palette (deep blue, paper background) rather than a pixel copy of the old app.
+Visual identity: warm canvas (`#F6F2EB`), espresso text, forest-green actions (`#365A46`), caramel as a small brand accent. Tokens live in `src/theme/tokens.ts`. Do not scatter hex values in screens.
 
 ## Git
 
@@ -64,9 +64,10 @@ npm test
 src/config     API origin (no URLs in screens)
 src/api        typed DTOs, fetch client, error mapping
 src/auth       Keychain refresh store, in-memory access token, session
+src/theme      color, type, space, radius, motion tokens
 src/screens    Login, Register, Home (profile + groups)
 src/navigation splash / signed-out / signed-in
-src/components shared UI
+src/components buttons, fields, chips, avatars, group rows
 ```
 
 Refresh credentials use **react-native-keychain** (Keystore/Keychain). Access tokens stay in process memory. They are not written to AsyncStorage.

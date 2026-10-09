@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { userFacingMessage } from '../api/errors';
 import { useAuth } from '../auth/AuthProvider';
 import { validateLogin } from '../auth/validation';
+import { AppText } from '../components/AppText';
+import { BrandMark } from '../components/BrandMark';
+import { Button } from '../components/Button';
 import { ErrorBanner } from '../components/ErrorBanner';
-import { PrimaryButton } from '../components/PrimaryButton';
 import { Screen } from '../components/Screen';
 import { TextField } from '../components/TextField';
-import { colors } from '../theme/colors';
+import { useTheme } from '../theme';
 
 export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
+  const theme = useTheme();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,8 +39,19 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
 
   return (
     <Screen>
-      <Text style={styles.brand}>StudySync</Text>
-      <Text style={styles.lead}>Sign in to continue</Text>
+      <View style={{ marginTop: theme.space.md, marginBottom: theme.space.xl }}>
+        <BrandMark compact />
+        <AppText variant="title" style={{ marginTop: theme.space.xl }}>
+          Welcome back
+        </AppText>
+        <AppText
+          variant="subhead"
+          color={theme.colors.textMuted}
+          style={{ marginTop: theme.space.xs }}
+        >
+          Sign in with the email you used to register.
+        </AppText>
+      </View>
       <ErrorBanner message={error} />
       <TextField
         label="Email"
@@ -45,6 +59,8 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
       />
       <TextField
         label="Password"
@@ -52,32 +68,16 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
         onChangeText={setPassword}
         secureTextEntry
         autoComplete="password"
+        textContentType="password"
+        returnKeyType="go"
+        onSubmitEditing={onSubmit}
       />
-      <PrimaryButton label="Log in" onPress={onSubmit} loading={loading} />
-      <Pressable onPress={onGoRegister} style={styles.linkWrap}>
-        <Text style={styles.link}>Create an account</Text>
-      </Pressable>
+      <View style={{ marginTop: theme.space.xl }}>
+        <Button label="Log in" onPress={onSubmit} loading={loading} />
+      </View>
+      <View style={{ marginTop: theme.space.md, alignItems: 'center' }}>
+        <Button label="Create an account" tone="ghost" onPress={onGoRegister} />
+      </View>
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  brand: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.primary,
-  },
-  lead: {
-    color: colors.muted,
-    marginBottom: 16,
-    marginTop: 4,
-  },
-  linkWrap: {
-    marginTop: 16,
-    alignItems: 'center',
-  },
-  link: {
-    color: colors.accent,
-    fontWeight: '600',
-  },
-});

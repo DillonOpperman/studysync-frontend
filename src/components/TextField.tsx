@@ -1,50 +1,84 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, type TextInputProps } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors } from '../theme/colors';
+import { useTheme } from '../theme';
+import { AppText } from './AppText';
 
 export function TextField({
   label,
   error,
+  hint,
   ...rest
-}: TextInputProps & { label: string; error?: string }) {
+}: TextInputProps & { label: string; error?: string; hint?: string }) {
+  const theme = useTheme();
+  const [focused, setFocused] = useState(false);
+  const border = error
+    ? theme.colors.danger
+    : focused
+    ? theme.colors.accent
+    : theme.colors.border;
+
   return (
-    <>
-      <Text style={styles.label}>{label}</Text>
+    <View style={{ marginTop: theme.space.md }}>
+      <AppText
+        variant="footnote"
+        color={theme.colors.textSecondary}
+        style={{ marginBottom: theme.space.xxs }}
+      >
+        {label}
+      </AppText>
       <TextInput
-        style={[styles.input, error ? styles.inputError : null]}
-        placeholderTextColor={colors.muted}
+        accessibilityLabel={label}
+        placeholderTextColor={theme.colors.placeholder}
         autoCapitalize="none"
+        autoCorrect={false}
         {...rest}
+        onFocus={event => {
+          setFocused(true);
+          rest.onFocus?.(event);
+        }}
+        onBlur={event => {
+          setFocused(false);
+          rest.onBlur?.(event);
+        }}
+        style={[
+          styles.input,
+          {
+            minHeight: theme.control.minHeight,
+            borderRadius: theme.radius.md,
+            borderColor: border,
+            borderWidth: focused || error ? 1.5 : theme.control.hairline,
+            backgroundColor: theme.colors.surface,
+            color: theme.colors.text,
+            paddingHorizontal: theme.space.md,
+            ...theme.type.callout,
+          },
+          rest.style,
+        ]}
       />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-    </>
+      {error ? (
+        <AppText
+          variant="footnote"
+          color={theme.colors.danger}
+          style={{ marginTop: theme.space.xxs }}
+        >
+          {error}
+        </AppText>
+      ) : hint ? (
+        <AppText
+          variant="caption"
+          color={theme.colors.textMuted}
+          style={{ marginTop: theme.space.xxs }}
+        >
+          {hint}
+        </AppText>
+      ) : null}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    color: colors.text,
-    fontWeight: '600',
-    marginBottom: 6,
-    marginTop: 12,
-  },
   input: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: colors.text,
-    fontSize: 16,
-  },
-  inputError: {
-    borderColor: colors.danger,
-  },
-  error: {
-    color: colors.danger,
-    marginTop: 4,
-    fontSize: 13,
+    paddingVertical: 12,
   },
 });

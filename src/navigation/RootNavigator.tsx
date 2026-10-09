@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 
@@ -7,6 +7,7 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
 import { SplashScreen } from '../screens/SplashScreen';
+import { lightColors } from '../theme';
 import { rootFor } from './rootFor';
 
 export type AuthStackParamList = {
@@ -21,10 +22,29 @@ export type AppStackParamList = {
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AppStack = createNativeStackNavigator<AppStackParamList>();
 
+const navigationTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: lightColors.canvas,
+    card: lightColors.canvas,
+    text: lightColors.text,
+    border: lightColors.border,
+    primary: lightColors.accent,
+  },
+};
+
+const stackOptions = {
+  headerShown: false,
+  animation: 'fade' as const,
+  animationDuration: 200,
+  contentStyle: { backgroundColor: lightColors.canvas },
+};
+
 function SignedOutNavigator() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthStack.Navigator screenOptions={stackOptions}>
       {mode === 'login' ? (
         <AuthStack.Screen name="Login">
           {() => <LoginScreen onGoRegister={() => setMode('register')} />}
@@ -40,12 +60,8 @@ function SignedOutNavigator() {
 
 function SignedInNavigator() {
   return (
-    <AppStack.Navigator>
-      <AppStack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
+    <AppStack.Navigator screenOptions={stackOptions}>
+      <AppStack.Screen name="Home" component={HomeScreen} />
     </AppStack.Navigator>
   );
 }
@@ -57,7 +73,7 @@ export function RootNavigator() {
     return <SplashScreen />;
   }
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       {root === 'app' ? <SignedInNavigator /> : <SignedOutNavigator />}
     </NavigationContainer>
   );

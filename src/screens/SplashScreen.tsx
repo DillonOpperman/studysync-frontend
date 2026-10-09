@@ -1,13 +1,18 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { colors } from '../theme/colors';
+import { BrandMark } from '../components/BrandMark';
+import { useTheme } from '../theme';
 
 export function SplashScreen() {
+  const theme = useTheme();
   return (
-    <View style={styles.box}>
-      <Text style={styles.title}>StudySync</Text>
-      <ActivityIndicator color={colors.primary} />
+    <View style={[styles.box, { backgroundColor: theme.colors.canvas }]}>
+      <BrandMark />
+      <ActivityIndicator
+        color={theme.colors.accent}
+        style={{ marginTop: theme.space.xl }}
+      />
     </View>
   );
 }
@@ -15,14 +20,7 @@ export function SplashScreen() {
 const styles = StyleSheet.create({
   box: {
     flex: 1,
-    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.primary,
   },
 });
