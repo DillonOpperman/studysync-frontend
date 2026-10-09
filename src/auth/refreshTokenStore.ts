@@ -20,7 +20,7 @@ export const keychainRefreshTokenStore: RefreshTokenStore = {
   async set(token: string) {
     await Keychain.setGenericPassword(USERNAME, token, {
       service: SERVICE,
-      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
     });
   },
   async clear() {
