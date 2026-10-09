@@ -1,10 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import type { ApiClient } from '../api/client';
 import type { ChatMessage } from '../features/chat/messageStore';
 import { useTheme } from '../theme';
 import { AppText } from './AppText';
 import { Glass } from './Glass';
+import { MessageAttachments } from './MessageAttachments';
 import { TextLink } from './TextLink';
 
 function formatTime(iso: string): string {
@@ -29,6 +31,8 @@ export function MessageBubble({
   onEdit,
   onDelete,
   onReact,
+  client,
+  getAccessToken,
 }: {
   message: ChatMessage;
   mine: boolean;
@@ -38,6 +42,8 @@ export function MessageBubble({
   onEdit: () => void;
   onDelete: () => void;
   onReact: (emoji: string) => void;
+  client: ApiClient;
+  getAccessToken: () => string | null;
 }) {
   const theme = useTheme();
   const announcement = message.messageType === 'announcement';
@@ -59,13 +65,24 @@ export function MessageBubble({
         style={{ marginTop: 5 }}
       >
         <View style={{ paddingVertical: 11, paddingHorizontal: 16 }}>
-          <AppText
-            variant="body"
-            color={fg}
-            style={deleted ? { fontStyle: 'italic' } : undefined}
-          >
-            {deleted ? 'Message deleted' : message.content}
-          </AppText>
+          {deleted ? (
+            <AppText variant="body" color={fg} style={{ fontStyle: 'italic' }}>
+              Message deleted
+            </AppText>
+          ) : (
+            <>
+              {message.content ? (
+                <AppText variant="body" color={fg}>
+                  {message.content}
+                </AppText>
+              ) : null}
+              <MessageAttachments
+                attachments={message.attachments}
+                client={client}
+                getAccessToken={getAccessToken}
+              />
+            </>
+          )}
         </View>
       </Glass>
       <AppText

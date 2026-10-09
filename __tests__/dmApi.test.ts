@@ -101,6 +101,13 @@ describe('dmApi (mocked HTTP — not a live Rust server)', () => {
       content: 'hello',
     });
     expect(sent.kind).toBe('directMessage');
+    const withFile = await messages.send({
+      recipientId: 'u2',
+      content: '',
+      messageType: 'image',
+      attachmentIds: ['media-1'],
+    });
+    expect(withFile.kind).toBe('directMessage');
     const first = await messages.list('u2', { limit: 50 });
     expect(first).toHaveLength(50);
     const older = await messages.list('u2', { before: 'm0', limit: 50 });

@@ -9,6 +9,7 @@ export type ClientOp =
       clientMsgId: string;
       content: string;
       messageType?: string;
+      attachmentIds?: string[];
     }
   | { op: 'reaction.toggle'; messageId: string; emoji: string }
   | { op: 'message.edit'; messageId: string; content: string }

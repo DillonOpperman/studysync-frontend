@@ -73,6 +73,18 @@ export function userFacingMessage(error: unknown): string {
     return error.message;
   }
   if (error instanceof ApiError) {
+    if (error.code === 'cannot_message') {
+      return 'You cannot send this until they accept a message request, share a group, or are friends.';
+    }
+    if (error.code === 'upload_too_large') {
+      return 'That file is larger than the 10 MB limit.';
+    }
+    if (error.code === 'media_forbidden') {
+      return 'You are not allowed to view this file.';
+    }
+    if (error.code === 'media_not_found') {
+      return 'This file is no longer available.';
+    }
     return error.message;
   }
   if (error instanceof Error) {

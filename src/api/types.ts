@@ -70,9 +70,13 @@ export type GroupPreferencesDto = {
 };
 
 export type MediaDto = {
-  id?: string;
-  key?: string;
-  contentType?: string;
+  id: string;
+  fileName: string;
+  contentType: string;
+  byteSize: number;
+  kind: string;
+  status: string;
+  downloadUrl: string | null;
 };
 
 export type UserProfileDto = {
@@ -210,15 +214,7 @@ export type ReactionCountDto = {
   me: boolean;
 };
 
-export type ChatAttachmentDto = {
-  id: string;
-  fileName: string;
-  contentType: string;
-  byteSize: number;
-  kind: string;
-  status: string;
-  downloadUrl: string | null;
-};
+export type ChatAttachmentDto = MediaDto;
 
 export type GroupMessageDto = {
   id: string;
@@ -317,6 +313,11 @@ export type SendDirectMessageResult =
 
 export const MAX_GROUP_MESSAGE_CHARS = 4000;
 export const MAX_DIRECT_MESSAGE_CHARS = 4000;
+/** Matches backend default `MEDIA_MAX_BYTES` (10 MiB). */
+export const MAX_MEDIA_BYTES = 10 * 1024 * 1024;
+export const MAX_MESSAGE_ATTACHMENTS = 5;
+export const MEDIA_PURPOSE_GROUP = 'group_message';
+export const MEDIA_PURPOSE_DIRECT = 'direct_message';
 export const GROUP_MESSAGE_EDIT_WINDOW_MS = 15 * 60 * 1000;
 export const CHAT_REACTION_CHOICES = ['👍', '❤️', '😂', '🎉', '👀'] as const;
 

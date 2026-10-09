@@ -102,9 +102,12 @@ export function canDeleteMessage(
   return message.senderId === userId || isLeader;
 }
 
-export function validateOutgoingContent(content: string): string | null {
+export function validateOutgoingContent(
+  content: string,
+  options: { allowEmpty?: boolean } = {},
+): string | null {
   const trimmed = content.trim();
-  if (!trimmed) {
+  if (!trimmed && !options.allowEmpty) {
     return 'content is required';
   }
   if ([...trimmed].length > 4000) {

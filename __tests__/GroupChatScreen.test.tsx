@@ -3,9 +3,12 @@ import { FlatList } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { act, create } from 'react-test-renderer';
 
+import { launchImageLibrary } from 'react-native-image-picker';
+
 import { Button } from '../src/components/Button';
 import { EmptyState } from '../src/components/EmptyState';
 import { TextField } from '../src/components/TextField';
+import { TextLink } from '../src/components/TextLink';
 import { GroupChatScreen } from '../src/screens/GroupChatScreen';
 import { ThemeProvider } from '../src/theme';
 import { chatMessage } from '../src/testSupport/chatFixtures';
@@ -48,6 +51,14 @@ jest.mock('../src/features/chat/wsClient', () => ({
     isSubscribed = mockSocket.isSubscribed;
     sendOp = mockSocket.sendOp;
   },
+}));
+
+const mockMedia = {
+  upload: jest.fn(),
+  get: jest.fn(),
+};
+jest.mock('../src/features/media/mediaApi', () => ({
+  mediaApi: () => mockMedia,
 }));
 
 const mockClient = {};
@@ -106,6 +117,15 @@ describe('GroupChatScreen (mocked HTTP/WS — not a live Rust server)', () => {
         nextBefore: null,
         nextAfter: null,
       },
+    });
+    mockMedia.upload.mockResolvedValue({
+      id: 'media-1',
+      fileName: 'a.png',
+      contentType: 'image/png',
+      byteSize: 12,
+      kind: 'image',
+      status: 'uploaded',
+      downloadUrl: null,
     });
   });
 
@@ -213,5 +233,62 @@ describe('GroupChatScreen (mocked HTTP/WS — not a live Rust server)', () => {
     expect(mockChat.list).not.toHaveBeenCalled();
     expect(mockSocket.connect).not.toHaveBeenCalled();
     expect(screen.root.findAllByType(Button).length).toBe(0);
+  });
+
+  it('uploads then REST-sends an image without claiming a socket payload', async () => {
+    (launchImageLibrary as jest.Mock).mockResolvedValueOnce({
+      didCancel: false,
+      assets: [
+        {
+          uri: 'file://a.png',
+          fileName: 'a.png',
+          type: 'image/png',
+          fileSize: 12,
+        },
+      ],
+    });
+    mockChat.send.mockResolvedValue(
+      chatMessage({
+        id: 'm-img',
+        clientMsgId: 'c-img',
+        messageType: 'image',
+        content: '',
+        attachments: [
+          {
+            id: 'media-1',
+            fileName: 'a.png',
+            contentType: 'image/png',
+            byteSize: 12,
+            kind: 'image',
+            status: 'attached',
+            downloadUrl: null,
+          },
+        ],
+      }),
+    );
+    const screen = await renderChat();
+    const photo = screen.root
+      .findAllByType(TextLink)
+      .find(node => node.props.label === 'Photo');
+    await act(async () => {
+      await photo?.props.onPress();
+    });
+    const send = screen.root
+      .findAllByType(Button)
+      .find(node => node.props.accessibilityLabel === 'Send');
+    await act(async () => {
+      send?.props.onPress();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(mockMedia.upload).toHaveBeenCalled();
+    expect(mockChat.send).toHaveBeenCalledWith(
+      'g1',
+      expect.objectContaining({
+        messageType: 'image',
+        attachmentIds: ['media-1'],
+      }),
+    );
+    expect(mockSocket.sendOp).not.toHaveBeenCalled();
   });
 });

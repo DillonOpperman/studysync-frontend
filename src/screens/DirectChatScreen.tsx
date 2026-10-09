@@ -19,10 +19,19 @@ import { ChatComposer } from '../components/ChatComposer';
 import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { Glass } from '../components/Glass';
+import { MessageAttachments } from '../components/MessageAttachments';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ScreenShell } from '../components/ScreenShell';
 import { TextLink } from '../components/TextLink';
 import { validateOutgoingContent } from '../features/chat/messageStore';
+import type { LocalAttachment } from '../features/media/limits';
+import {
+  addPickedAttachment,
+  pickDocumentAttachment,
+  pickImageAttachment,
+} from '../features/media/pickAttachment';
+import { outgoingMessageType } from '../features/media/validateSelection';
+import { uploadPendingAttachments } from '../features/media/uploadAll';
 import { dmApi } from '../features/social/dmApi';
 import {
   oldestDirectId,
@@ -37,7 +46,7 @@ export function DirectChatScreen({
   route,
 }: NativeStackScreenProps<AppStackParamList, 'DirectChat'>) {
   const theme = useTheme();
-  const { client, state } = useAuth();
+  const { client, state, getAccessToken } = useAuth();
   const selfId = state.status === 'signedIn' ? state.user.id : '';
   const { userId, name } = route.params;
   const [messages, setMessages] = useState<DirectMessageDto[]>([]);
@@ -48,6 +57,7 @@ export function DirectChatScreen({
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [hasMoreOlder, setHasMoreOlder] = useState(false);
   const [sending, setSending] = useState(false);
+  const [attachments, setAttachments] = useState<LocalAttachment[]>([]);
   const sendingRef = useRef(false);
   const oldestRef = useRef<string | null>(null);
   const seq = useRef(0);
@@ -113,7 +123,9 @@ export function DirectChatScreen({
     if (sendingRef.current) {
       return;
     }
-    const problem = validateOutgoingContent(draft);
+    const problem = validateOutgoingContent(draft, {
+      allowEmpty: attachments.length > 0,
+    });
     if (problem) {
       setError(problem);
       return;
@@ -122,13 +134,30 @@ export function DirectChatScreen({
     sendingRef.current = true;
     setSending(true);
     setError(null);
+    let ready = attachments;
     try {
+      if (ready.length > 0) {
+        ready = await uploadPendingAttachments(
+          client,
+          'direct_message',
+          ready,
+          { recipientId: userId },
+          setAttachments,
+        );
+        setAttachments(ready);
+      }
+      const messageType = outgoingMessageType(ready);
+      const attachmentIds = ready
+        .map(file => file.mediaId)
+        .filter((id): id is string => Boolean(id));
       const result = await dmApi(client).send({
         recipientId: userId,
         content,
-        messageType: 'text',
+        messageType,
+        attachmentIds: attachmentIds.length ? attachmentIds : undefined,
       });
       setDraft('');
+      setAttachments([]);
       if (result.kind === 'directMessage') {
         setNotice(null);
         setMessages(current => upsertDirectMessages(current, [result.message]));
@@ -141,10 +170,33 @@ export function DirectChatScreen({
       }
     } catch (caught) {
       setError(userFacingMessage(caught));
+      if (ready.length > 0) {
+        setAttachments(ready);
+      }
     } finally {
       sendingRef.current = false;
       setSending(false);
     }
+  }
+
+  async function addAttachment(
+    picker: () => ReturnType<typeof pickImageAttachment>,
+  ) {
+    const result = await picker();
+    if (result.status === 'cancelled') {
+      return;
+    }
+    if (result.status === 'error') {
+      setError(result.error);
+      return;
+    }
+    const added = addPickedAttachment(attachments, result.file);
+    if (!added.ok) {
+      setError(added.error);
+      return;
+    }
+    setError(null);
+    setAttachments(added.next);
   }
 
   const inverted = [...messages].reverse();
@@ -230,6 +282,8 @@ export function DirectChatScreen({
                   <DirectBubble
                     message={item}
                     mine={item.senderId === selfId}
+                    client={client}
+                    getAccessToken={getAccessToken}
                   />
                 )}
               />
@@ -245,6 +299,15 @@ export function DirectChatScreen({
               onToggleAnnounce={() => undefined}
               disabled={false}
               maxLength={MAX_DIRECT_MESSAGE_CHARS}
+              allowAttach
+              attachments={attachments}
+              onPickImage={() => addAttachment(pickImageAttachment)}
+              onPickFile={() => addAttachment(pickDocumentAttachment)}
+              onRemoveAttachment={id =>
+                setAttachments(current =>
+                  current.filter(file => file.localId !== id),
+                )
+              }
             />
           </View>
         </KeyboardAvoidingView>
@@ -256,9 +319,13 @@ export function DirectChatScreen({
 function DirectBubble({
   message,
   mine,
+  client,
+  getAccessToken,
 }: {
   message: DirectMessageDto;
   mine: boolean;
+  client: ReturnType<typeof useAuth>['client'];
+  getAccessToken: () => string | null;
 }) {
   const theme = useTheme();
   const time = new Date(message.createdAt);
@@ -284,9 +351,16 @@ function DirectBubble({
         style={{ marginTop: 2 }}
       >
         <View style={{ paddingVertical: 11, paddingHorizontal: 16 }}>
-          <AppText variant="body" color={theme.colors.onGlass}>
-            {message.content}
-          </AppText>
+          {message.content ? (
+            <AppText variant="body" color={theme.colors.onGlass}>
+              {message.content}
+            </AppText>
+          ) : null}
+          <MessageAttachments
+            attachments={message.attachments}
+            client={client}
+            getAccessToken={getAccessToken}
+          />
         </View>
       </Glass>
       <AppText

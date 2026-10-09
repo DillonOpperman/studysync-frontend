@@ -100,7 +100,9 @@ export class ApiClient {
     parseJson: boolean,
   ): Promise<{ status: number; data: T }> {
     const headers = new Headers(init.headers);
-    if (init.body && !headers.has('Content-Type')) {
+    const isFormData =
+      typeof FormData !== 'undefined' && init.body instanceof FormData;
+    if (init.body && !headers.has('Content-Type') && !isFormData) {
       headers.set('Content-Type', 'application/json');
     }
     if (!skipAuth) {

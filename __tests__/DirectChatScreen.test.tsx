@@ -22,6 +22,7 @@ jest.mock('../src/auth/AuthProvider', () => {
     useAuth: () => ({
       client,
       state: { status: 'signedIn', user: { id: 'me', name: 'Ada' } },
+      getAccessToken: () => 'jwt',
     }),
   };
 });

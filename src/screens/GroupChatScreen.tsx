@@ -43,6 +43,14 @@ import {
 import type { ServerEvent } from '../features/chat/protocol';
 import { GroupChatSocket, type SocketStatus } from '../features/chat/wsClient';
 import { groupsApi } from '../features/groups/groupsApi';
+import type { LocalAttachment } from '../features/media/limits';
+import {
+  addPickedAttachment,
+  pickDocumentAttachment,
+  pickImageAttachment,
+} from '../features/media/pickAttachment';
+import { outgoingMessageType } from '../features/media/validateSelection';
+import { uploadPendingAttachments } from '../features/media/uploadAll';
 import { canOpenGroupChat } from '../features/groups/membership';
 import type { AppStackParamList } from '../navigation/types';
 import { useTheme } from '../theme';
@@ -67,6 +75,7 @@ export function GroupChatScreen({
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [hasMoreOlder, setHasMoreOlder] = useState(false);
   const [sending, setSending] = useState(false);
+  const [attachments, setAttachments] = useState<LocalAttachment[]>([]);
   const [status, setStatus] = useState<SocketStatus>('idle');
   const socketRef = useRef<GroupChatSocket | null>(null);
   const messagesRef = useRef<ChatMessage[]>([]);
@@ -257,7 +266,13 @@ export function GroupChatScreen({
       }
       return;
     }
-    const problem = validateOutgoingContent(draft);
+    if (announce && attachments.length > 0) {
+      setError('Announcements cannot include attachments.');
+      return;
+    }
+    const problem = validateOutgoingContent(draft, {
+      allowEmpty: attachments.length > 0,
+    });
     if (problem) {
       setError(problem);
       return;
@@ -266,7 +281,24 @@ export function GroupChatScreen({
     sendingRef.current = true;
     setSending(true);
     let clientMsgId = '';
+    let ready = attachments;
     try {
+      if (ready.length > 0) {
+        ready = await uploadPendingAttachments(
+          client,
+          'group_message',
+          ready,
+          { groupId },
+          setAttachments,
+        );
+        setAttachments(ready);
+      }
+      const messageType = announce
+        ? 'announcement'
+        : outgoingMessageType(ready);
+      const attachmentIds = ready
+        .map(file => file.mediaId)
+        .filter((id): id is string => Boolean(id));
       clientMsgId = newClientMsgId();
       const pending: ChatMessage = {
         id: clientMsgId,
@@ -274,7 +306,7 @@ export function GroupChatScreen({
         senderId: userId,
         clientMsgId,
         content,
-        messageType: announce ? 'announcement' : 'text',
+        messageType,
         createdAt: new Date().toISOString(),
         editedAt: null,
         deletedAt: null,
@@ -283,22 +315,25 @@ export function GroupChatScreen({
         pending: true,
       };
       setDraft('');
+      setAttachments([]);
       setMessages(current => upsertMessages(current, [pending]));
       const socket = socketRef.current;
       const viaSocket =
+        attachmentIds.length === 0 &&
         socket?.isSubscribed() &&
         socket.sendOp({
           op: 'message.send',
           groupId,
           clientMsgId,
           content,
-          messageType: announce ? 'announcement' : 'text',
+          messageType,
         });
       if (!viaSocket) {
         const saved = await chatApi(client).send(groupId, {
           clientMsgId,
           content,
-          messageType: announce ? 'announcement' : 'text',
+          messageType,
+          attachmentIds: attachmentIds.length ? attachmentIds : undefined,
         });
         setMessages(current => upsertMessages(current, [saved]));
       } else {
@@ -313,7 +348,7 @@ export function GroupChatScreen({
             .send(groupId, {
               clientMsgId,
               content,
-              messageType: announce ? 'announcement' : 'text',
+              messageType,
             })
             .then(saved =>
               setMessages(current => upsertMessages(current, [saved])),
@@ -334,6 +369,9 @@ export function GroupChatScreen({
     } catch (caught) {
       setError(userFacingMessage(caught));
       setDraft(current => current || content);
+      if (ready.length > 0) {
+        setAttachments(ready);
+      }
       setMessages(current =>
         current.map(row =>
           row.clientMsgId === clientMsgId
@@ -345,6 +383,26 @@ export function GroupChatScreen({
       sendingRef.current = false;
       setSending(false);
     }
+  }
+
+  async function addAttachment(
+    picker: () => ReturnType<typeof pickImageAttachment>,
+  ) {
+    const result = await picker();
+    if (result.status === 'cancelled') {
+      return;
+    }
+    if (result.status === 'error') {
+      setError(result.error);
+      return;
+    }
+    const added = addPickedAttachment(attachments, result.file);
+    if (!added.ok) {
+      setError(added.error);
+      return;
+    }
+    setError(null);
+    setAttachments(added.next);
   }
 
   function requestEdit(message: ChatMessage) {
@@ -440,6 +498,8 @@ export function GroupChatScreen({
                   <MessageBubble
                     message={item}
                     mine={item.senderId === userId}
+                    client={client}
+                    getAccessToken={getAccessToken}
                     senderName={
                       names.get(item.senderId) ??
                       (item.senderId === userId ? 'You' : 'Member')
@@ -477,6 +537,15 @@ export function GroupChatScreen({
                 announce={announce}
                 onToggleAnnounce={() => setAnnounce(value => !value)}
                 disabled={false}
+                allowAttach={!editingId}
+                attachments={attachments}
+                onPickImage={() => addAttachment(pickImageAttachment)}
+                onPickFile={() => addAttachment(pickDocumentAttachment)}
+                onRemoveAttachment={id =>
+                  setAttachments(current =>
+                    current.filter(file => file.localId !== id),
+                  )
+                }
               />
             ) : null}
             {editingId ? (

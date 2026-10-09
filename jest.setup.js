@@ -19,3 +19,22 @@ jest.mock('@react-native-community/blur', () => {
     BlurView: props => React.createElement(View, props),
   };
 });
+
+jest.mock('react-native-image-picker', () => ({
+  launchImageLibrary: jest.fn(async () => ({ didCancel: true, assets: [] })),
+}));
+
+jest.mock('@react-native-documents/picker', () => ({
+  pick: jest.fn(async () => {
+    throw { code: 'OPERATION_CANCELED' };
+  }),
+  types: {
+    pdf: 'application/pdf',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  },
+  errorCodes: { OPERATION_CANCELED: 'OPERATION_CANCELED' },
+  isErrorWithCode: error =>
+    Boolean(error && typeof error === 'object' && 'code' in error),
+}));
