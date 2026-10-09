@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { glassSurface, useTheme } from '../theme';
+import { useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 
 export function ErrorBanner({ message }: { message: string | null }) {
   const theme = useTheme();
@@ -10,22 +11,16 @@ export function ErrorBanner({ message }: { message: string | null }) {
     return null;
   }
   return (
-    <View
-      accessibilityRole="alert"
-      style={[
-        glassSurface(theme, 'strong'),
-        {
-          backgroundColor: theme.colors.dangerSoft,
-          borderRadius: theme.radius.lg,
-          padding: theme.space.md,
-          marginBottom: theme.space.md,
-          borderColor: 'rgba(180, 35, 24, 0.2)',
-        },
-      ]}
+    <Glass
+      intensity="strong"
+      radius={theme.radius.lg}
+      style={{ marginBottom: theme.space.md }}
     >
-      <AppText variant="footnote" color={theme.colors.danger}>
-        {message}
-      </AppText>
-    </View>
+      <View style={{ padding: theme.space.md }}>
+        <AppText variant="footnote" color={theme.colors.danger}>
+          {message}
+        </AppText>
+      </View>
+    </Glass>
   );
 }

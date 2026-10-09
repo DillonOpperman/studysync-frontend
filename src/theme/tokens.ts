@@ -1,13 +1,13 @@
 /**
- * StudySync visual language: gold-brew coffee, blurred cream, clean glass.
- * Canvas is the cup. Controls are the cream.
+ * StudySync visual language: blurred ivory-and-cocoa wallpaper with
+ * translucent liquid glass controls. Canvas is a fallback only.
  */
 
 export const palette = {
   ink: '#1C1410',
   cocoa: '#5A463A',
   stone: '#C4B0A0',
-  canvas: '#3C2418',
+  canvas: '#EDE4D8',
   brew: '#2F1B12',
   mocha: '#4A2E20',
   gold: '#C49A6C',
@@ -22,12 +22,12 @@ export const palette = {
   line: 'rgba(255, 255, 255, 0.55)',
   espresso: '#241C18',
   espressoPressed: '#3A2E27',
-  cinnamon: '#E08A5C',
+  cinnamon: '#C45C32',
   cinnamonPressed: '#C45C32',
   cinnamonSoft: 'rgba(224, 138, 92, 0.22)',
   sage: '#8FA084',
   sageSoft: 'rgba(143, 160, 132, 0.2)',
-  danger: '#E87A6C',
+  danger: '#B42318',
   dangerSoft: 'rgba(232, 122, 108, 0.18)',
   inverse: '#F6EDE3',
   skeleton: 'rgba(243, 230, 212, 0.16)',
@@ -87,9 +87,9 @@ export const lightColors: ColorTokens = {
   sageMist: palette.sageMist,
   surface: palette.surface,
   inputFill: palette.inputFill,
-  text: palette.mist,
-  textSecondary: palette.blush,
-  textMuted: 'rgba(246, 237, 227, 0.64)',
+  text: palette.ink,
+  textSecondary: palette.cocoa,
+  textMuted: 'rgba(28, 20, 16, 0.58)',
   textInverse: palette.mist,
   onGlass: palette.ink,
   onGlassMuted: palette.cocoa,

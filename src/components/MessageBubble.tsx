@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import type { ChatMessage } from '../features/chat/messageStore';
-import { glassSurface, useTheme } from '../theme';
+import { useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 import { TextLink } from './TextLink';
 
 function formatTime(iso: string): string {
@@ -42,11 +43,6 @@ export function MessageBubble({
   const announcement = message.messageType === 'announcement';
   const deleted = Boolean(message.deletedAt);
   const outgoing = mine && !announcement && !deleted;
-  const bg = deleted
-    ? theme.colors.skeleton
-    : announcement
-    ? theme.colors.brandSoft
-    : theme.colors.glassStrong;
   const fg = deleted ? theme.colors.onGlassMuted : theme.colors.onGlass;
   const align = mine ? 'flex-end' : 'flex-start';
   return (
@@ -57,32 +53,21 @@ export function MessageBubble({
         {message.pending ? ' · sending' : ''}
         {message.failed ? ' · not sent' : ''}
       </AppText>
-      <View
-        style={[
-          deleted ? null : glassSurface(theme, outgoing ? 'action' : 'strong'),
-          {
-            marginTop: 5,
-            paddingVertical: 11,
-            paddingHorizontal: 16,
-            borderRadius: theme.radius.lg,
-            backgroundColor: bg,
-            borderWidth: deleted ? 0 : 1,
-            borderColor: announcement
-              ? 'rgba(196, 92, 50, 0.28)'
-              : outgoing
-              ? 'rgba(28, 20, 16, 0.22)'
-              : theme.colors.glassEdge,
-          },
-        ]}
+      <Glass
+        intensity={outgoing || announcement ? 'action' : 'strong'}
+        radius={theme.radius.lg}
+        style={{ marginTop: 5 }}
       >
-        <AppText
-          variant="body"
-          color={fg}
-          style={deleted ? { fontStyle: 'italic' } : undefined}
-        >
-          {deleted ? 'Message deleted' : message.content}
-        </AppText>
-      </View>
+        <View style={{ paddingVertical: 11, paddingHorizontal: 16 }}>
+          <AppText
+            variant="body"
+            color={fg}
+            style={deleted ? { fontStyle: 'italic' } : undefined}
+          >
+            {deleted ? 'Message deleted' : message.content}
+          </AppText>
+        </View>
+      </Glass>
       <AppText
         variant="caption"
         color={theme.colors.textMuted}

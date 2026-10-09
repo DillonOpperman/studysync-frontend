@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Atmosphere, type AtmosphereMood } from './Atmosphere';
+import type { AtmosphereMood } from './Atmosphere';
+import { Wallpaper } from './Wallpaper';
 
 export function ScreenShell({
   children,
@@ -12,12 +13,12 @@ export function ScreenShell({
 }) {
   return (
     <View style={styles.fill}>
-      <Atmosphere mood={mood} />
+      <Wallpaper mood={mood} />
       {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  fill: { flex: 1, overflow: 'hidden' },
+  fill: { flex: 1, overflow: 'hidden', backgroundColor: '#EDE4D8' },
 });

@@ -94,8 +94,8 @@ export function GroupsScreen({
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              tintColor={theme.colors.cream}
-              colors={[theme.colors.cream]}
+              tintColor={theme.colors.brand}
+              colors={[theme.colors.brand]}
               onRefresh={() => {
                 setRefreshing(true);
                 load();

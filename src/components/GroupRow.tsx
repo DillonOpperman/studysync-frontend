@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import type { GroupDto } from '../api/types';
-import { glassSurface, useTheme } from '../theme';
+import { useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 import { PressScale } from './PressScale';
 
 export function GroupRow({
@@ -27,54 +28,50 @@ export function GroupRow({
     .join(' · ');
 
   const body = (
-    <View
-      style={[
-        glassSurface(theme, 'soft'),
-        {
-          paddingVertical: 16,
-          paddingHorizontal: 16,
-          borderRadius: theme.radius.lg,
-          marginBottom: last ? 0 : theme.space.sm,
-        },
-      ]}
+    <Glass
+      intensity="soft"
+      radius={theme.radius.lg}
+      style={{ marginBottom: last ? 0 : theme.space.sm }}
     >
-      <AppText variant="headline" color={theme.colors.onGlass}>
-        {group.title}
-      </AppText>
-      <AppText
-        variant="subhead"
-        color={theme.colors.onGlassMuted}
-        style={{ marginTop: 3 }}
-      >
-        {group.subject}
-      </AppText>
-      <AppText
-        variant="footnote"
-        color={theme.colors.onGlassMuted}
-        style={{ marginTop: 4 }}
-      >
-        {meta}
-      </AppText>
-      {caption ? (
+      <View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
+        <AppText variant="headline" color={theme.colors.onGlass}>
+          {group.title}
+        </AppText>
+        <AppText
+          variant="subhead"
+          color={theme.colors.onGlassMuted}
+          style={{ marginTop: 3 }}
+        >
+          {group.subject}
+        </AppText>
         <AppText
           variant="footnote"
           color={theme.colors.onGlassMuted}
           style={{ marginTop: 4 }}
         >
-          {caption}
+          {meta}
         </AppText>
-      ) : null}
-      {group.description ? (
-        <AppText
-          variant="subhead"
-          color={theme.colors.onGlassMuted}
-          numberOfLines={2}
-          style={{ marginTop: 6 }}
-        >
-          {group.description}
-        </AppText>
-      ) : null}
-    </View>
+        {caption ? (
+          <AppText
+            variant="footnote"
+            color={theme.colors.onGlassMuted}
+            style={{ marginTop: 4 }}
+          >
+            {caption}
+          </AppText>
+        ) : null}
+        {group.description ? (
+          <AppText
+            variant="subhead"
+            color={theme.colors.onGlassMuted}
+            numberOfLines={2}
+            style={{ marginTop: 6 }}
+          >
+            {group.description}
+          </AppText>
+        ) : null}
+      </View>
+    </Glass>
   );
 
   if (!onPress) {

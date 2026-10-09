@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { glassSurface, useTheme } from '../theme';
+import { useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 
 export function initialsFromName(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -18,28 +19,29 @@ export function initialsFromName(name: string): string {
 export function Avatar({ name, size }: { name: string; size?: number }) {
   const theme = useTheme();
   const dim = size ?? theme.control.avatar;
-  const glass = glassSurface(theme, 'strong');
   return (
-    <View
-      accessibilityLabel={`${name} avatar`}
-      style={[
-        glass,
-        {
+    <Glass
+      intensity="strong"
+      radius={dim / 2}
+      style={{ width: dim, height: dim }}
+    >
+      <View
+        accessibilityLabel={`${name} avatar`}
+        style={{
           width: dim,
           height: dim,
-          borderRadius: dim / 2,
           alignItems: 'center',
           justifyContent: 'center',
-        },
-      ]}
-    >
-      <AppText
-        variant="footnote"
-        color={theme.colors.onGlass}
-        style={{ fontWeight: '700' }}
+        }}
       >
-        {initialsFromName(name)}
-      </AppText>
-    </View>
+        <AppText
+          variant="footnote"
+          color={theme.colors.onGlass}
+          style={{ fontWeight: '700' }}
+        >
+          {initialsFromName(name)}
+        </AppText>
+      </View>
+    </Glass>
   );
 }

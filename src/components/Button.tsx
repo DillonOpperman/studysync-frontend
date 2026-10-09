@@ -1,8 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { glassSurface, useTheme } from '../theme';
+import { useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 import { PressScale } from './PressScale';
 
 type Tone = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -28,10 +29,6 @@ export function Button({
 }) {
   const theme = useTheme();
   const inactive = disabled || loading;
-  const glass = glassSurface(
-    theme,
-    tone === 'primary' ? 'action' : tone === 'secondary' ? 'soft' : 'strong',
-  );
   const fg =
     tone === 'danger'
       ? theme.colors.danger
@@ -39,7 +36,24 @@ export function Button({
       ? theme.colors.brand
       : theme.colors.onGlass;
   const size = theme.control.circle;
-  const frosted = tone !== 'ghost';
+  const intensity = tone === 'primary' ? 'action' : 'soft';
+
+  const body = (
+    <View
+      style={[
+        styles.inner,
+        round ? { minHeight: size, width: size, paddingHorizontal: 0 } : null,
+      ]}
+    >
+      {loading ? (
+        <ActivityIndicator color={fg} />
+      ) : (
+        <AppText variant="headline" color={fg} style={{ letterSpacing: -0.2 }}>
+          {label}
+        </AppText>
+      )}
+    </View>
+  );
 
   return (
     <PressScale
@@ -49,53 +63,32 @@ export function Button({
       accessibilityState={{ disabled: inactive, busy: !!loading }}
       onPress={onPress}
       disabled={inactive}
-      style={[
-        styles.base,
-        frosted ? glass : null,
-        {
-          minHeight: round ? size : theme.control.minHeight,
-          width: round ? size : undefined,
-          height: round ? size : undefined,
-          borderRadius: theme.radius.pill,
-          backgroundColor: frosted
-            ? (glass.backgroundColor as string)
-            : 'transparent',
-          opacity: inactive ? 0.4 : 1,
-          paddingHorizontal: round ? 0 : theme.space.lg,
-          borderWidth: frosted ? 1 : 0,
-          borderColor:
-            tone === 'danger'
-              ? 'rgba(180, 35, 24, 0.28)'
-              : frosted
-              ? (glass.borderColor as string)
-              : 'transparent',
-        },
-      ]}
+      style={{ opacity: inactive ? 0.45 : 1 }}
     >
-      <View style={[styles.inner, round ? { minHeight: size } : null]}>
-        {loading ? (
-          <ActivityIndicator color={fg} />
-        ) : (
-          <AppText
-            variant="headline"
-            color={fg}
-            style={{ letterSpacing: -0.2 }}
-          >
-            {label}
-          </AppText>
-        )}
-      </View>
+      {tone === 'ghost' ? (
+        body
+      ) : (
+        <Glass
+          intensity={intensity}
+          radius={theme.radius.pill}
+          style={{
+            minHeight: round ? size : theme.control.minHeight,
+            width: round ? size : undefined,
+            height: round ? size : undefined,
+          }}
+        >
+          {body}
+        </Glass>
+      )}
     </PressScale>
   );
 }
 
 const styles = StyleSheet.create({
-  base: {
-    justifyContent: 'center',
-  },
   inner: {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 52,
+    paddingHorizontal: 20,
   },
 });

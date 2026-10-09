@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 
-import { glassSurface, useReduceMotion, useTheme } from '../theme';
+import { useReduceMotion, useTheme } from '../theme';
 import { AppText } from './AppText';
+import { Glass } from './Glass';
 
 export function BrandMark({
   compact = false,
@@ -15,7 +16,6 @@ export function BrandMark({
   const reduceMotion = useReduceMotion();
   const opacity = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current;
   const size = compact ? 64 : 88;
-  const glass = glassSurface(theme, 'strong');
 
   useEffect(() => {
     if (reduceMotion) {
@@ -35,27 +35,34 @@ export function BrandMark({
         alignItems: align === 'center' ? 'center' : 'flex-start',
       }}
     >
-      <View
-        style={[
-          glass,
-          {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-        ]}
+      <Glass
+        intensity="strong"
+        radius={size / 2}
+        style={{
+          width: size,
+          height: size,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         <View
           style={{
-            width: 18,
-            height: 18,
-            borderRadius: 9,
-            backgroundColor: theme.colors.brand,
+            width: size,
+            height: size,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-        />
-      </View>
+        >
+          <View
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 8,
+              backgroundColor: theme.colors.brand,
+            }}
+          />
+        </View>
+      </Glass>
       <AppText
         variant={compact ? 'title' : 'display'}
         color={theme.colors.text}

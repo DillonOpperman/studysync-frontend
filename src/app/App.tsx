@@ -13,7 +13,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
         <AuthProvider>
           <RootNavigator />
         </AuthProvider>

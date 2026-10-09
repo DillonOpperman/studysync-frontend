@@ -417,7 +417,7 @@ export function GroupChatScreen({
             ) : null}
 
             {loading ? (
-              <ActivityIndicator color={theme.colors.cream} />
+              <ActivityIndicator color={theme.colors.brand} />
             ) : messages.length === 0 ? (
               <EmptyState
                 title="No messages yet"
@@ -433,7 +433,7 @@ export function GroupChatScreen({
                 keyboardShouldPersistTaps="handled"
                 ListFooterComponent={
                   loadingOlder ? (
-                    <ActivityIndicator color={theme.colors.cream} />
+                    <ActivityIndicator color={theme.colors.brand} />
                   ) : undefined
                 }
                 renderItem={({ item }) => (
