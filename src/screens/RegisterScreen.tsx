@@ -46,15 +46,15 @@ export function RegisterScreen({ onGoLogin }: { onGoLogin: () => void }) {
 
   return (
     <Screen>
-      <View style={{ marginBottom: theme.space.lg }}>
+      <View style={{ marginTop: theme.space.md, marginBottom: theme.space.lg }}>
         <BrandMark compact />
         <AppText variant="title" style={{ marginTop: theme.space.xl }}>
           Join StudySync
         </AppText>
         <AppText
-          variant="subhead"
+          variant="body"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.xs }}
+          style={{ marginTop: theme.space.sm }}
         >
           A few details from campus. Passwords must be at least 8 characters.
         </AppText>

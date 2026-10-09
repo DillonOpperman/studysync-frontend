@@ -14,10 +14,11 @@ import { ErrorBanner } from '../components/ErrorBanner';
 import { GroupRow } from '../components/GroupRow';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { TextLink } from '../components/TextLink';
+import { SectionLabel } from '../components/SectionLabel';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { groupsApi } from '../features/groups/groupsApi';
 import type { AppStackParamList } from '../navigation/types';
-import { hairlineWidth, useTheme } from '../theme';
+import { useTheme } from '../theme';
 
 function factorCaption(row: RecommendedGroupDto): string {
   return `Score ${row.score.toFixed(2)} · subject ${row.groupSubject.toFixed(
@@ -81,11 +82,11 @@ export function GroupsScreen({
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.canvas }}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'bottom', 'left', 'right']}
     >
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: theme.space.xl,
+          paddingHorizontal: theme.space.screen,
           paddingBottom: theme.space.xxxl,
         }}
         refreshControl={
@@ -119,16 +120,7 @@ export function GroupsScreen({
           onPress={() => navigation.navigate('Search')}
         />
 
-        <View
-          style={{
-            marginTop: theme.space.xl,
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
-          }}
-        >
-          <AppText variant="headline">Your groups</AppText>
-        </View>
+        <SectionLabel>Your groups</SectionLabel>
         {loading && !mine ? <GroupListSkeleton /> : null}
         {mine && memberships.length === 0 ? (
           <EmptyState
@@ -147,24 +139,15 @@ export function GroupsScreen({
           />
         ))}
 
-        <View
-          style={{
-            marginTop: theme.space.xl,
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
-          }}
+        <SectionLabel>For you</SectionLabel>
+        <AppText
+          variant="footnote"
+          color={theme.colors.textMuted}
+          style={{ marginBottom: theme.space.xs }}
         >
-          <AppText variant="headline">For you</AppText>
-          <AppText
-            variant="footnote"
-            color={theme.colors.textMuted}
-            style={{ marginTop: theme.space.xxs }}
-          >
-            Personalized matches from the API. Groups you already lead, belong
-            to, or have requested are excluded server-side.
-          </AppText>
-        </View>
+          Personalized matches from the API. Groups you already lead, belong to,
+          or have requested are excluded server-side.
+        </AppText>
         {loading && !recs ? <GroupListSkeleton /> : null}
         {recs && recs.length === 0 ? (
           <EmptyState

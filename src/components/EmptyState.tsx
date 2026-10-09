@@ -12,7 +12,7 @@ export function EmptyState({ title, body }: { title: string; body: string }) {
       <AppText
         variant="subhead"
         color={theme.colors.textMuted}
-        style={{ marginTop: theme.space.xs }}
+        style={{ marginTop: theme.space.xs, maxWidth: 340 }}
       >
         {body}
       </AppText>

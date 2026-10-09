@@ -21,7 +21,7 @@ export function TextLink({
       ? theme.colors.danger
       : tone === 'muted'
       ? theme.colors.textMuted
-      : theme.colors.accent;
+      : theme.colors.brand;
   return (
     <PressScale
       accessibilityRole="button"

@@ -10,7 +10,7 @@ export function SplashScreen() {
     <View style={[styles.box, { backgroundColor: theme.colors.canvas }]}>
       <BrandMark />
       <ActivityIndicator
-        color={theme.colors.accent}
+        color={theme.colors.brand}
         style={{ marginTop: theme.space.xl }}
       />
     </View>

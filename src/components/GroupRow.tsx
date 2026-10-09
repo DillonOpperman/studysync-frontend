@@ -18,10 +18,18 @@ export function GroupRow({
   caption?: string;
 }) {
   const theme = useTheme();
+  const meta = [
+    `${group.memberCount}/${group.maxMembers}`,
+    group.status !== 'active' ? group.status : null,
+    group.pendingJoinRequest ? 'request pending' : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
   const body = (
     <View
       style={{
-        paddingVertical: theme.space.md,
+        paddingVertical: 14,
         borderBottomWidth: last ? 0 : hairlineWidth(),
         borderBottomColor: theme.colors.divider,
       }}
@@ -30,24 +38,22 @@ export function GroupRow({
       <AppText
         variant="subhead"
         color={theme.colors.textSecondary}
-        style={{ marginTop: 2 }}
+        style={{ marginTop: 3 }}
       >
         {group.subject}
       </AppText>
       <AppText
         variant="footnote"
         color={theme.colors.textMuted}
-        style={{ marginTop: theme.space.xxs }}
+        style={{ marginTop: 4 }}
       >
-        {group.memberCount}/{group.maxMembers} members
-        {group.status !== 'active' ? ` · ${group.status}` : ''}
-        {group.pendingJoinRequest ? ' · request pending' : ''}
+        {meta}
       </AppText>
       {caption ? (
         <AppText
           variant="footnote"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.xxs }}
+          style={{ marginTop: 4 }}
         >
           {caption}
         </AppText>
@@ -57,7 +63,7 @@ export function GroupRow({
           variant="subhead"
           color={theme.colors.textMuted}
           numberOfLines={2}
-          style={{ marginTop: theme.space.xs }}
+          style={{ marginTop: 6 }}
         >
           {group.description}
         </AppText>

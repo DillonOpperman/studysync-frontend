@@ -20,7 +20,7 @@ export function Screen({
   padded?: boolean;
 }) {
   const theme = useTheme();
-  const padding = padded ? theme.space.xl : 0;
+  const padding = padded ? theme.space.screen : 0;
   const body = scroll ? (
     <KeyboardAvoidingView
       style={styles.flex}
@@ -29,7 +29,7 @@ export function Screen({
       <ScrollView
         contentContainerStyle={{
           padding,
-          paddingBottom: theme.space.xxxl,
+          paddingBottom: theme.space.xxxl + theme.space.xl,
           flexGrow: 1,
         }}
         keyboardShouldPersistTaps="handled"
@@ -45,7 +45,7 @@ export function Screen({
   return (
     <SafeAreaView
       style={[styles.flex, { backgroundColor: theme.colors.canvas }]}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'bottom', 'left', 'right']}
     >
       {body}
     </SafeAreaView>

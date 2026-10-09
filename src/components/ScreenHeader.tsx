@@ -21,7 +21,7 @@ export function ScreenHeader({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: theme.space.lg,
+        marginBottom: theme.space.md,
         minHeight: 44,
       }}
     >
@@ -30,17 +30,14 @@ export function ScreenHeader({
           <TextLink label="Back" tone="accent" align="start" onPress={onBack} />
         ) : null}
       </View>
-      <AppText variant="headline" style={{ flexShrink: 1 }} numberOfLines={1}>
+      <AppText
+        variant="headline"
+        style={{ flexShrink: 1, textAlign: 'center' }}
+        numberOfLines={1}
+      >
         {title}
       </AppText>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'flex-end',
-        }}
-      >
-        {action}
-      </View>
+      <View style={{ flex: 1, alignItems: 'flex-end' }}>{action}</View>
     </View>
   );
 }

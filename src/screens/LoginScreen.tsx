@@ -39,15 +39,17 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
 
   return (
     <Screen>
-      <View style={{ marginTop: theme.space.md, marginBottom: theme.space.xl }}>
-        <BrandMark compact />
-        <AppText variant="title" style={{ marginTop: theme.space.xl }}>
+      <View
+        style={{ marginTop: theme.space.xxl, marginBottom: theme.space.xl }}
+      >
+        <BrandMark />
+        <AppText variant="title" style={{ marginTop: theme.space.xxl }}>
           Welcome back
         </AppText>
         <AppText
-          variant="subhead"
+          variant="body"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.xs }}
+          style={{ marginTop: theme.space.sm }}
         >
           Sign in with the email you used to register.
         </AppText>
@@ -72,10 +74,10 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
         returnKeyType="go"
         onSubmitEditing={onSubmit}
       />
-      <View style={{ marginTop: theme.space.xl }}>
+      <View style={{ marginTop: theme.space.xxl }}>
         <Button label="Log in" onPress={onSubmit} loading={loading} />
       </View>
-      <View style={{ marginTop: theme.space.md, alignItems: 'center' }}>
+      <View style={{ marginTop: theme.space.sm, alignItems: 'center' }}>
         <Button label="Create an account" tone="ghost" onPress={onGoRegister} />
       </View>
     </Screen>

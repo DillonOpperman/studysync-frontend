@@ -8,25 +8,33 @@ export function TextField({
   label,
   error,
   hint,
+  hideLabel,
   ...rest
-}: TextInputProps & { label: string; error?: string; hint?: string }) {
+}: TextInputProps & {
+  label: string;
+  error?: string;
+  hint?: string;
+  hideLabel?: boolean;
+}) {
   const theme = useTheme();
   const [focused, setFocused] = useState(false);
   const border = error
     ? theme.colors.danger
     : focused
-    ? theme.colors.accent
-    : theme.colors.border;
+    ? theme.colors.brand
+    : 'transparent';
 
   return (
-    <View style={{ marginTop: theme.space.md }}>
-      <AppText
-        variant="footnote"
-        color={theme.colors.textSecondary}
-        style={{ marginBottom: theme.space.xxs }}
-      >
-        {label}
-      </AppText>
+    <View style={{ marginTop: hideLabel ? 0 : theme.space.md }}>
+      {hideLabel ? null : (
+        <AppText
+          variant="footnote"
+          color={theme.colors.textSecondary}
+          style={{ marginBottom: theme.space.xs, fontWeight: '600' }}
+        >
+          {label}
+        </AppText>
+      )}
       <TextInput
         accessibilityLabel={label}
         placeholderTextColor={theme.colors.placeholder}
@@ -47,8 +55,8 @@ export function TextField({
             minHeight: theme.control.minHeight,
             borderRadius: theme.radius.md,
             borderColor: border,
-            borderWidth: focused || error ? 1.5 : theme.control.hairline,
-            backgroundColor: theme.colors.surface,
+            borderWidth: 1.5,
+            backgroundColor: theme.colors.inputFill,
             color: theme.colors.text,
             paddingHorizontal: theme.space.md,
             ...theme.type.callout,
@@ -68,7 +76,7 @@ export function TextField({
         <AppText
           variant="caption"
           color={theme.colors.textMuted}
-          style={{ marginTop: theme.space.xxs }}
+          style={{ marginTop: theme.space.xxs, letterSpacing: 0 }}
         >
           {hint}
         </AppText>

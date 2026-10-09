@@ -16,7 +16,7 @@ import { GroupRow } from '../components/GroupRow';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { TextLink } from '../components/TextLink';
 import type { AppStackParamList } from '../navigation/types';
-import { hairlineWidth, useTheme } from '../theme';
+import { useTheme } from '../theme';
 
 function firstName(name: string): string {
   return name.trim().split(/\s+/)[0] || name;
@@ -71,11 +71,11 @@ export function HomeScreen({
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.canvas }}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'bottom', 'left', 'right']}
     >
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: theme.space.xl,
+          paddingHorizontal: theme.space.screen,
           paddingBottom: theme.space.xxxl,
         }}
         refreshControl={
@@ -94,12 +94,12 @@ export function HomeScreen({
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             marginTop: theme.space.sm,
             marginBottom: theme.space.lg,
           }}
         >
-          <AppText variant="footnote" color={theme.colors.textMuted}>
+          <AppText variant="caption" color={theme.colors.textMuted}>
             StudySync
           </AppText>
           <TextLink label="Log out" tone="danger" onPress={onLogout} />
@@ -114,17 +114,21 @@ export function HomeScreen({
               marginBottom: theme.space.xl,
             }}
           >
-            <Avatar name={profile.name} size={52} />
+            <Avatar name={profile.name} size={56} />
             <View style={{ flex: 1 }}>
               <AppText variant="title">Hi, {firstName(profile.name)}</AppText>
               <AppText
                 variant="subhead"
                 color={theme.colors.textSecondary}
-                style={{ marginTop: 2 }}
+                style={{ marginTop: 4 }}
               >
                 {profile.major} · {profile.year}
               </AppText>
-              <AppText variant="footnote" color={theme.colors.textMuted}>
+              <AppText
+                variant="footnote"
+                color={theme.colors.textMuted}
+                style={{ marginTop: 2 }}
+              >
                 {profile.institution.name}
               </AppText>
             </View>
@@ -133,7 +137,7 @@ export function HomeScreen({
 
         <ErrorBanner message={error} />
 
-        <View style={{ gap: theme.space.sm, marginBottom: theme.space.xl }}>
+        <View style={{ gap: theme.space.sm, marginBottom: theme.space.md }}>
           <Button
             label="Find groups"
             onPress={() => navigation.navigate('Groups')}
@@ -147,15 +151,19 @@ export function HomeScreen({
 
         <View
           style={{
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
+            marginTop: theme.space.md,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'baseline',
           }}
         >
-          <AppText variant="headline">Your groups</AppText>
+          <AppText
+            variant="caption"
+            color={theme.colors.textMuted}
+            style={{ textTransform: 'uppercase', letterSpacing: 0.9 }}
+          >
+            Your groups
+          </AppText>
           <TextLink
             label="See all"
             onPress={() => navigation.navigate('Groups')}

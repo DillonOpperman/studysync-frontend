@@ -30,11 +30,11 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
       </AppText>
       <View
         style={{
-          marginTop: theme.space.xs,
-          width: compact ? 28 : 36,
-          height: 2,
-          borderRadius: 1,
-          backgroundColor: theme.colors.caramel,
+          marginTop: compact ? 6 : 8,
+          width: compact ? 36 : 48,
+          height: 3,
+          borderRadius: 2,
+          backgroundColor: theme.colors.brand,
         }}
       />
     </Animated.View>

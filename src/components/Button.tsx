@@ -30,18 +30,18 @@ export function Button({
       : tone === 'danger'
       ? theme.colors.danger
       : tone === 'secondary'
-      ? theme.colors.accentSoft
+      ? theme.colors.brandSoft
       : 'transparent';
   const fg =
     tone === 'primary' || tone === 'danger'
       ? theme.colors.textInverse
       : tone === 'secondary'
-      ? theme.colors.accent
-      : theme.colors.accent;
+      ? theme.colors.brandPressed
+      : theme.colors.brand;
   const spinner =
     tone === 'primary' || tone === 'danger'
       ? theme.colors.textInverse
-      : theme.colors.accent;
+      : theme.colors.brand;
 
   return (
     <PressScale
@@ -55,9 +55,9 @@ export function Button({
         styles.base,
         {
           minHeight: theme.control.minHeight,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.radius.lg,
           backgroundColor: bg,
-          opacity: inactive ? 0.55 : 1,
+          opacity: inactive ? 0.45 : 1,
           paddingHorizontal: theme.space.lg,
         },
       ]}
@@ -66,7 +66,11 @@ export function Button({
         {loading ? (
           <ActivityIndicator color={spinner} />
         ) : (
-          <AppText variant="headline" color={fg}>
+          <AppText
+            variant="headline"
+            color={fg}
+            style={{ letterSpacing: -0.2 }}
+          >
             {label}
           </AppText>
         )}
@@ -82,6 +86,6 @@ const styles = StyleSheet.create({
   inner: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 48,
+    minHeight: 50,
   },
 });

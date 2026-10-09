@@ -25,14 +25,14 @@ export function Avatar({ name, size }: { name: string; size?: number }) {
         width: dim,
         height: dim,
         borderRadius: dim / 2,
-        backgroundColor: theme.colors.accentSoft,
+        backgroundColor: theme.colors.brandSoft,
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
       <AppText
         variant="footnote"
-        color={theme.colors.accent}
+        color={theme.colors.brandPressed}
         style={{ fontWeight: '700' }}
       >
         {initialsFromName(name)}

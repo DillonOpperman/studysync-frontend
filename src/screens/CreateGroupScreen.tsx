@@ -75,7 +75,11 @@ export function CreateGroupScreen({
   return (
     <Screen>
       <ScreenHeader title="New group" onBack={() => navigation.goBack()} />
-      <AppText variant="subhead" color={theme.colors.textMuted}>
+      <AppText
+        variant="footnote"
+        color={theme.colors.textMuted}
+        style={{ marginBottom: theme.space.sm }}
+      >
         Title, subject, and capacity are required. Recurring hours are optional;
         overnight windows (end before start) are allowed.
       </AppText>

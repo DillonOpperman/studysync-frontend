@@ -22,12 +22,12 @@ export function Chip({
       onPress={onPress}
       style={{
         minHeight: 36,
-        paddingHorizontal: theme.space.sm,
+        paddingHorizontal: theme.space.md,
         paddingVertical: theme.space.xs,
-        borderRadius: theme.radius.sm,
-        backgroundColor: selected ? theme.colors.accent : theme.colors.surface,
-        borderWidth: selected ? 0 : theme.control.hairline,
-        borderColor: theme.colors.border,
+        borderRadius: theme.radius.pill,
+        backgroundColor: selected
+          ? theme.colors.accent
+          : theme.colors.inputFill,
         justifyContent: 'center',
       }}
     >

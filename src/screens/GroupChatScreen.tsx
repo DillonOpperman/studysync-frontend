@@ -390,7 +390,7 @@ export function GroupChatScreen({
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={{ paddingHorizontal: theme.space.xl, flex: 1 }}>
+        <View style={{ paddingHorizontal: theme.space.screen, flex: 1 }}>
           <ScreenHeader
             title={headerTitle}
             onBack={() => navigation.goBack()}

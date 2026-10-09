@@ -1,29 +1,37 @@
 /**
  * StudySync design tokens. Light theme only for this phase; names are semantic
  * so a later dark palette can slot in without restyling every screen.
+ *
+ * Warm brown is the identity. Primary actions use near-black espresso (high
+ * contrast, contemporary). Cinnamon is the brand accent for selection, links,
+ * and the wordmark — not a wash of beige.
  */
 
 export const palette = {
-  canvas: '#F6F2EB',
-  surface: '#FFFDFA',
-  espresso: '#302720',
-  cocoa: '#594236',
-  secondary: '#846B5B',
-  taupe: '#B6A797',
-  border: '#E7DED3',
-  forest: '#365A46',
-  forestPressed: '#2C4A3A',
-  forestSoft: '#E7EFEA',
-  caramel: '#B68B5D',
-  danger: '#8F3A32',
-  dangerSoft: '#F4E6E3',
-  inverse: '#FFFDFA',
-  skeleton: '#EDE6DC',
+  ink: '#1A1410',
+  cocoa: '#4E3F36',
+  stone: '#6D5E55',
+  canvas: '#F4F0EB',
+  surface: '#FFFFFF',
+  inputFill: '#EFE8E1',
+  line: '#E2D9D0',
+  espresso: '#241C18',
+  espressoPressed: '#3A2E27',
+  cinnamon: '#C45C32',
+  cinnamonPressed: '#A34B29',
+  cinnamonSoft: '#F6E6DC',
+  sage: '#5C6B52',
+  sageSoft: '#E7EDE3',
+  danger: '#B42318',
+  dangerSoft: '#F8E7E4',
+  inverse: '#FFFFFF',
+  skeleton: '#E8E0D7',
 } as const;
 
 export type ColorTokens = {
   canvas: string;
   surface: string;
+  inputFill: string;
   text: string;
   textSecondary: string;
   textMuted: string;
@@ -33,6 +41,11 @@ export type ColorTokens = {
   accent: string;
   accentPressed: string;
   accentSoft: string;
+  brand: string;
+  brandPressed: string;
+  brandSoft: string;
+  success: string;
+  successSoft: string;
   caramel: string;
   danger: string;
   dangerSoft: string;
@@ -43,20 +56,26 @@ export type ColorTokens = {
 export const lightColors: ColorTokens = {
   canvas: palette.canvas,
   surface: palette.surface,
-  text: palette.espresso,
+  inputFill: palette.inputFill,
+  text: palette.ink,
   textSecondary: palette.cocoa,
-  textMuted: palette.secondary,
+  textMuted: palette.stone,
   textInverse: palette.inverse,
-  border: palette.border,
-  divider: palette.border,
-  accent: palette.forest,
-  accentPressed: palette.forestPressed,
-  accentSoft: palette.forestSoft,
-  caramel: palette.caramel,
+  border: palette.line,
+  divider: palette.line,
+  accent: palette.espresso,
+  accentPressed: palette.espressoPressed,
+  accentSoft: palette.inputFill,
+  brand: palette.cinnamon,
+  brandPressed: palette.cinnamonPressed,
+  brandSoft: palette.cinnamonSoft,
+  success: palette.sage,
+  successSoft: palette.sageSoft,
+  caramel: palette.cinnamon,
   danger: palette.danger,
   dangerSoft: palette.dangerSoft,
   skeleton: palette.skeleton,
-  placeholder: palette.taupe,
+  placeholder: palette.stone,
 };
 
 export const space = {
@@ -67,29 +86,71 @@ export const space = {
   lg: 20,
   xl: 24,
   xxl: 32,
-  xxxl: 40,
+  xxxl: 44,
+  screen: 20,
 } as const;
 
 export const radius = {
   sm: 8,
   md: 12,
   lg: 16,
+  xl: 22,
   pill: 999,
 } as const;
 
 export const type = {
-  display: { fontSize: 32, lineHeight: 38, fontWeight: '600' as const },
-  title: { fontSize: 22, lineHeight: 28, fontWeight: '600' as const },
-  headline: { fontSize: 17, lineHeight: 22, fontWeight: '600' as const },
-  body: { fontSize: 17, lineHeight: 24, fontWeight: '400' as const },
-  callout: { fontSize: 16, lineHeight: 22, fontWeight: '400' as const },
-  subhead: { fontSize: 15, lineHeight: 20, fontWeight: '400' as const },
-  footnote: { fontSize: 13, lineHeight: 18, fontWeight: '400' as const },
-  caption: { fontSize: 12, lineHeight: 16, fontWeight: '500' as const },
+  display: {
+    fontSize: 34,
+    lineHeight: 40,
+    fontWeight: '700' as const,
+    letterSpacing: -0.7,
+  },
+  title: {
+    fontSize: 28,
+    lineHeight: 34,
+    fontWeight: '700' as const,
+    letterSpacing: -0.45,
+  },
+  headline: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: '600' as const,
+    letterSpacing: -0.2,
+  },
+  body: {
+    fontSize: 17,
+    lineHeight: 24,
+    fontWeight: '400' as const,
+    letterSpacing: -0.2,
+  },
+  callout: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: '400' as const,
+    letterSpacing: -0.15,
+  },
+  subhead: {
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '400' as const,
+    letterSpacing: -0.1,
+  },
+  footnote: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+  },
+  caption: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '600' as const,
+    letterSpacing: 0.4,
+  },
 } as const;
 
 export const control = {
-  minHeight: 48,
+  minHeight: 50,
   hitSlop: { top: 8, bottom: 8, left: 8, right: 8 },
   icon: 22,
   avatar: 40,

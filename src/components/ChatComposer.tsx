@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MAX_GROUP_MESSAGE_CHARS } from '../api/types';
 import { useTheme } from '../theme';
@@ -28,6 +29,7 @@ export function ChatComposer({
   disabled?: boolean;
 }) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const count = [...value].length;
   return (
     <View
@@ -35,7 +37,7 @@ export function ChatComposer({
         borderTopWidth: theme.control.hairline,
         borderTopColor: theme.colors.divider,
         paddingTop: theme.space.sm,
-        paddingBottom: theme.space.sm,
+        paddingBottom: Math.max(insets.bottom, theme.space.sm),
         backgroundColor: theme.colors.canvas,
       }}
     >
@@ -50,6 +52,8 @@ export function ChatComposer({
       ) : null}
       <TextField
         label="Message"
+        hideLabel
+        placeholder="Message"
         value={value}
         onChangeText={onChangeText}
         multiline
@@ -68,10 +72,14 @@ export function ChatComposer({
           gap: theme.space.sm,
         }}
       >
-        <AppText variant="caption" color={theme.colors.textMuted}>
+        <AppText
+          variant="caption"
+          color={theme.colors.textMuted}
+          style={{ letterSpacing: 0, fontWeight: '400' }}
+        >
           {count}/{MAX_GROUP_MESSAGE_CHARS}
         </AppText>
-        <View style={{ minWidth: 120 }}>
+        <View style={{ minWidth: 108 }}>
           <Button
             label="Send"
             onPress={onSend}

@@ -41,10 +41,22 @@ export function MessageBubble({
   const theme = useTheme();
   const announcement = message.messageType === 'announcement';
   const deleted = Boolean(message.deletedAt);
-  const bg = mine ? theme.colors.accentSoft : theme.colors.surface;
+  const outgoing = mine && !announcement && !deleted;
+  const bg = deleted
+    ? theme.colors.skeleton
+    : announcement
+    ? theme.colors.brandSoft
+    : outgoing
+    ? theme.colors.accent
+    : theme.colors.surface;
+  const fg = deleted
+    ? theme.colors.textMuted
+    : outgoing
+    ? theme.colors.textInverse
+    : theme.colors.text;
   const align = mine ? 'flex-end' : 'flex-start';
   return (
-    <View style={{ alignSelf: align, maxWidth: '86%', marginVertical: 6 }}>
+    <View style={{ alignSelf: align, maxWidth: '84%', marginVertical: 5 }}>
       <AppText variant="caption" color={theme.colors.textMuted}>
         {senderName}
         {announcement ? ' · announcement' : ''}
@@ -53,16 +65,20 @@ export function MessageBubble({
       </AppText>
       <View
         style={{
-          marginTop: 4,
-          paddingVertical: theme.space.sm,
-          paddingHorizontal: theme.space.md,
-          borderRadius: theme.radius.md,
-          backgroundColor: deleted ? theme.colors.skeleton : bg,
+          marginTop: 5,
+          paddingVertical: 10,
+          paddingHorizontal: 14,
+          borderRadius: theme.radius.lg,
+          borderBottomRightRadius: mine ? 6 : theme.radius.lg,
+          borderBottomLeftRadius: mine ? theme.radius.lg : 6,
+          backgroundColor: bg,
+          borderWidth: outgoing || deleted || announcement ? 0 : 1,
+          borderColor: theme.colors.border,
         }}
       >
         <AppText
           variant="body"
-          color={deleted ? theme.colors.textMuted : theme.colors.text}
+          color={fg}
           style={deleted ? { fontStyle: 'italic' } : undefined}
         >
           {deleted ? 'Message deleted' : message.content}
@@ -71,7 +87,7 @@ export function MessageBubble({
       <AppText
         variant="caption"
         color={theme.colors.textMuted}
-        style={{ marginTop: 4 }}
+        style={{ marginTop: 4, letterSpacing: 0, fontWeight: '400' }}
       >
         {formatTime(message.createdAt)}
         {message.editedAt ? ' · edited' : ''}
@@ -90,8 +106,8 @@ export function MessageBubble({
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
-            gap: theme.space.sm,
-            marginTop: 4,
+            gap: theme.space.xs,
+            marginTop: 2,
           }}
         >
           {['👍', '❤️', '😂'].map(emoji => (

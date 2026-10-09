@@ -13,6 +13,7 @@ import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { Screen } from '../components/Screen';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { SectionLabel } from '../components/SectionLabel';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { groupsApi } from '../features/groups/groupsApi';
 import {
@@ -121,14 +122,7 @@ export function GroupDetailScreen({
     <Screen>
       <ScreenHeader title={group.title} onBack={() => navigation.goBack()} />
       <ErrorBanner message={error ?? actionError} />
-      <AppText variant="title">{group.title}</AppText>
-      <AppText
-        variant="subhead"
-        color={theme.colors.textSecondary}
-        style={{ marginTop: theme.space.xxs }}
-      >
-        {group.subject}
-      </AppText>
+      <AppText variant="headline">{group.subject}</AppText>
       <AppText
         variant="footnote"
         color={theme.colors.textMuted}
@@ -138,43 +132,84 @@ export function GroupDetailScreen({
         {group.location ? ` · ${group.location}` : ''}
       </AppText>
       {group.description ? (
-        <AppText variant="body" style={{ marginTop: theme.space.md }}>
+        <AppText
+          variant="body"
+          color={theme.colors.textSecondary}
+          style={{ marginTop: theme.space.md }}
+        >
           {group.description}
         </AppText>
       ) : null}
 
+      <View style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
+        {canOpenGroupChat(group) ? (
+          <Button
+            label="Open group chat"
+            onPress={() =>
+              navigation.navigate('GroupChat', {
+                groupId: group.id,
+                title: group.title,
+              })
+            }
+          />
+        ) : null}
+        {canRequestJoin(group) ? (
+          <Button
+            label="Request to join"
+            onPress={() =>
+              run(() =>
+                groupsApi(client)
+                  .requestJoin(group.id)
+                  .then(() => undefined),
+              )
+            }
+            loading={busy}
+          />
+        ) : null}
+        {joinReason && !isActiveMember(group) ? (
+          <AppText variant="footnote" color={theme.colors.textMuted}>
+            {joinReason}
+          </AppText>
+        ) : null}
+        {canLeave(group) ? (
+          <Button
+            label={
+              group.isLeader && group.memberCount === 1
+                ? 'Leave and archive'
+                : 'Leave group'
+            }
+            tone="danger"
+            onPress={() =>
+              run(async () => {
+                await groupsApi(client).leave(group.id);
+                navigation.navigate('Groups');
+              })
+            }
+            loading={busy}
+          />
+        ) : null}
+        {leaveReason ? (
+          <AppText variant="footnote" color={theme.colors.textMuted}>
+            {leaveReason}
+          </AppText>
+        ) : null}
+      </View>
+
+      <SectionLabel>Leader</SectionLabel>
       <View
         style={{
-          marginTop: theme.space.lg,
-          borderTopWidth: hairlineWidth(),
-          borderTopColor: theme.colors.divider,
-          paddingTop: theme.space.md,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: theme.space.sm,
         }}
       >
-        <AppText variant="headline">Leader</AppText>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: theme.space.sm,
-            marginTop: theme.space.sm,
-          }}
-        >
-          <Avatar name={group.leader.name} />
-          <AppText variant="callout">{group.leader.name}</AppText>
-        </View>
+        <Avatar name={group.leader.name} />
+        <AppText variant="callout">{group.leader.name}</AppText>
       </View>
 
       {group.recurringSlots.length > 0 ? (
-        <View
-          style={{
-            marginTop: theme.space.lg,
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
-          }}
-        >
-          <AppText variant="headline">Schedule</AppText>
+        <View>
+          <SectionLabel>Schedule</SectionLabel>
           {group.recurringSlots.map(slot => (
             <AppText
               key={slot.id}
@@ -189,15 +224,8 @@ export function GroupDetailScreen({
       ) : null}
 
       {canViewMembers(group) && members ? (
-        <View
-          style={{
-            marginTop: theme.space.lg,
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
-          }}
-        >
-          <AppText variant="headline">Members</AppText>
+        <View>
+          <SectionLabel>Members</SectionLabel>
           {members.map(member => (
             <View
               key={member.userId}
@@ -221,15 +249,8 @@ export function GroupDetailScreen({
       ) : null}
 
       {canManageJoinRequests(group) ? (
-        <View
-          style={{
-            marginTop: theme.space.lg,
-            borderTopWidth: hairlineWidth(),
-            borderTopColor: theme.colors.divider,
-            paddingTop: theme.space.md,
-          }}
-        >
-          <AppText variant="headline">Join requests</AppText>
+        <View>
+          <SectionLabel>Join requests</SectionLabel>
           {requests && requests.length === 0 ? (
             <AppText
               variant="subhead"
@@ -291,60 +312,6 @@ export function GroupDetailScreen({
           ))}
         </View>
       ) : null}
-
-      <View style={{ marginTop: theme.space.xl, gap: theme.space.sm }}>
-        {canOpenGroupChat(group) ? (
-          <Button
-            label="Open group chat"
-            onPress={() =>
-              navigation.navigate('GroupChat', {
-                groupId: group.id,
-                title: group.title,
-              })
-            }
-          />
-        ) : null}
-        {canRequestJoin(group) ? (
-          <Button
-            label="Request to join"
-            onPress={() =>
-              run(() =>
-                groupsApi(client)
-                  .requestJoin(group.id)
-                  .then(() => undefined),
-              )
-            }
-            loading={busy}
-          />
-        ) : null}
-        {joinReason && !isActiveMember(group) ? (
-          <AppText variant="footnote" color={theme.colors.textMuted}>
-            {joinReason}
-          </AppText>
-        ) : null}
-        {canLeave(group) ? (
-          <Button
-            label={
-              group.isLeader && group.memberCount === 1
-                ? 'Leave and archive'
-                : 'Leave group'
-            }
-            tone="danger"
-            onPress={() =>
-              run(async () => {
-                await groupsApi(client).leave(group.id);
-                navigation.navigate('Groups');
-              })
-            }
-            loading={busy}
-          />
-        ) : null}
-        {leaveReason ? (
-          <AppText variant="footnote" color={theme.colors.textMuted}>
-            {leaveReason}
-          </AppText>
-        ) : null}
-      </View>
     </Screen>
   );
 }

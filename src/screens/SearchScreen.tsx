@@ -123,11 +123,17 @@ export function SearchScreen({
   return (
     <Screen>
       <ScreenHeader title="Search" onBack={() => navigation.goBack()} />
-      <AppText variant="subhead" color={theme.colors.textMuted}>
+      <AppText
+        variant="footnote"
+        color={theme.colors.textMuted}
+        style={{ marginBottom: theme.space.xs }}
+      >
         Full-text uses Postgres. Semantic uses the server embedding model.
       </AppText>
       <TextField
         label="Query"
+        hideLabel
+        placeholder="Search groups"
         value={query}
         onChangeText={value => {
           setQuery(value);
