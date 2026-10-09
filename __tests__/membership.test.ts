@@ -1,6 +1,7 @@
 import {
   canLeave,
   canManageJoinRequests,
+  canOpenGroupChat,
   canRequestJoin,
   canViewMembers,
   joinBlockedReason,
@@ -30,6 +31,13 @@ describe('membership UI rules', () => {
     });
     expect(canManageJoinRequests(member)).toBe(false);
     expect(canViewMembers(member)).toBe(true);
+    expect(canOpenGroupChat(member)).toBe(true);
+    expect(canOpenGroupChat(group())).toBe(false);
+    expect(
+      canOpenGroupChat(
+        group({ membershipStatus: 'member', status: 'archived' }),
+      ),
+    ).toBe(false);
     expect(
       canManageJoinRequests(
         group({ membershipStatus: 'leader', isLeader: true }),

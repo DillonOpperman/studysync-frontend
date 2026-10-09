@@ -77,6 +77,7 @@ describe('SessionController', () => {
     );
     await session.login({ email: 'ada@campus.edu', password: 'password12' });
     expect(session.getState().status).toBe('signedIn');
+    expect(session.currentAccessToken()).toBe('access.1');
     expect(await store.get()).toBe('refresh.login');
     expect(await session.loadMe()).toMatchObject({ email: 'ada@campus.edu' });
     await expect(session.listMyGroups()).resolves.toEqual([]);

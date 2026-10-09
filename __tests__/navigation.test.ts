@@ -18,6 +18,7 @@ describe('initial navigation', () => {
       'Search',
       'CreateGroup',
       'GroupDetail',
+      'GroupChat',
     ]);
     expect(APP_STACK_ROUTES).not.toContain('Chat');
     expect(APP_STACK_ROUTES).not.toContain('Profile');

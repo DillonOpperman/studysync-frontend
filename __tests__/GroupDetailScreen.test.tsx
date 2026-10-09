@@ -75,6 +75,7 @@ describe('GroupDetailScreen (mocked HTTP — not a live Rust server)', () => {
     expect(mockApi.members).not.toHaveBeenCalled();
     expect(mockApi.listJoinRequests).not.toHaveBeenCalled();
     expect(labels(tree)).toContain('Request to join');
+    expect(labels(tree)).not.toContain('Open group chat');
     expect(labels(tree)).not.toContain('Approve');
   });
 
@@ -90,6 +91,7 @@ describe('GroupDetailScreen (mocked HTTP — not a live Rust server)', () => {
     expect(mockApi.members).toHaveBeenCalledWith('g1');
     expect(mockApi.listJoinRequests).not.toHaveBeenCalled();
     expect(labels(tree)).toContain('Leave group');
+    expect(labels(tree)).toContain('Open group chat');
     expect(labels(tree)).not.toContain('Approve');
     expect(labels(tree)).not.toContain('Request to join');
   });
