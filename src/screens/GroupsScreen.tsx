@@ -81,7 +81,7 @@ export function GroupsScreen({
   );
 
   return (
-    <ScreenShell>
+    <ScreenShell mood="groups">
       <SafeAreaView
         style={{ flex: 1 }}
         edges={['top', 'bottom', 'left', 'right']}

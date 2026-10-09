@@ -1,14 +1,18 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { useTheme } from '../theme';
-import { Atmosphere } from './Atmosphere';
+import { Atmosphere, type AtmosphereMood } from './Atmosphere';
 
-export function ScreenShell({ children }: { children: React.ReactNode }) {
-  const theme = useTheme();
+export function ScreenShell({
+  children,
+  mood = 'home',
+}: {
+  children: React.ReactNode;
+  mood?: AtmosphereMood;
+}) {
   return (
-    <View style={[styles.fill, { backgroundColor: theme.colors.canvas }]}>
-      <Atmosphere />
+    <View style={styles.fill}>
+      <Atmosphere mood={mood} />
       {children}
     </View>
   );

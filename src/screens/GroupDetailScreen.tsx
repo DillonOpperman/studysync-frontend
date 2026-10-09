@@ -95,7 +95,7 @@ export function GroupDetailScreen({
 
   if (loading && !group) {
     return (
-      <Screen>
+      <Screen mood="detail">
         <ScreenHeader title="Group" onBack={() => navigation.goBack()} />
         <GroupListSkeleton />
       </Screen>
@@ -104,7 +104,7 @@ export function GroupDetailScreen({
 
   if (!group) {
     return (
-      <Screen>
+      <Screen mood="detail">
         <ScreenHeader title="Group" onBack={() => navigation.goBack()} />
         <ErrorBanner message={error} />
         <EmptyState
@@ -119,7 +119,7 @@ export function GroupDetailScreen({
   const leaveReason = leaveBlockedReason(group);
 
   return (
-    <Screen>
+    <Screen mood="detail">
       <ScreenHeader title={group.title} onBack={() => navigation.goBack()} />
       <ErrorBanner message={error ?? actionError} />
       <AppText variant="headline">{group.subject}</AppText>

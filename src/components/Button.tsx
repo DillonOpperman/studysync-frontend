@@ -28,26 +28,18 @@ export function Button({
 }) {
   const theme = useTheme();
   const inactive = disabled || loading;
-  const glass = glassSurface(theme, 'soft');
-  const bg =
-    tone === 'primary'
-      ? theme.colors.accent
-      : tone === 'danger'
-      ? theme.colors.danger
-      : tone === 'secondary'
-      ? glass.backgroundColor
-      : 'transparent';
+  const glass = glassSurface(
+    theme,
+    tone === 'primary' ? 'action' : tone === 'secondary' ? 'soft' : 'strong',
+  );
   const fg =
-    tone === 'primary' || tone === 'danger'
-      ? theme.colors.textInverse
-      : tone === 'secondary'
-      ? theme.colors.text
-      : theme.colors.brand;
-  const spinner =
-    tone === 'primary' || tone === 'danger'
-      ? theme.colors.textInverse
-      : theme.colors.brand;
+    tone === 'danger'
+      ? theme.colors.danger
+      : tone === 'ghost'
+      ? theme.colors.brand
+      : theme.colors.text;
   const size = theme.control.circle;
+  const frosted = tone !== 'ghost';
 
   return (
     <PressScale
@@ -59,24 +51,30 @@ export function Button({
       disabled={inactive}
       style={[
         styles.base,
-        tone === 'secondary' ? glass : null,
+        frosted ? glass : null,
         {
           minHeight: round ? size : theme.control.minHeight,
           width: round ? size : undefined,
           height: round ? size : undefined,
           borderRadius: theme.radius.pill,
-          backgroundColor: bg,
+          backgroundColor: frosted
+            ? (glass.backgroundColor as string)
+            : 'transparent',
           opacity: inactive ? 0.4 : 1,
           paddingHorizontal: round ? 0 : theme.space.lg,
-          borderWidth: tone === 'secondary' ? 1 : 0,
+          borderWidth: frosted ? 1 : 0,
           borderColor:
-            tone === 'secondary' ? theme.colors.glassEdge : 'transparent',
+            tone === 'danger'
+              ? 'rgba(180, 35, 24, 0.28)'
+              : frosted
+              ? (glass.borderColor as string)
+              : 'transparent',
         },
       ]}
     >
       <View style={[styles.inner, round ? { minHeight: size } : null]}>
         {loading ? (
-          <ActivityIndicator color={spinner} />
+          <ActivityIndicator color={fg} />
         ) : (
           <AppText
             variant="headline"

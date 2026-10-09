@@ -45,7 +45,7 @@ export function RegisterScreen({ onGoLogin }: { onGoLogin: () => void }) {
   }
 
   return (
-    <Screen>
+    <Screen mood="auth">
       <View
         style={{
           alignItems: 'center',

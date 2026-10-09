@@ -8,7 +8,7 @@ import { useTheme } from '../theme';
 export function SplashScreen() {
   const theme = useTheme();
   return (
-    <ScreenShell>
+    <ScreenShell mood="splash">
       <View style={styles.box}>
         <BrandMark align="center" />
         <ActivityIndicator

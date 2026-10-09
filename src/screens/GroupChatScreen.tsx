@@ -383,7 +383,7 @@ export function GroupChatScreen({
       : null;
 
   return (
-    <ScreenShell>
+    <ScreenShell mood="chat">
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}

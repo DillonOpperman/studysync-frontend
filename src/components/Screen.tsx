@@ -9,6 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../theme';
+import type { AtmosphereMood } from './Atmosphere';
 import { ScreenShell } from './ScreenShell';
 
 export function Screen({
@@ -16,11 +17,13 @@ export function Screen({
   scroll = true,
   padded = true,
   center = false,
+  mood = 'form',
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   padded?: boolean;
   center?: boolean;
+  mood?: AtmosphereMood;
 }) {
   const theme = useTheme();
   const padding = padded ? theme.space.screen : 0;
@@ -47,7 +50,7 @@ export function Screen({
   );
 
   return (
-    <ScreenShell>
+    <ScreenShell mood={mood}>
       <SafeAreaView
         style={styles.flex}
         edges={['top', 'bottom', 'left', 'right']}

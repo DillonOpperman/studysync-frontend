@@ -70,7 +70,7 @@ export function HomeScreen({
   const preview = (groups ?? []).slice(0, 3);
 
   return (
-    <ScreenShell>
+    <ScreenShell mood="home">
       <SafeAreaView
         style={{ flex: 1 }}
         edges={['top', 'bottom', 'left', 'right']}

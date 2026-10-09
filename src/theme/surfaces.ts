@@ -4,17 +4,23 @@ import type { Theme } from './tokens';
 
 export function glassSurface(
   theme: Theme,
-  strength: 'soft' | 'strong' = 'soft',
+  strength: 'soft' | 'strong' | 'action' = 'soft',
 ): ViewStyle {
+  const fill =
+    strength === 'action' || strength === 'strong'
+      ? theme.colors.glassStrong
+      : theme.colors.glass;
   return {
-    backgroundColor:
-      strength === 'strong' ? theme.colors.glassStrong : theme.colors.glass,
+    backgroundColor: fill,
     borderWidth: 1,
-    borderColor: theme.colors.glassEdge,
+    borderColor:
+      strength === 'action'
+        ? 'rgba(255, 255, 255, 0.88)'
+        : theme.colors.glassEdge,
     shadowColor: theme.colors.shadow,
-    shadowOpacity: 0.14,
-    shadowRadius: 22,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: Platform.OS === 'android' ? 3 : 0,
+    shadowOpacity: strength === 'action' ? 0.08 : 0.1,
+    shadowRadius: strength === 'action' ? 16 : 20,
+    shadowOffset: { width: 0, height: strength === 'action' ? 6 : 8 },
+    elevation: Platform.OS === 'android' ? 2 : 0,
   };
 }

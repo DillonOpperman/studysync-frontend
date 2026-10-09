@@ -121,7 +121,7 @@ export function SearchScreen({
   );
 
   return (
-    <Screen>
+    <Screen mood="search">
       <ScreenHeader title="Search" onBack={() => navigation.goBack()} />
       <AppText
         variant="footnote"

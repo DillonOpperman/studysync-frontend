@@ -38,7 +38,7 @@ export function LoginScreen({ onGoRegister }: { onGoRegister: () => void }) {
   }
 
   return (
-    <Screen center>
+    <Screen center mood="auth">
       <View style={{ alignItems: 'center', marginBottom: theme.space.xl }}>
         <BrandMark align="center" />
         <AppText

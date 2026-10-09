@@ -73,7 +73,7 @@ export function CreateGroupScreen({
   }
 
   return (
-    <Screen>
+    <Screen mood="form">
       <ScreenHeader title="New group" onBack={() => navigation.goBack()} />
       <AppText
         variant="footnote"

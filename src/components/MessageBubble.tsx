@@ -46,14 +46,8 @@ export function MessageBubble({
     ? theme.colors.skeleton
     : announcement
     ? theme.colors.brandSoft
-    : outgoing
-    ? theme.colors.accent
     : theme.colors.glassStrong;
-  const fg = deleted
-    ? theme.colors.textMuted
-    : outgoing
-    ? theme.colors.textInverse
-    : theme.colors.text;
+  const fg = deleted ? theme.colors.textMuted : theme.colors.text;
   const align = mine ? 'flex-end' : 'flex-start';
   return (
     <View style={{ alignSelf: align, maxWidth: '84%', marginVertical: 5 }}>
@@ -65,16 +59,18 @@ export function MessageBubble({
       </AppText>
       <View
         style={[
-          outgoing || deleted ? null : glassSurface(theme, 'strong'),
+          deleted ? null : glassSurface(theme, outgoing ? 'action' : 'strong'),
           {
             marginTop: 5,
             paddingVertical: 11,
             paddingHorizontal: 16,
             borderRadius: theme.radius.lg,
             backgroundColor: bg,
-            borderWidth: outgoing || deleted ? 0 : 1,
+            borderWidth: deleted ? 0 : 1,
             borderColor: announcement
               ? 'rgba(196, 92, 50, 0.28)'
+              : outgoing
+              ? 'rgba(28, 20, 16, 0.22)'
               : theme.colors.glassEdge,
           },
         ]}
