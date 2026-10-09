@@ -262,26 +262,27 @@ export function GroupChatScreen({
       return;
     }
     const content = draft.trim();
-    const clientMsgId = newClientMsgId();
-    const pending: ChatMessage = {
-      id: clientMsgId,
-      groupId,
-      senderId: userId,
-      clientMsgId,
-      content,
-      messageType: announce ? 'announcement' : 'text',
-      createdAt: new Date().toISOString(),
-      editedAt: null,
-      deletedAt: null,
-      reactions: [],
-      attachments: [],
-      pending: true,
-    };
     sendingRef.current = true;
     setSending(true);
-    setDraft('');
-    setMessages(current => upsertMessages(current, [pending]));
+    let clientMsgId = '';
     try {
+      clientMsgId = newClientMsgId();
+      const pending: ChatMessage = {
+        id: clientMsgId,
+        groupId,
+        senderId: userId,
+        clientMsgId,
+        content,
+        messageType: announce ? 'announcement' : 'text',
+        createdAt: new Date().toISOString(),
+        editedAt: null,
+        deletedAt: null,
+        reactions: [],
+        attachments: [],
+        pending: true,
+      };
+      setDraft('');
+      setMessages(current => upsertMessages(current, [pending]));
       const socket = socketRef.current;
       const viaSocket =
         socket?.isSubscribed() &&
