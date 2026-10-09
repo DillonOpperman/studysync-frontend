@@ -1,97 +1,88 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# StudySync frontend
 
-# Getting Started
+React Native (CLI) + TypeScript client for the **Rust** API in `E:\Desktop\studysync-backend-rs`.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+This is a **separate Git repository**. It is not a monorepo with the backend. Do not copy this tree into `studysync-app` or the Flask backend.
 
-## Step 1: Start Metro
+The legacy `studysync-app` tree was not available on this machine during Phase 8A, so branding here is a conservative StudySync palette (deep blue, paper background) rather than a pixel copy of the old app.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Git
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+Local `main` only. Do not add a GitHub remote or push until that is an explicit later task.
 
-```sh
-# Using npm
-npm start
+Confirmed repository root: `E:\Desktop\studysync-frontend`.
 
-# OR using Yarn
-yarn start
+## API contract (source of truth: Rust backend)
+
+- Origin: `SERVER_HOST`/`SERVER_PORT`, default `0.0.0.0:8080`
+- Prefix: `/api/v1`
+- JSON field names: **camelCase**
+- Errors: `{"error":{"code":"...","message":"..."}}`
+- Auth: `Authorization: Bearer <accessToken>`
+- Access JWT TTL: 15 minutes
+- Refresh: `POST /api/v1/auth/refresh` with `{ "refreshToken": "..." }` **rotates** the refresh token (old session revoked)
+- Logout: `POST /api/v1/auth/logout` with the refresh token, HTTP **204**
+- Profile: `GET /api/v1/me`
+- Groups: `GET /api/v1/groups/mine`
+
+## Configure the API URL
+
+Set `apiBaseUrlOverride` in `src/config/overrides.ts` when the defaults are wrong (physical devices). Leave it `null` for emulator/simulator defaults.
+
+| Runtime | Base URL |
+| --- | --- |
+| Android emulator | `http://10.0.2.2:8080` |
+| iOS simulator | `http://127.0.0.1:8080` |
+| Physical device | `http://<LAN-IP>:8080` (phone and PC on the same Wi-Fi; Windows firewall must allow 8080) |
+
+**Do not use `localhost` from an Android emulator.** It refers to the emulator itself, not the host running the Rust API.
+
+The app talks HTTP in development. Debug Android allows cleartext; iOS allows local networking. Production HTTPS is a later concern.
+
+Never commit JWT secrets, production URLs with credentials, or refresh tokens.
+
+## Run
+
+1. Start Postgres + the Rust API from `studysync-backend-rs` (`cargo run`, port 8080).
+2. `npm start` in this repo.
+3. `npm run android` when an emulator/SDK is installed.
+
+Windows cannot build iOS here (no Xcode).
+
+## Checks
+
+```powershell
+npm run typecheck
+npm run lint
+npx prettier --check "src/**/*.{ts,tsx}" "__tests__/**/*.{ts,tsx}"
+npm test
 ```
 
-## Step 2: Build and run your app
+## Architecture
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+src/config     API origin (no URLs in screens)
+src/api        typed DTOs, fetch client, error mapping
+src/auth       Keychain refresh store, in-memory access token, session
+src/screens    Login, Register, Home (profile + groups)
+src/navigation splash / signed-out / signed-in
+src/components shared UI
 ```
 
-### iOS
+Refresh credentials use **react-native-keychain** (Keystore/Keychain). Access tokens stay in process memory. They are not written to AsyncStorage.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Concurrent `token_expired` retries share one in-flight `POST /auth/refresh` on `SessionController`.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## Phase 8A scope
 
-```sh
-bundle install
-```
+Implemented: register, login, session restore, `/me`, `/groups/mine`, logout.
 
-Then, and every time you update your native dependencies, run:
+Not in this phase: DMs, group chat WebSockets, media, matching, notifications, account deletion.
 
-```sh
-bundle exec pod install
-```
+## Middleware / extra services
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+None. Auth, authorization, and rate limits stay in the Rust API. A future reverse proxy or BFF should only be added if a concrete deployment requirement appears (for example TLS termination or a web client). Do not add a third repository yet.
 
-```sh
-# Using npm
-npm run ios
+## Android package path
 
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+The CLI created `com/com.studysync.app` from `--package-name com.studysync.app`. Sources were moved to `android/app/src/main/java/com/studysync/app/` to match `package com.studysync.app`.

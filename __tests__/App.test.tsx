@@ -1,13 +1,5 @@
-/**
- * @format
- */
+import { rootFor } from '../src/navigation/rootFor';
 
-import React from 'react';
-import ReactTestRenderer from 'react-test-renderer';
-import App from '../App';
-
-test('renders correctly', async () => {
-  await ReactTestRenderer.act(() => {
-    ReactTestRenderer.create(<App />);
-  });
+test('signed-out users do not land on home', () => {
+  expect(rootFor({ status: 'signedOut' })).not.toBe('app');
 });
