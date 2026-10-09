@@ -20,5 +20,5 @@ export function ScreenShell({
 }
 
 const styles = StyleSheet.create({
-  fill: { flex: 1, overflow: 'hidden', backgroundColor: '#EDE4D8' },
+  fill: { flex: 1, overflow: 'hidden', backgroundColor: '#1B120D' },
 });

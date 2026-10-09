@@ -16,11 +16,11 @@ export function Wallpaper({ mood = 'home' }: { mood?: AtmosphereMood }) {
       />
       <BlurView
         style={StyleSheet.absoluteFill}
-        blurType="xlight"
-        blurAmount={6}
-        blurRadius={4}
+        blurType="dark"
+        blurAmount={8}
+        blurRadius={6}
         downsampleFactor={8}
-        overlayColor="transparent"
+        overlayColor="rgba(27, 18, 13, 0.06)"
       />
     </View>
   );

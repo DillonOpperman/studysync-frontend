@@ -1,37 +1,37 @@
 /**
- * StudySync visual language: blurred ivory-and-cocoa wallpaper with
- * translucent liquid glass controls. Canvas is a fallback only.
+ * StudySync visual language: dark espresso liquid wallpaper with
+ * translucent glass controls and ivory type.
  */
 
 export const palette = {
-  ink: '#1C1410',
-  cocoa: '#5A463A',
+  ink: '#F6EBDD',
+  cocoa: '#D9B48C',
   stone: '#C4B0A0',
-  canvas: '#EDE4D8',
-  brew: '#2F1B12',
-  mocha: '#4A2E20',
-  gold: '#C49A6C',
-  cream: '#F3E6D4',
-  foam: '#FFF6EC',
-  mist: '#F6EDE3',
-  clay: '#C49A6C',
+  canvas: '#1B120D',
+  brew: '#1B120D',
+  mocha: '#2A1A12',
+  gold: '#E9B77A',
+  cream: '#F3E6D3',
+  foam: '#FFF6EA',
+  mist: '#F6EBDD',
+  clay: '#C98B4E',
   blush: '#E8D3BE',
   sageMist: '#A89078',
-  surface: 'rgba(255, 249, 242, 0.94)',
-  inputFill: 'rgba(255, 246, 236, 0.86)',
-  line: 'rgba(255, 255, 255, 0.55)',
-  espresso: '#241C18',
-  espressoPressed: '#3A2E27',
-  cinnamon: '#C45C32',
-  cinnamonPressed: '#C45C32',
-  cinnamonSoft: 'rgba(224, 138, 92, 0.22)',
-  sage: '#8FA084',
-  sageSoft: 'rgba(143, 160, 132, 0.2)',
-  danger: '#B42318',
-  dangerSoft: 'rgba(232, 122, 108, 0.18)',
-  inverse: '#F6EDE3',
-  skeleton: 'rgba(243, 230, 212, 0.16)',
-  shadow: '#1A0E08',
+  surface: 'rgba(255, 255, 255, 0.14)',
+  inputFill: 'rgba(255, 255, 255, 0.11)',
+  line: 'rgba(255, 255, 255, 0.22)',
+  espresso: '#1B120D',
+  espressoPressed: '#2A1A12',
+  cinnamon: '#F2C48D',
+  cinnamonPressed: '#E9B77A',
+  cinnamonSoft: 'rgba(242, 196, 141, 0.22)',
+  sage: '#C8D4B8',
+  sageSoft: 'rgba(200, 212, 184, 0.2)',
+  danger: '#F09595',
+  dangerSoft: 'rgba(240, 149, 149, 0.22)',
+  inverse: '#1B120D',
+  skeleton: 'rgba(255, 255, 255, 0.14)',
+  shadow: '#050302',
 } as const;
 
 export type ColorTokens = {
@@ -88,16 +88,16 @@ export const lightColors: ColorTokens = {
   surface: palette.surface,
   inputFill: palette.inputFill,
   text: palette.ink,
-  textSecondary: palette.cocoa,
-  textMuted: 'rgba(28, 20, 16, 0.58)',
-  textInverse: palette.mist,
+  textSecondary: 'rgba(246, 235, 221, 0.86)',
+  textMuted: 'rgba(246, 235, 221, 0.72)',
+  textInverse: palette.espresso,
   onGlass: palette.ink,
-  onGlassMuted: palette.cocoa,
+  onGlassMuted: 'rgba(246, 235, 221, 0.78)',
   border: palette.line,
-  divider: 'rgba(246, 237, 227, 0.12)',
-  accent: palette.espresso,
-  accentPressed: palette.espressoPressed,
-  accentSoft: palette.inputFill,
+  divider: 'rgba(246, 235, 221, 0.14)',
+  accent: palette.cinnamon,
+  accentPressed: palette.cinnamonPressed,
+  accentSoft: palette.cinnamonSoft,
   brand: palette.cinnamon,
   brandPressed: palette.cinnamonPressed,
   brandSoft: palette.cinnamonSoft,
@@ -107,7 +107,7 @@ export const lightColors: ColorTokens = {
   danger: palette.danger,
   dangerSoft: palette.dangerSoft,
   skeleton: palette.skeleton,
-  placeholder: 'rgba(28, 20, 16, 0.42)',
+  placeholder: 'rgba(246, 235, 221, 0.48)',
   glass: palette.inputFill,
   glassStrong: palette.surface,
   glassEdge: palette.line,
@@ -123,7 +123,7 @@ export const space = {
   xl: 24,
   xxl: 32,
   xxxl: 44,
-  screen: 22,
+  screen: 24,
 } as const;
 
 export const radius = {
@@ -136,16 +136,16 @@ export const radius = {
 
 export const type = {
   display: {
-    fontSize: 40,
-    lineHeight: 44,
-    fontWeight: '700' as const,
-    letterSpacing: -1.2,
+    fontSize: 30,
+    lineHeight: 36,
+    fontWeight: '500' as const,
+    letterSpacing: -0.5,
   },
   title: {
-    fontSize: 28,
-    lineHeight: 34,
-    fontWeight: '700' as const,
-    letterSpacing: -0.5,
+    fontSize: 26,
+    lineHeight: 32,
+    fontWeight: '600' as const,
+    letterSpacing: -0.4,
   },
   headline: {
     fontSize: 17,
@@ -202,7 +202,7 @@ export const motion = {
 } as const;
 
 export const lightTheme = {
-  scheme: 'light' as const,
+  scheme: 'dark' as const,
   colors: lightColors,
   space,
   radius,

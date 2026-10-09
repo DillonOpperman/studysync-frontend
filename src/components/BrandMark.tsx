@@ -15,7 +15,7 @@ export function BrandMark({
   const theme = useTheme();
   const reduceMotion = useReduceMotion();
   const opacity = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current;
-  const size = compact ? 64 : 88;
+  const size = compact ? 64 : 76;
 
   useEffect(() => {
     if (reduceMotion) {
@@ -66,7 +66,7 @@ export function BrandMark({
       <AppText
         variant={compact ? 'title' : 'display'}
         color={theme.colors.text}
-        style={{ marginTop: theme.space.md }}
+        style={{ marginTop: theme.space.lg }}
       >
         StudySync
       </AppText>

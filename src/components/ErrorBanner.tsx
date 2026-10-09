@@ -13,7 +13,7 @@ export function ErrorBanner({ message }: { message: string | null }) {
   return (
     <Glass
       intensity="strong"
-      radius={theme.radius.lg}
+      radius={theme.radius.md}
       style={{ marginBottom: theme.space.md }}
     >
       <View style={{ padding: theme.space.md }}>

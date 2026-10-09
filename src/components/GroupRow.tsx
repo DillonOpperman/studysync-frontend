@@ -30,7 +30,7 @@ export function GroupRow({
   const body = (
     <Glass
       intensity="soft"
-      radius={theme.radius.lg}
+      radius={theme.radius.md}
       style={{ marginBottom: last ? 0 : theme.space.sm }}
     >
       <View style={{ paddingVertical: 16, paddingHorizontal: 16 }}>

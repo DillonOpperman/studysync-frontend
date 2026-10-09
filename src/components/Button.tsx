@@ -43,12 +43,20 @@ export function Button({
       style={[
         styles.inner,
         round ? { minHeight: size, width: size, paddingHorizontal: 0 } : null,
+        tone === 'ghost' ? { minHeight: 44, paddingHorizontal: 0 } : null,
       ]}
     >
       {loading ? (
         <ActivityIndicator color={fg} />
       ) : (
-        <AppText variant="headline" color={fg} style={{ letterSpacing: -0.2 }}>
+        <AppText
+          variant="headline"
+          color={fg}
+          style={{
+            letterSpacing: -0.2,
+            fontWeight: tone === 'primary' ? '500' : '600',
+          }}
+        >
           {label}
         </AppText>
       )}
@@ -70,11 +78,11 @@ export function Button({
       ) : (
         <Glass
           intensity={intensity}
-          radius={theme.radius.pill}
+          radius={round ? theme.radius.pill : theme.radius.md}
           style={{
             minHeight: round ? size : theme.control.minHeight,
             width: round ? size : undefined,
-            height: round ? size : undefined,
+            height: round ? size : 54,
           }}
         >
           {body}

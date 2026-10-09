@@ -2,9 +2,10 @@ import { initialsFromName } from '../src/components/Avatar';
 import { lightColors, palette } from '../src/theme';
 
 describe('StudySync palette', () => {
-  it('keeps espresso type and cinnamon brand over liquid glass', () => {
+  it('keeps ivory type and caramel brand over dark liquid glass', () => {
     expect(lightColors.text).toBe(palette.ink);
     expect(lightColors.onGlass).toBe(palette.ink);
+    expect(lightColors.canvas).toBe('#1B120D');
     expect(lightColors.brand).toBe(palette.cinnamon);
     expect(lightColors.accent).not.toMatch(/#1B4D6E|#007AFF|#1A73E8/i);
   });

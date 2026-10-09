@@ -55,7 +55,7 @@ export function MessageBubble({
       </AppText>
       <Glass
         intensity={outgoing || announcement ? 'action' : 'strong'}
-        radius={theme.radius.lg}
+        radius={theme.radius.md}
         style={{ marginTop: 5 }}
       >
         <View style={{ paddingVertical: 11, paddingHorizontal: 16 }}>

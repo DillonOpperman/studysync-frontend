@@ -35,7 +35,7 @@ export function TextField({
           {label}
         </AppText>
       )}
-      <Glass intensity={focused ? 'strong' : 'soft'} radius={theme.radius.pill}>
+      <Glass intensity={focused ? 'strong' : 'soft'} radius={theme.radius.md}>
         <TextInput
           accessibilityLabel={label}
           placeholder={rest.placeholder ?? (hideLabel ? label : undefined)}

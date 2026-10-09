@@ -24,7 +24,7 @@ export function Chip({
     >
       <Glass
         intensity={selected ? 'action' : 'soft'}
-        radius={theme.radius.pill}
+        radius={theme.radius.md}
         style={{
           minHeight: 40,
           paddingHorizontal: theme.space.md,
