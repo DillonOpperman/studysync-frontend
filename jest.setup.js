@@ -12,6 +12,18 @@ jest.mock('react-native-screens', () => ({
   enableScreens: jest.fn(),
 }));
 
+jest.mock('react-native-gesture-handler', () => {
+  const { View } = require('react-native');
+  return {
+    GestureHandlerRootView: View,
+    GestureDetector: View,
+    PanGestureHandler: View,
+    NativeViewGestureHandler: View,
+    State: {},
+    Directions: {},
+  };
+});
+
 jest.mock('@react-native-community/blur', () => {
   const React = require('react');
   const { View } = require('react-native');

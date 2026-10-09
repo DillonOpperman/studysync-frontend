@@ -149,6 +149,8 @@ describe('GroupDetailScreen (mocked HTTP — not a live Rust server)', () => {
       await Promise.resolve();
     });
     expect(mockApi.leave).toHaveBeenCalledWith('g1');
-    expect(navigation.navigate).toHaveBeenCalledWith('Groups');
+    expect(navigation.navigate).toHaveBeenCalledWith('Home', {
+      screen: 'Groups',
+    });
   });
 });

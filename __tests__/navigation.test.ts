@@ -1,5 +1,5 @@
 import { rootFor } from '../src/navigation/rootFor';
-import { APP_STACK_ROUTES } from '../src/navigation/types';
+import { APP_STACK_ROUTES, HOME_DESK_ROUTES } from '../src/navigation/types';
 import type { UserProfileDto } from '../src/api/types';
 
 const user = { id: '1', name: 'Ada' } as UserProfileDto;
@@ -12,9 +12,9 @@ describe('initial navigation', () => {
   });
 
   it('exposes Groups, Search, Create, Detail, Friends, and DirectChat without dummy tabs', () => {
+    expect(HOME_DESK_ROUTES).toEqual(['Home', 'Groups']);
     expect(APP_STACK_ROUTES).toEqual([
       'Home',
-      'Groups',
       'Search',
       'CreateGroup',
       'GroupDetail',

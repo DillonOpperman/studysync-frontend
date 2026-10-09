@@ -1,5 +1,4 @@
 import { useFocusEffect } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,19 +12,18 @@ import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { GroupRow } from '../components/GroupRow';
+import { InkWriteText } from '../components/InkWriteText';
 import { ScreenShell } from '../components/ScreenShell';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { TextLink } from '../components/TextLink';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
 function firstName(name: string): string {
   return name.trim().split(/\s+/)[0] || name;
 }
 
-export function HomeScreen({
-  navigation,
-}: NativeStackScreenProps<AppStackParamList, 'Home'>) {
+export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
   const theme = useTheme();
   const { state, logout, refreshProfile, loadGroups } = useAuth();
   const user = state.status === 'signedIn' ? state.user : null;
@@ -70,7 +68,7 @@ export function HomeScreen({
   const preview = (groups ?? []).slice(0, 3);
 
   return (
-    <ScreenShell mood="home">
+    <ScreenShell mood="home" showPaper={false}>
       <SafeAreaView
         style={{ flex: 1 }}
         edges={['top', 'bottom', 'left', 'right']}
@@ -115,9 +113,13 @@ export function HomeScreen({
               }}
             >
               <Avatar name={profile.name} size={88} />
-              <AppText variant="display" style={{ marginTop: theme.space.md }}>
-                Hi, {firstName(profile.name)}
-              </AppText>
+              <View style={{ marginTop: theme.space.md }}>
+                <InkWriteText
+                  playKey={`home-hi-${profile.id}`}
+                  variant="display"
+                  text={`Hi, ${firstName(profile.name)}`}
+                />
+              </View>
               <AppText
                 variant="subhead"
                 color={theme.colors.textSecondary}

@@ -1,5 +1,4 @@
 import { useFocusEffect } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,7 +17,7 @@ import { ScreenShell } from '../components/ScreenShell';
 import { SectionLabel } from '../components/SectionLabel';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { groupsApi } from '../features/groups/groupsApi';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
 function factorCaption(row: RecommendedGroupDto): string {
@@ -31,9 +30,7 @@ function factorCaption(row: RecommendedGroupDto): string {
   )} · size ${row.sizeMatch.toFixed(2)}`;
 }
 
-export function GroupsScreen({
-  navigation,
-}: NativeStackScreenProps<AppStackParamList, 'Groups'>) {
+export function GroupsScreen({ navigation }: HomeDeskScreenProps<'Groups'>) {
   const theme = useTheme();
   const { client } = useAuth();
   const [mine, setMine] = useState<GroupDto[] | null>(null);
@@ -81,7 +78,7 @@ export function GroupsScreen({
   );
 
   return (
-    <ScreenShell mood="groups">
+    <ScreenShell mood="groups" showPaper={false}>
       <SafeAreaView
         style={{ flex: 1 }}
         edges={['top', 'bottom', 'left', 'right']}

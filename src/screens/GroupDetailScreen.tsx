@@ -185,7 +185,7 @@ export function GroupDetailScreen({
             onPress={() =>
               run(async () => {
                 await groupsApi(client).leave(group.id);
-                navigation.navigate('Groups');
+                navigation.navigate('Home', { screen: 'Groups' });
               })
             }
             loading={busy}
