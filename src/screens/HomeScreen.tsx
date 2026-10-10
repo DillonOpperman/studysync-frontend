@@ -23,7 +23,7 @@ function firstName(name: string): string {
   return name.trim().split(/\s+/)[0] || name;
 }
 
-export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
+export function HomeScreen({ navigation }: HomeDeskScreenProps<'Desk'>) {
   const theme = useTheme();
   const { state, logout, refreshProfile, loadGroups } = useAuth();
   const user = state.status === 'signedIn' ? state.user : null;
@@ -76,7 +76,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: theme.space.screen,
-            paddingBottom: theme.space.xxxl,
+            paddingBottom: theme.space.xl,
           }}
           refreshControl={
             <RefreshControl
@@ -95,8 +95,8 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'flex-start',
-              marginTop: theme.space.sm,
-              marginBottom: theme.space.lg,
+              marginTop: theme.space.xs,
+              marginBottom: theme.space.sm,
             }}
           >
             <AppText variant="caption" color={theme.colors.textMuted}>
@@ -109,11 +109,11 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
             <View
               style={{
                 alignItems: 'flex-start',
-                marginBottom: theme.space.xl,
+                marginBottom: theme.space.md,
               }}
             >
-              <Avatar name={profile.name} size={88} />
-              <View style={{ marginTop: theme.space.md }}>
+              <Avatar name={profile.name} size={80} />
+              <View style={{ marginTop: theme.space.xs }}>
                 <InkWriteText
                   playKey={`home-hi-${profile.id}`}
                   variant="display"
@@ -123,7 +123,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
               <AppText
                 variant="subhead"
                 color={theme.colors.textSecondary}
-                style={{ marginTop: 6 }}
+                style={{ marginTop: 4 }}
               >
                 {profile.major} · {profile.year}
               </AppText>
@@ -139,7 +139,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
 
           <ErrorBanner message={error} />
 
-          <View style={{ gap: theme.space.sm, marginBottom: theme.space.md }}>
+          <View style={{ gap: theme.space.xs, marginBottom: theme.space.sm }}>
             <Button
               label="Find groups"
               onPress={() => navigation.navigate('Groups')}
@@ -158,7 +158,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Home'>) {
 
           <View
             style={{
-              marginTop: theme.space.md,
+              marginTop: theme.space.xs,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'baseline',

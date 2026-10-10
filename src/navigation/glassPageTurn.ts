@@ -11,7 +11,7 @@ export const PAGE_TURN_MS = 420;
 export const PAGE_TURN_FADE_MS = 200;
 
 /** Frosted ivory sheet: paper shows through, stacked text does not. */
-export const GLASS_SHEET = 'rgba(251, 246, 238, 0.58)';
+export const GLASS_SHEET = 'rgba(251, 246, 238, 0.28)';
 
 const pageTurnTiming = {
   animation: 'timing' as const,

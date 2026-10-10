@@ -11,7 +11,7 @@ export type AuthStackParamList = {
 };
 
 export type HomeDeskParamList = {
-  Home: undefined;
+  Desk: undefined;
   Groups: undefined;
 };
 
@@ -32,7 +32,7 @@ export type HomeDeskScreenProps<Route extends keyof HomeDeskParamList> =
   >;
 
 export const HOME_DESK_ROUTES: Array<keyof HomeDeskParamList> = [
-  'Home',
+  'Desk',
   'Groups',
 ];
 

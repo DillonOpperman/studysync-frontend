@@ -19,8 +19,8 @@ export const palette = {
   clay: '#79583F',
   blush: '#EDE0C9',
   sageMist: '#C8B79A',
-  surface: 'rgba(247, 240, 227, 0.42)',
-  inputFill: 'rgba(255, 252, 246, 0.28)',
+  surface: 'rgba(247, 240, 227, 0.28)',
+  inputFill: 'rgba(255, 252, 246, 0.16)',
   line: 'rgba(121, 88, 63, 0.18)',
   espresso: '#49382B',
   espressoPressed: '#3A2C22',
@@ -112,7 +112,7 @@ export const lightColors: ColorTokens = {
   placeholder: 'rgba(73, 56, 43, 0.42)',
   glass: palette.inputFill,
   glassStrong: palette.surface,
-  glassEdge: 'rgba(255, 255, 255, 0.62)',
+  glassEdge: 'rgba(255, 252, 246, 0.28)',
   shadow: palette.shadow,
 };
 

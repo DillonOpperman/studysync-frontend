@@ -15,7 +15,7 @@ export function glassSurface(
     borderWidth: 1,
     borderColor:
       strength === 'action'
-        ? 'rgba(255, 255, 255, 0.88)'
+        ? 'rgba(255, 252, 246, 0.34)'
         : theme.colors.glassEdge,
     shadowColor: theme.colors.shadow,
     shadowOpacity: strength === 'action' ? 0.08 : 0.1,

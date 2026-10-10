@@ -12,7 +12,7 @@ describe('initial navigation', () => {
   });
 
   it('exposes Groups, Search, Create, Detail, Friends, and DirectChat without dummy tabs', () => {
-    expect(HOME_DESK_ROUTES).toEqual(['Home', 'Groups']);
+    expect(HOME_DESK_ROUTES).toEqual(['Desk', 'Groups']);
     expect(APP_STACK_ROUTES).toEqual([
       'Home',
       'Search',

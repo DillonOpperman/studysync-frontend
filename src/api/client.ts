@@ -128,7 +128,7 @@ export class ApiClient {
         throw new AbortedError();
       }
       if (__DEV__) {
-        console.warn('StudySync request failed', {
+        console.debug('StudySync request failed', {
           path,
           headers: redactHeaders(headers),
         });

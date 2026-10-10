@@ -19,3 +19,18 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+/**
+ * AGP lint's extract*Annotations uses Java Flight Recorder. Some Windows JDKs
+ * (and Cursor sandbox VMs) throw "Flight Recorder is not supported on this VM"
+ * while assembling debug AARs for libraries such as react-native-keychain.
+ * That task is for publishing library artifacts, not the app APK or Keychain
+ * runtime. Disable it so assembleDebug can finish without removing Keychain.
+ */
+subprojects { sub ->
+    sub.tasks.configureEach { task ->
+        if (task.name == "extractDebugAnnotations" || task.name == "extractReleaseAnnotations") {
+            task.enabled = false
+        }
+    }
+}

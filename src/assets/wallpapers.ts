@@ -15,13 +15,14 @@ export const wallpapers: Record<AtmosphereMood, ImageSourcePropType> = {
   chat: paper,
 };
 
+/** Warm parchment veils over bundled `paper-texture.jpg` (asset itself unchanged). */
 export const paperWashes: Record<AtmosphereMood, string> = {
-  auth: 'rgba(247, 240, 227, 0.08)',
-  splash: 'rgba(247, 240, 227, 0.1)',
-  home: 'rgba(237, 224, 201, 0.12)',
-  search: 'rgba(237, 224, 201, 0.1)',
-  form: 'rgba(247, 240, 227, 0.14)',
+  auth: 'rgba(237, 224, 201, 0.1)',
+  splash: 'rgba(237, 224, 201, 0.12)',
+  home: 'rgba(213, 190, 155, 0.14)',
+  search: 'rgba(213, 190, 155, 0.12)',
+  form: 'rgba(237, 224, 201, 0.12)',
   groups: 'rgba(213, 190, 155, 0.16)',
-  detail: 'rgba(213, 190, 155, 0.12)',
-  chat: 'rgba(213, 190, 155, 0.18)',
+  detail: 'rgba(213, 190, 155, 0.14)',
+  chat: 'rgba(213, 190, 155, 0.16)',
 };

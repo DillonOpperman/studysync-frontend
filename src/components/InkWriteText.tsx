@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   Text,
@@ -19,7 +19,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 /**
  * Stroke-based fountain-pen ink: SVG path dash offset per glyph stroke.
  * Dynamic text is composed from a bundled bookhand alphabet (not a hardcoded name).
- * After the write, Courier Prime text remains for the settled layout.
+ * After the write, strokes crossfade into Courier Prime.
  */
 const played = new Set<string>();
 
@@ -44,14 +44,16 @@ export function InkWriteText({
     () => layout.strokes.map(stroke => new Animated.Value(stroke.length)),
     [layout],
   );
+  const inkOpacity = useRef(new Animated.Value(1)).current;
+  const typeOpacity = useRef(new Animated.Value(0)).current;
   const [animate] = useState(
     () => writable && !reduceMotion && !played.has(playKey),
   );
-  const [written, setWritten] = useState(false);
-  const instant = reduceMotion || !animate || written || !writable;
+  const [settled, setSettled] = useState(false);
+  const instant = reduceMotion || !animate || !writable || settled;
 
   useEffect(() => {
-    if (reduceMotion || !animate || written || !writable) {
+    if (reduceMotion || !animate || settled || !writable) {
       return;
     }
     played.add(playKey);
@@ -67,33 +69,50 @@ export function InkWriteText({
       delay += duration * 0.62;
       return run;
     });
-    const run = Animated.parallel(sequence);
-    let settle: ReturnType<typeof setTimeout> | undefined;
-    run.start(({ finished }) => {
-      if (finished) {
-        settle = setTimeout(() => setWritten(true), 450);
+    const write = Animated.parallel(sequence);
+    const fade = Animated.parallel([
+      Animated.timing(inkOpacity, {
+        toValue: 0,
+        duration: 320,
+        useNativeDriver: true,
+      }),
+      Animated.timing(typeOpacity, {
+        toValue: 1,
+        duration: 320,
+        useNativeDriver: true,
+      }),
+    ]);
+    write.start(({ finished }) => {
+      if (!finished) {
+        return;
       }
+      fade.start(({ finished: faded }) => {
+        if (faded) {
+          setSettled(true);
+        }
+      });
     });
     return () => {
-      run.stop();
-      if (settle) {
-        clearTimeout(settle);
-      }
+      write.stop();
+      fade.stop();
     };
   }, [
     animate,
+    inkOpacity,
     layout.strokes,
     playKey,
     reduceMotion,
+    settled,
+    typeOpacity,
     values,
     writable,
-    written,
   ]);
 
   const ink = color ?? theme.colors.text;
   const preset = theme.type[variant];
   const textStyle: StyleProp<TextStyle> = [preset, style, { color: ink }];
   const height = preset.fontSize ?? 32;
+  const lineHeight = preset.lineHeight ?? height;
   const width = (layout.width / INK_EM) * height;
 
   if (instant) {
@@ -113,30 +132,41 @@ export function InkWriteText({
     <View
       accessibilityRole="text"
       accessibilityLabel={text}
-      style={{ width, height: preset.lineHeight ?? height }}
+      style={{ width: Math.max(width, 1), height: lineHeight }}
     >
-      <Svg
-        width={width}
-        height={height}
-        viewBox={`0 0 ${layout.width} ${INK_EM}`}
-        accessible={false}
-        importantForAccessibility="no"
+      <Animated.View
+        pointerEvents="none"
+        style={{ position: 'absolute', opacity: inkOpacity }}
       >
-        {layout.strokes.map((stroke, index) => (
-          <G key={`${playKey}-${index}`} x={stroke.x}>
-            <AnimatedPath
-              d={stroke.d}
-              fill="none"
-              stroke={ink}
-              strokeWidth={1.7}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray={`${stroke.length} ${stroke.length}`}
-              strokeDashoffset={values[index]}
-            />
-          </G>
-        ))}
-      </Svg>
+        <Svg
+          width={width}
+          height={height}
+          viewBox={`0 0 ${layout.width} ${INK_EM}`}
+          accessible={false}
+          importantForAccessibility="no"
+        >
+          {layout.strokes.map((stroke, index) => (
+            <G key={`${playKey}-${index}`} x={stroke.x}>
+              <AnimatedPath
+                d={stroke.d}
+                fill="none"
+                stroke={ink}
+                strokeWidth={1.7}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeDasharray={`${stroke.length} ${stroke.length}`}
+                strokeDashoffset={values[index]}
+              />
+            </G>
+          ))}
+        </Svg>
+      </Animated.View>
+      <Animated.Text
+        maxFontSizeMultiplier={1.35}
+        style={[textStyle, { opacity: typeOpacity }]}
+      >
+        {text}
+      </Animated.Text>
     </View>
   );
 }

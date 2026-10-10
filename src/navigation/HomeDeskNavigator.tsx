@@ -19,7 +19,7 @@ export function HomeDeskNavigator() {
     <View style={styles.fill}>
       <Wallpaper mood="home" />
       <Desk.Navigator detachInactiveScreens={false} screenOptions={options}>
-        <Desk.Screen name="Home" component={HomeScreen} />
+        <Desk.Screen name="Desk" component={HomeScreen} />
         <Desk.Screen name="Groups" component={GroupsScreen} />
       </Desk.Navigator>
     </View>
