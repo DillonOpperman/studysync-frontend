@@ -1,11 +1,9 @@
-import {
-  CardStyleInterpolators,
-  type StackCardInterpolationProps,
-} from '@react-navigation/stack';
+import { type StackCardInterpolationProps } from '@react-navigation/stack';
 import { Animated } from 'react-native';
 
 import {
   deskStackOptions,
+  glassPageFade,
   glassPageTurn,
   GLASS_SHEET,
   PAGE_TURN_FADE_MS,
@@ -37,9 +35,10 @@ describe('glass page turn (unit — not an emulator recording)', () => {
 
   it('replaces the turn with a fade when reduced motion is on', () => {
     const reduced = deskStackOptions(true);
-    expect(reduced.cardStyleInterpolator).toBe(
-      CardStyleInterpolators.forFadeFromCenter,
-    );
+    expect(reduced.cardStyleInterpolator).toBe(glassPageFade);
+    expect(reduced.cardStyle).toMatchObject({
+      backfaceVisibility: 'hidden',
+    });
     expect(reduced.gestureEnabled).toBe(false);
     expect(reduced.transitionSpec?.open).toMatchObject({
       config: { duration: PAGE_TURN_FADE_MS },

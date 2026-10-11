@@ -3,8 +3,12 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Wallpaper } from '../components/Wallpaper';
+import { CreateGroupScreen } from '../screens/CreateGroupScreen';
+import { FriendsScreen } from '../screens/FriendsScreen';
+import { GroupDetailScreen } from '../screens/GroupDetailScreen';
 import { GroupsScreen } from '../screens/GroupsScreen';
 import { HomeScreen } from '../screens/HomeScreen';
+import { SearchScreen } from '../screens/SearchScreen';
 import { useReduceMotion } from '../theme';
 import { deskStackOptions } from './glassPageTurn';
 import type { HomeDeskParamList } from './types';
@@ -21,6 +25,10 @@ export function HomeDeskNavigator() {
       <Desk.Navigator detachInactiveScreens={false} screenOptions={options}>
         <Desk.Screen name="Desk" component={HomeScreen} />
         <Desk.Screen name="Groups" component={GroupsScreen} />
+        <Desk.Screen name="Friends" component={FriendsScreen} />
+        <Desk.Screen name="CreateGroup" component={CreateGroupScreen} />
+        <Desk.Screen name="Search" component={SearchScreen} />
+        <Desk.Screen name="GroupDetail" component={GroupDetailScreen} />
       </Desk.Navigator>
     </View>
   );

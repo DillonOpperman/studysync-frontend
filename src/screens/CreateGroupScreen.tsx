@@ -1,4 +1,3 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 
@@ -18,12 +17,12 @@ import {
   type CreateGroupDraft,
   type CreateGroupErrors,
 } from '../features/groups/validateCreate';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
 export function CreateGroupScreen({
   navigation,
-}: NativeStackScreenProps<AppStackParamList, 'CreateGroup'>) {
+}: HomeDeskScreenProps<'CreateGroup'>) {
   const theme = useTheme();
   const { client, state } = useAuth();
   const profile = state.status === 'signedIn' ? state.user : null;
@@ -73,7 +72,7 @@ export function CreateGroupScreen({
   }
 
   return (
-    <Screen mood="form">
+    <Screen mood="form" showPaper={false}>
       <ScreenHeader title="New group" onBack={() => navigation.goBack()} />
       <AppText
         variant="footnote"

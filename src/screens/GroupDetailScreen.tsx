@@ -1,5 +1,4 @@
 import { useFocusEffect } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 
@@ -29,13 +28,13 @@ import {
   leaveBlockedReason,
 } from '../features/groups/membership';
 import { formatSlot } from '../features/groups/validateCreate';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { hairlineWidth, useTheme } from '../theme';
 
 export function GroupDetailScreen({
   navigation,
   route,
-}: NativeStackScreenProps<AppStackParamList, 'GroupDetail'>) {
+}: HomeDeskScreenProps<'GroupDetail'>) {
   const theme = useTheme();
   const { client, state } = useAuth();
   const selfId = state?.status === 'signedIn' ? state.user.id : '';
@@ -98,7 +97,7 @@ export function GroupDetailScreen({
 
   if (loading && !group) {
     return (
-      <Screen mood="detail">
+      <Screen mood="detail" showPaper={false}>
         <ScreenHeader title="Group" onBack={() => navigation.goBack()} />
         <GroupListSkeleton />
       </Screen>
@@ -107,7 +106,7 @@ export function GroupDetailScreen({
 
   if (!group) {
     return (
-      <Screen mood="detail">
+      <Screen mood="detail" showPaper={false}>
         <ScreenHeader title="Group" onBack={() => navigation.goBack()} />
         <ErrorBanner message={error} />
         <EmptyState
@@ -122,7 +121,7 @@ export function GroupDetailScreen({
   const leaveReason = leaveBlockedReason(group);
 
   return (
-    <Screen mood="detail">
+    <Screen mood="detail" showPaper={false}>
       <ScreenHeader title={group.title} onBack={() => navigation.goBack()} />
       <ErrorBanner message={error ?? actionError} />
       <AppText variant="headline">{group.subject}</AppText>

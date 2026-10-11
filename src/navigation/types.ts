@@ -13,15 +13,15 @@ export type AuthStackParamList = {
 export type HomeDeskParamList = {
   Desk: undefined;
   Groups: undefined;
+  Friends: undefined;
+  CreateGroup: undefined;
+  Search: undefined;
+  GroupDetail: { groupId: string };
 };
 
 export type AppStackParamList = {
   Home: NavigatorScreenParams<HomeDeskParamList> | undefined;
-  Search: undefined;
-  CreateGroup: undefined;
-  GroupDetail: { groupId: string };
   GroupChat: { groupId: string; title: string };
-  Friends: undefined;
   DirectChat: { userId: string; name: string };
 };
 
@@ -34,14 +34,14 @@ export type HomeDeskScreenProps<Route extends keyof HomeDeskParamList> =
 export const HOME_DESK_ROUTES: Array<keyof HomeDeskParamList> = [
   'Desk',
   'Groups',
+  'Friends',
+  'CreateGroup',
+  'Search',
+  'GroupDetail',
 ];
 
 export const APP_STACK_ROUTES: Array<keyof AppStackParamList> = [
   'Home',
-  'Search',
-  'CreateGroup',
-  'GroupDetail',
   'GroupChat',
-  'Friends',
   'DirectChat',
 ];

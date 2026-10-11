@@ -18,12 +18,14 @@ export function Screen({
   padded = true,
   center = false,
   mood = 'form',
+  showPaper = true,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   padded?: boolean;
   center?: boolean;
   mood?: AtmosphereMood;
+  showPaper?: boolean;
 }) {
   const theme = useTheme();
   const padding = padded ? theme.space.screen : 0;
@@ -50,7 +52,7 @@ export function Screen({
   );
 
   return (
-    <ScreenShell mood={mood}>
+    <ScreenShell mood={mood} showPaper={showPaper}>
       <SafeAreaView
         style={styles.flex}
         edges={['top', 'bottom', 'left', 'right']}

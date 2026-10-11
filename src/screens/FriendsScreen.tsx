@@ -1,5 +1,4 @@
 import { useFocusEffect } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 
@@ -25,12 +24,10 @@ import { TextLink } from '../components/TextLink';
 import { dmApi } from '../features/social/dmApi';
 import { friendsApi } from '../features/social/friendsApi';
 import { isUserId, normalizeUserId } from '../features/social/userId';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
-export function FriendsScreen({
-  navigation,
-}: NativeStackScreenProps<AppStackParamList, 'Friends'>) {
+export function FriendsScreen({ navigation }: HomeDeskScreenProps<'Friends'>) {
   const theme = useTheme();
   const { client, state } = useAuth();
   const selfId = state.status === 'signedIn' ? state.user.id : '';
@@ -115,7 +112,7 @@ export function FriendsScreen({
     messageRequests?.filter(row => row.status === 'pending') ?? [];
 
   return (
-    <Screen mood="home">
+    <Screen mood="home" showPaper={false}>
       <ScreenHeader title="People" onBack={() => navigation.goBack()} />
       <AppText
         variant="footnote"

@@ -12,16 +12,15 @@ describe('initial navigation', () => {
   });
 
   it('exposes Groups, Search, Create, Detail, Friends, and DirectChat without dummy tabs', () => {
-    expect(HOME_DESK_ROUTES).toEqual(['Desk', 'Groups']);
-    expect(APP_STACK_ROUTES).toEqual([
-      'Home',
-      'Search',
-      'CreateGroup',
-      'GroupDetail',
-      'GroupChat',
+    expect(HOME_DESK_ROUTES).toEqual([
+      'Desk',
+      'Groups',
       'Friends',
-      'DirectChat',
+      'CreateGroup',
+      'Search',
+      'GroupDetail',
     ]);
+    expect(APP_STACK_ROUTES).toEqual(['Home', 'GroupChat', 'DirectChat']);
     expect(APP_STACK_ROUTES).not.toContain('Chat');
     expect(APP_STACK_ROUTES).not.toContain('Profile');
   });

@@ -3,15 +3,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 
 import { useAuth } from '../auth/AuthProvider';
-import { CreateGroupScreen } from '../screens/CreateGroupScreen';
 import { DirectChatScreen } from '../screens/DirectChatScreen';
-import { FriendsScreen } from '../screens/FriendsScreen';
 import { GroupChatScreen } from '../screens/GroupChatScreen';
-import { GroupDetailScreen } from '../screens/GroupDetailScreen';
 import { HomeDeskNavigator } from './HomeDeskNavigator';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
-import { SearchScreen } from '../screens/SearchScreen';
 import { SplashScreen } from '../screens/SplashScreen';
 import { lightColors } from '../theme';
 import { rootFor } from './rootFor';
@@ -67,11 +63,7 @@ function SignedInNavigator() {
   return (
     <AppStack.Navigator screenOptions={appOptions}>
       <AppStack.Screen name="Home" component={HomeDeskNavigator} />
-      <AppStack.Screen name="Search" component={SearchScreen} />
-      <AppStack.Screen name="CreateGroup" component={CreateGroupScreen} />
-      <AppStack.Screen name="GroupDetail" component={GroupDetailScreen} />
       <AppStack.Screen name="GroupChat" component={GroupChatScreen} />
-      <AppStack.Screen name="Friends" component={FriendsScreen} />
       <AppStack.Screen name="DirectChat" component={DirectChatScreen} />
     </AppStack.Navigator>
   );

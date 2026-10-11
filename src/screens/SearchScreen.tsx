@@ -1,4 +1,3 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 
@@ -21,12 +20,10 @@ import {
   runGroupSearch,
   searchHasMore,
 } from '../features/groups/searchSession';
-import type { AppStackParamList } from '../navigation/types';
+import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
-export function SearchScreen({
-  navigation,
-}: NativeStackScreenProps<AppStackParamList, 'Search'>) {
+export function SearchScreen({ navigation }: HomeDeskScreenProps<'Search'>) {
   const theme = useTheme();
   const { client } = useAuth();
   const [query, setQuery] = useState('');
@@ -121,7 +118,7 @@ export function SearchScreen({
   );
 
   return (
-    <Screen mood="search">
+    <Screen mood="search" showPaper={false}>
       <ScreenHeader title="Search" onBack={() => navigation.goBack()} />
       <AppText
         variant="footnote"

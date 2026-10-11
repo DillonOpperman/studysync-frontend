@@ -1,6 +1,5 @@
 import { Easing } from 'react-native';
 import {
-  CardStyleInterpolators,
   type StackCardInterpolatedStyle,
   type StackCardInterpolationProps,
   type StackNavigationOptions,
@@ -105,6 +104,31 @@ export function glassPageTurn({
   };
 }
 
+export function glassPageFade({
+  current,
+  next,
+}: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const leaving = next;
+  const opacity = leaving
+    ? leaving.progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 0],
+        extrapolate: 'clamp',
+      })
+    : current.progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+      });
+  return {
+    cardStyle: {
+      backgroundColor: GLASS_SHEET,
+      backfaceVisibility: 'hidden',
+      opacity,
+    },
+  };
+}
+
 export function deskStackOptions(
   reduceMotion: boolean,
 ): StackNavigationOptions {
@@ -112,9 +136,12 @@ export function deskStackOptions(
     return {
       headerShown: false,
       gestureEnabled: false,
-      cardStyle: { backgroundColor: GLASS_SHEET },
+      cardStyle: {
+        backgroundColor: GLASS_SHEET,
+        backfaceVisibility: 'hidden',
+      },
       cardOverlayEnabled: false,
-      cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+      cardStyleInterpolator: glassPageFade,
       transitionSpec: { open: fadeTiming, close: fadeTiming },
     };
   }
@@ -122,7 +149,10 @@ export function deskStackOptions(
     headerShown: false,
     gestureEnabled: true,
     gestureDirection: 'horizontal',
-    cardStyle: { backgroundColor: GLASS_SHEET },
+    cardStyle: {
+      backgroundColor: GLASS_SHEET,
+      backfaceVisibility: 'hidden',
+    },
     cardOverlayEnabled: true,
     cardStyleInterpolator: glassPageTurn,
     transitionSpec: { open: pageTurnTiming, close: pageTurnTiming },
