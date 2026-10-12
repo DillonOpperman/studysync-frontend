@@ -11,7 +11,7 @@ describe('initial navigation', () => {
     expect(rootFor({ status: 'signedIn', user })).toBe('app');
   });
 
-  it('exposes Groups, Search, Create, Detail, Friends, and DirectChat without dummy tabs', () => {
+  it('exposes Groups, Search, Create, Detail, Friends, Alerts, and DirectChat without dummy tabs', () => {
     expect(HOME_DESK_ROUTES).toEqual([
       'Desk',
       'Groups',
@@ -19,6 +19,7 @@ describe('initial navigation', () => {
       'CreateGroup',
       'Search',
       'GroupDetail',
+      'Notifications',
     ]);
     expect(APP_STACK_ROUTES).toEqual(['Home', 'GroupChat', 'DirectChat']);
     expect(APP_STACK_ROUTES).not.toContain('Chat');

@@ -272,6 +272,21 @@ export type FriendListDto = {
   friendsSince: string;
 };
 
+/** Matches `NotificationDto` in studysync-backend-rs `src/api/dto.rs`. */
+export type NotificationDto = {
+  id: string;
+  type: string;
+  title: string;
+  body: string;
+  data: unknown;
+  readAt: string | null;
+  createdAt: string;
+};
+
+/** Backend default 20, clamp 1–50 (`services::notifications::list`). */
+export const NOTIFICATION_LIST_DEFAULT_LIMIT = 20;
+export const NOTIFICATION_LIST_MAX_LIMIT = 50;
+
 export type DirectMessageDto = {
   id: string;
   senderId: string;

@@ -17,6 +17,7 @@ export type HomeDeskParamList = {
   CreateGroup: undefined;
   Search: undefined;
   GroupDetail: { groupId: string };
+  Notifications: undefined;
 };
 
 export type AppStackParamList = {
@@ -38,6 +39,7 @@ export const HOME_DESK_ROUTES: Array<keyof HomeDeskParamList> = [
   'CreateGroup',
   'Search',
   'GroupDetail',
+  'Notifications',
 ];
 
 export const APP_STACK_ROUTES: Array<keyof AppStackParamList> = [

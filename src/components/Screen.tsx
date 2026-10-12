@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  type RefreshControlProps,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,6 +20,7 @@ export function Screen({
   center = false,
   mood = 'form',
   showPaper = true,
+  refreshControl,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
@@ -26,6 +28,7 @@ export function Screen({
   center?: boolean;
   mood?: AtmosphereMood;
   showPaper?: boolean;
+  refreshControl?: React.ReactElement<RefreshControlProps>;
 }) {
   const theme = useTheme();
   const padding = padded ? theme.space.screen : 0;
@@ -43,6 +46,7 @@ export function Screen({
         }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        refreshControl={refreshControl}
       >
         {children}
       </ScrollView>

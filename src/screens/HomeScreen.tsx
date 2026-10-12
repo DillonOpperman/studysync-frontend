@@ -13,9 +13,11 @@ import { EmptyState } from '../components/EmptyState';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { GroupRow } from '../components/GroupRow';
 import { InkWriteText } from '../components/InkWriteText';
+import { PressScale } from '../components/PressScale';
 import { ScreenShell } from '../components/ScreenShell';
 import { GroupListSkeleton } from '../components/Skeleton';
 import { TextLink } from '../components/TextLink';
+import { useNotifications } from '../features/notifications/NotificationsProvider';
 import type { HomeDeskScreenProps } from '../navigation/types';
 import { useTheme } from '../theme';
 
@@ -26,6 +28,7 @@ function firstName(name: string): string {
 export function HomeScreen({ navigation }: HomeDeskScreenProps<'Desk'>) {
   const theme = useTheme();
   const { state, logout, refreshProfile, loadGroups } = useAuth();
+  const { badge, refreshUnread } = useNotifications();
   const user = state.status === 'signedIn' ? state.user : null;
   const [groups, setGroups] = useState<GroupDto[] | null>(null);
   const [profile, setProfile] = useState<UserProfileDto | null>(user);
@@ -39,6 +42,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Desk'>) {
       const [nextProfile, nextGroups] = await Promise.all([
         refreshProfile(),
         loadGroups(),
+        refreshUnread(),
       ]);
       setProfile(nextProfile);
       setGroups(nextGroups);
@@ -48,7 +52,7 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Desk'>) {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [loadGroups, refreshProfile]);
+  }, [loadGroups, refreshProfile, refreshUnread]);
 
   useFocusEffect(
     useCallback(() => {
@@ -102,7 +106,61 @@ export function HomeScreen({ navigation }: HomeDeskScreenProps<'Desk'>) {
             <AppText variant="caption" color={theme.colors.textMuted}>
               StudySync
             </AppText>
-            <TextLink label="Log out" tone="danger" onPress={onLogout} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: theme.space.sm,
+              }}
+            >
+              <PressScale
+                accessibilityRole="button"
+                accessibilityLabel={
+                  badge.label ? `Alerts, ${badge.label} unread` : 'Alerts'
+                }
+                onPress={() => navigation.navigate('Notifications')}
+                style={{
+                  minHeight: 44,
+                  minWidth: 44,
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
+                }}
+              >
+                <View
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+                >
+                  <AppText
+                    variant="callout"
+                    color={theme.colors.brand}
+                    style={{ fontWeight: '600' }}
+                  >
+                    Alerts
+                  </AppText>
+                  {badge.label ? (
+                    <View
+                      style={{
+                        minWidth: 22,
+                        height: 22,
+                        paddingHorizontal: 6,
+                        borderRadius: 11,
+                        backgroundColor: theme.colors.accentSoft,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <AppText
+                        variant="caption"
+                        color={theme.colors.accent}
+                        style={{ fontWeight: '700' }}
+                      >
+                        {badge.label}
+                      </AppText>
+                    </View>
+                  ) : null}
+                </View>
+              </PressScale>
+              <TextLink label="Log out" tone="danger" onPress={onLogout} />
+            </View>
           </View>
 
           {profile ? (

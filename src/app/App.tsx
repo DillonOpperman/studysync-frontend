@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 
 import { AuthProvider } from '../auth/AuthProvider';
+import { NotificationsProvider } from '../features/notifications/NotificationsProvider';
 import { RootNavigator } from '../navigation/RootNavigator';
 import { ThemeProvider } from '../theme';
 
@@ -17,7 +18,9 @@ export default function App() {
         <ThemeProvider>
           <StatusBar barStyle="dark-content" />
           <AuthProvider>
-            <RootNavigator />
+            <NotificationsProvider>
+              <RootNavigator />
+            </NotificationsProvider>
           </AuthProvider>
         </ThemeProvider>
       </SafeAreaProvider>
