@@ -191,11 +191,17 @@ export function NotificationsScreen({
       <AppText
         variant="footnote"
         color={theme.colors.textMuted}
-        style={{ marginBottom: theme.space.md }}
+        style={{ marginBottom: theme.space.sm }}
       >
         Activity from groups, people, and messages. Opening an item marks it
         read.
       </AppText>
+      <TextLink
+        label="Notification settings"
+        align="start"
+        onPress={() => navigation.navigate('NotificationsSettings')}
+      />
+      <View style={{ height: theme.space.md }} />
       <ErrorBanner message={error} />
       <ErrorBanner message={actionError} />
       {error && !items?.length ? (

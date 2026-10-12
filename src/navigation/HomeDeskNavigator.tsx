@@ -9,6 +9,7 @@ import { GroupDetailScreen } from '../screens/GroupDetailScreen';
 import { GroupsScreen } from '../screens/GroupsScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { PushSettingsScreen } from '../screens/PushSettingsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
 import { useReduceMotion } from '../theme';
 import { deskStackOptions } from './glassPageTurn';
@@ -31,6 +32,10 @@ export function HomeDeskNavigator() {
         <Desk.Screen name="Search" component={SearchScreen} />
         <Desk.Screen name="GroupDetail" component={GroupDetailScreen} />
         <Desk.Screen name="Notifications" component={NotificationsScreen} />
+        <Desk.Screen
+          name="NotificationsSettings"
+          component={PushSettingsScreen}
+        />
       </Desk.Navigator>
     </View>
   );

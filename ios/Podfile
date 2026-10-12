@@ -8,6 +8,9 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# React Native Firebase on iOS typically needs static frameworks:
+#   USE_FRAMEWORKS=static pod install
+# Do not enable that here; iOS builds are untested on Windows.
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green

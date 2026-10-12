@@ -51,6 +51,27 @@ jest.mock('react-native-image-picker', () => ({
   launchImageLibrary: jest.fn(async () => ({ didCancel: true, assets: [] })),
 }));
 
+jest.mock('@react-native-firebase/app', () => ({
+  __esModule: true,
+  default: { apps: [] },
+}));
+
+jest.mock('@react-native-firebase/messaging', () => {
+  const mockMessaging = {
+    getToken: jest.fn(async () => 'fcm-token-test-abcdefghijklmnopqrstuvwxyz'),
+    onTokenRefresh: jest.fn(() => jest.fn()),
+    requestPermission: jest.fn(async () => 1),
+    hasPermission: jest.fn(async () => 1),
+    onMessage: jest.fn(() => jest.fn()),
+    onNotificationOpenedApp: jest.fn(() => jest.fn()),
+    getInitialNotification: jest.fn(async () => null),
+    setBackgroundMessageHandler: jest.fn(),
+  };
+  const factory = () => mockMessaging;
+  factory.setBackgroundMessageHandler = jest.fn();
+  return { __esModule: true, default: factory };
+});
+
 jest.mock('@react-native-documents/picker', () => ({
   pick: jest.fn(async () => {
     throw { code: 'OPERATION_CANCELED' };

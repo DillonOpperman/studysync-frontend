@@ -14,6 +14,7 @@ import type {
   RegisterRequest,
   UserProfileDto,
 } from '../api/types';
+import { unregisterCurrentDevice } from '../features/push/registration';
 import { keychainRefreshTokenStore } from './refreshTokenStore';
 import { SessionController, type SessionState } from './session';
 
@@ -58,6 +59,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    try {
+      await unregisterCurrentDevice(controller.client);
+    } catch {
+      // Still sign out locally if unregister fails.
+    }
     await controller.logout();
   }, []);
 

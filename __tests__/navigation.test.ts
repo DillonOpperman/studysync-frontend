@@ -20,6 +20,7 @@ describe('initial navigation', () => {
       'Search',
       'GroupDetail',
       'Notifications',
+      'NotificationsSettings',
     ]);
     expect(APP_STACK_ROUTES).toEqual(['Home', 'GroupChat', 'DirectChat']);
     expect(APP_STACK_ROUTES).not.toContain('Chat');

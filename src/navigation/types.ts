@@ -18,6 +18,7 @@ export type HomeDeskParamList = {
   Search: undefined;
   GroupDetail: { groupId: string };
   Notifications: undefined;
+  NotificationsSettings: undefined;
 };
 
 export type AppStackParamList = {
@@ -40,6 +41,7 @@ export const HOME_DESK_ROUTES: Array<keyof HomeDeskParamList> = [
   'Search',
   'GroupDetail',
   'Notifications',
+  'NotificationsSettings',
 ];
 
 export const APP_STACK_ROUTES: Array<keyof AppStackParamList> = [

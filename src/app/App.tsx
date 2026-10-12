@@ -6,6 +6,7 @@ import { enableScreens } from 'react-native-screens';
 
 import { AuthProvider } from '../auth/AuthProvider';
 import { NotificationsProvider } from '../features/notifications/NotificationsProvider';
+import { PushProvider } from '../features/push/PushProvider';
 import { RootNavigator } from '../navigation/RootNavigator';
 import { ThemeProvider } from '../theme';
 
@@ -19,7 +20,9 @@ export default function App() {
           <StatusBar barStyle="dark-content" />
           <AuthProvider>
             <NotificationsProvider>
-              <RootNavigator />
+              <PushProvider>
+                <RootNavigator />
+              </PushProvider>
             </NotificationsProvider>
           </AuthProvider>
         </ThemeProvider>

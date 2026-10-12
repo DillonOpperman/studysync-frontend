@@ -15,6 +15,7 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.2")
     }
 }
 
@@ -28,6 +29,13 @@ apply plugin: "com.facebook.react.rootproject"
  * runtime. Disable it so assembleDebug can finish without removing Keychain.
  */
 subprojects { sub ->
+    ["debug/extractDebugAnnotations", "release/extractReleaseAnnotations"].each { path ->
+        def file = new File(sub.buildDir, "intermediates/annotations_typedef_file/${path}/typedefs.txt")
+        file.parentFile.mkdirs()
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+    }
     sub.tasks.configureEach { task ->
         if (task.name == "extractDebugAnnotations" || task.name == "extractReleaseAnnotations") {
             task.enabled = false

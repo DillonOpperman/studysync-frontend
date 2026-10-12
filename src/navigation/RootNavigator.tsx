@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 
 import { useAuth } from '../auth/AuthProvider';
+import { appNavigationRef } from './ref';
 import { DirectChatScreen } from '../screens/DirectChatScreen';
 import { GroupChatScreen } from '../screens/GroupChatScreen';
 import { HomeDeskNavigator } from './HomeDeskNavigator';
@@ -76,7 +77,7 @@ export function RootNavigator() {
     return <SplashScreen />;
   }
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer ref={appNavigationRef} theme={navigationTheme}>
       {root === 'app' ? <SignedInNavigator /> : <SignedOutNavigator />}
     </NavigationContainer>
   );

@@ -45,6 +45,24 @@ describe('notificationsApi (mocked HTTP — not a live Rust server)', () => {
     await api(fetchImpl as unknown as typeof fetch).list({ limit: 500 });
   });
 
+  it('gets a single owned notification by id', async () => {
+    const fetchImpl = jest.fn(async (input: RequestInfo | URL) => {
+      expect(String(input)).toContain('/notifications/n1');
+      return jsonResponse(200, {
+        id: 'n1',
+        type: 'friend_request',
+        title: 't',
+        body: 'b',
+        data: {},
+        readAt: null,
+        createdAt: '2026-01-01T00:00:00Z',
+      });
+    });
+    await expect(
+      api(fetchImpl as unknown as typeof fetch).get('n1'),
+    ).resolves.toMatchObject({ id: 'n1' });
+  });
+
   it('marks one notification and all notifications as read', async () => {
     const fetchImpl = jest.fn(
       async (input: RequestInfo | URL, init?: RequestInit) => {

@@ -287,6 +287,37 @@ export type NotificationDto = {
 export const NOTIFICATION_LIST_DEFAULT_LIMIT = 20;
 export const NOTIFICATION_LIST_MAX_LIMIT = 50;
 
+export type PushDeviceDto = {
+  id: string;
+  platform: 'android' | 'ios' | string;
+  createdAt: string;
+  updatedAt: string;
+  lastSeenAt: string;
+};
+
+export type PushPreferencesDto = {
+  pushEnabled: boolean;
+  friends: boolean;
+  groups: boolean;
+  messages: boolean;
+  announcements: boolean;
+  updatedAt: string;
+};
+
+export type RegisterPushDeviceRequest = {
+  platform: 'android' | 'ios';
+  token: string;
+  installationId?: string;
+};
+
+export type UpdatePushPreferencesRequest = {
+  pushEnabled?: boolean;
+  friends?: boolean;
+  groups?: boolean;
+  messages?: boolean;
+  announcements?: boolean;
+};
+
 export type DirectMessageDto = {
   id: string;
   senderId: string;

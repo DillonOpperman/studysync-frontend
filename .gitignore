@@ -71,6 +71,9 @@ yarn-error.log
 .env.*
 !.env.example
 src/config/local.ts
+android/app/google-services.json
+ios/GoogleService-Info.plist
+*-firebase-adminsdk-*.json
 
 # Yarn
 .yarn/*

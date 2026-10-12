@@ -26,6 +26,12 @@ export function notificationsApi(client: ApiClient) {
         signal,
       });
     },
+    get(id: string, signal?: AbortSignal) {
+      return client.request<NotificationDto>(`/notifications/${id}`, {
+        method: 'GET',
+        signal,
+      });
+    },
     markRead(id: string) {
       return client.request<void>(`/notifications/${id}/read`, {
         method: 'POST',

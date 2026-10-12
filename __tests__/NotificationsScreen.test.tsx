@@ -89,6 +89,16 @@ describe('NotificationsScreen (mocked HTTP — not a live Rust server)', () => {
     mockMarkAll.mockResolvedValue(undefined);
   });
 
+  it('links to notification settings from Alerts', async () => {
+    const tree = await renderScreen();
+    const settings = tree.root
+      .findAllByType(TextLink)
+      .find(node => node.props.label === 'Notification settings');
+    expect(settings).toBeTruthy();
+    settings?.props.onPress();
+    expect(navigation.navigate).toHaveBeenCalledWith('NotificationsSettings');
+  });
+
   it('shows an empty state when the API returns no notifications', async () => {
     const tree = await renderScreen();
     expect(tree.root.findByType(EmptyState).props.title).toBe('No alerts yet');
